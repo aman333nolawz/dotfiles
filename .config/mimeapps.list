@@ -1,0 +1,18 @@
+[Added Associations]
+image/png=viewnior.desktop;
+image/jpeg=userapp-viewnior-G4BIS1.desktop;gcr-viewer.desktop;viewnior.desktop;userapp-viewnior-2P2NS1.desktop;
+image/gif=viewnior.desktop;
+image/svg+xml=viewnior.desktop;
+text/x-csrc=geany.desktop;
+text/plain=geany.desktop;
+application/x-shellscript=geany.desktop;
+application/x-theme=geany.desktop;
+application/json=geany.desktop;
+application/xml=userapp-geany-991HS1.desktop;
+
+[Default Applications]
+image/gif=viewnior.desktop
+image/svg+xml=viewnior.desktop
+application/x-extension-burp=install4j_1je7tfy-BurpSuiteCommunity.desktop
+application/pdf=org.pwmt.zathura.desktop
+image/jpeg=userapp-viewnior-G4BIS1.desktop

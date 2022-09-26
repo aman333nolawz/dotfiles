@@ -1,0 +1,22 @@
+ZSH=~/.config/zsh
+
+# Settings for prompt
+#autoload -Uz vcs_info
+#precmd() { vcs_info }
+#zstyle ':vcs_info:git:*' formats '%b '
+#setopt PROMPT_SUBST
+
+for file in $ZSH/lib/*;
+do
+    source $file
+done
+
+for plugin in $ZSH/plugins/*;
+do
+    source $plugin
+done
+
+source $ZSH/prompt.zsh
+source $ZSH/aliases.zsh
+
+complete -F _complete_alias config

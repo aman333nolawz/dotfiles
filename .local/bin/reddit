@@ -1,0 +1,34 @@
+#!/bin/bash
+
+menu() {
+  printf "meme\n"
+  printf "memes\n"
+  printf "ComedyCemetery\n"
+  printf "terriblefacebookmemes\n"
+  printf "fuckxavier\n"
+  printf "linuxmemes\n"
+  printf "programmingmemes\n"
+  printf "hackingmemes\n"
+  printf "marvelmemes\n"
+  printf "dankmemes\n"
+  printf "indiandankmemes\n"
+  printf "unixporn\n"
+  printf "wallpaers\n"
+  printf "wallpaper\n"
+}
+
+if [ -d "/tmp/reddit" ];
+then
+  rm -rf /tmp/reddit
+fi
+mkdir /tmp/reddit
+cd /tmp/reddit
+subreddit=$(menu | rofi -dmenu -p "Choose the subreddit:" -l 20)
+curl -H "User-agent: sth" "https://www.reddit.com/r/$subreddit.json?limit=75" | jq "." | grep url_overridden_by_dest | grep -Eo "https://.*(jpg|png|gif)" |
+  while IFS= read -r line
+  do
+    aria2c "$line"
+  done
+  notify-send "Reddit" "Downloaded all the reddit images!"
+  sxiv -a *
+

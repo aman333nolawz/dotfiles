@@ -1,0 +1,8 @@
+deluge/
+emacs/.local/
+aniwrapper/history.sqlite3
+binwalk/
+pulse/
+dconf/
+ncmpcpp/lyrics
+ncmpcpp/error.log

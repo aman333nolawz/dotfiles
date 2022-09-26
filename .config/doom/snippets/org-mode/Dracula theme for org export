@@ -1,0 +1,4 @@
+# key: org_dracula
+# name: Dracula theme for org export
+# --
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="/home/nolawz/org/styles/dracula.css">
