@@ -28,3 +28,7 @@ My dotfiles
 ## Neovim
 
 ![Neovim](./screenshots/neovim.png "Neovim")
+
+## Zathura
+
+![Zathura](./screenshots/zathura.png "Zathura")
