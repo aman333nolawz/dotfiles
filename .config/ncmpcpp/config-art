@@ -48,8 +48,8 @@ progressbar_elapsed_color   = "yellow"
 
 ### Alternative UI ###
 alternative_ui_separator_color 		  = "blue"
-alternative_header_first_line_format  = $b$5$/b  $b$8{%t}|{%f}$/b $/b 
-alternative_header_second_line_format = {$b{$2  %a$9}{ - $7  %b$9}{ ($2%y$9)}}|{%D}
+alternative_header_first_line_format  = $b$5ﱘ$/b  $b$8{%t}|{%f}$/b $/b 
+alternative_header_second_line_format = {$b{$2ﴁ  %a$9}{ - $7  %b$9}{ ($2%y$9)}}|{%D}
 
 ### Song list ###
 song_status_format		 = "$7%t"
