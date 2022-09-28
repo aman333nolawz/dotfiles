@@ -17,6 +17,14 @@ My dotfiles
 
 ![Firefox](./screenshots/firefox.png "Firefox")
 
+## Geany
+
+![Geany](./screenshots/geany.png "Geany")
+
+## Ncmpcpp
+
+![ncmpcpp](./screenshots/ncmpcpp.png "ncmpcpp")
+
 ## Neovim
 
 ![Neovim](./screenshots/neovim.png "Neovim")
