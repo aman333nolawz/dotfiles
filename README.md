@@ -4,4 +4,4 @@ My dotfiles
 
 # Desktop
 
-[Image of Desktop](./screenshots/desktop.png "Desktop")
+[Image of Desktop](screenshots/desktop.png "Desktop")
