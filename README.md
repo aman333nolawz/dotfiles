@@ -2,6 +2,8 @@
 
 My dotfiles
 
-# Desktop
+# Screenshots
 
-[Image of Desktop](screenshots/desktop.png)
+## Desktop
+
+![Desktop](./screenshots/desktop.png "Desktop")
