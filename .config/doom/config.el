@@ -32,6 +32,11 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-dracula)
+(setq doom-themes-treemacs-theme "doom-colors")
+
+(setq doom-modeline-icon t)
+(setq doom-modeline-major-mode-icon t)
+(setq doom-modeline-major-mode-color-icon t)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -81,9 +86,9 @@
 
 (setq centaur-tabs-style "bar")
 (setq centaur-tabs-set-icons t)
-(setq centaur-tabs-plain-icons t)
 (setq centaur-tabs-gray-out-icons 'buffer)
-(setq centaur-tabs-set-bar 'left)
+(setq centaur-tabs-set-bar 'under)
+(setq x-underline-at-descent-line t)
 (setq centaur-tabs-close-button "x")
 (setq centaur-tabs-modified-marker "●")
 

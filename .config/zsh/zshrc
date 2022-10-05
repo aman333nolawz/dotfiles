@@ -20,3 +20,7 @@ source $ZSH/prompt.zsh
 source $ZSH/aliases.zsh
 
 complete -F _complete_alias config
+
+export EDITOR="nvim"
+
+pfetch
