@@ -12,6 +12,7 @@ My dotfiles
 ## Emacs (Doom)
 
 ![Doom Emacs](./screenshots/emacs.png "Doom Emacs")
+![Doom Emacs](./screenshots/emacs2.png "Doom Emacs")
 
 ## Firefox
 
