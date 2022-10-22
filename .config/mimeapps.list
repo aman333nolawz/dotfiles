@@ -9,6 +9,7 @@ application/x-shellscript=geany.desktop;
 application/x-theme=geany.desktop;
 application/json=geany.desktop;
 application/xml=userapp-geany-991HS1.desktop;
+video/x-matroska=mpv.desktop;
 
 [Default Applications]
 image/gif=viewnior.desktop
