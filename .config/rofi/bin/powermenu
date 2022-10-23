@@ -19,12 +19,12 @@ get_confirmation() {
 	rofi -dmenu -i \
 		 -no-fixed-num-lines \
 		 -p "Are You Sure? : " \
-		 -theme "$DIR"/rofi/themes/confirm.rasi
+		 -theme "$DIR"/rofi/bin/themes/confirm.rasi
 }
 
 # Show message
 show_msg() {
-	rofi -theme "$DIR"/rofi/themes/askpass.rasi -e "Options  -  yes / y / no / n"
+	rofi -theme "$DIR"/rofi/bin/themes/askpass.rasi -e "Options  -  yes / y / no / n"
 }
 
 # Variable passed to rofi
