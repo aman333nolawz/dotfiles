@@ -3,7 +3,7 @@
 ## Copyright (C) 2020-2022 Aditya Shakya <adi1090x@gmail.com>
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
-DIR="$HOME/.config/bspwm"
+DIR="$HOME/.config"
 
 # File
 time=`date +%Y-%m-%d-%H-%M-%S`
@@ -13,7 +13,7 @@ file="Screenshot_${time}_${geometry}.png"
 
 # Commands
 notify_cmd_shot="dunstify -u low --replace=699 -i /usr/share/archcraft/icons/dunst/picture.png"
-rofi_cmd="rofi -theme $DIR/rofi/themes/screenshot.rasi"
+rofi_cmd="rofi -theme $DIR/rofi/bin/themes/screenshot.rasi"
 
 # Buttons
 screen=""

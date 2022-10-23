@@ -3,8 +3,8 @@
 ## Copyright (C) 2020-2022 Aditya Shakya <adi1090x@gmail.com>
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
-DIR="$HOME/.config/bspwm"
-rofi_cmd="rofi -theme $DIR/rofi/themes/mpd.rasi"
+DIR="$HOME/.config"
+rofi_cmd="rofi -theme $DIR/rofi/bin/themes/mpd.rasi"
 
 button_music=''
 button_play=''

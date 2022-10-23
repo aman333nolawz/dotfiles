@@ -20,7 +20,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 ## Current theme ---------------------------------------------#
 
 ## Load current theme files to get colors for bspwm
-source "$BSPDIR"/themes/current.bash
+source "$BSPDIR"/themes/dracula.bash
 
 ## Get the wallpaper from theme file
 CURRENT_WALLPAPER="$wallpaper"
@@ -155,7 +155,7 @@ if [[ ! `pidof xfce-polkit` ]]; then
 fi
 
 # Lauch keybindings daemon
-sxhkd -c "$BSPDIR"/sxhkdrc &
+sxhkd -c "$HOME/.config/sxhkd/sxhkdrc" &
 
 # Enable Super Keys For Menu
 ksuperkey -e 'Super_L=Alt_L|F1' &
@@ -181,6 +181,6 @@ bspcomp
 bspdunst
 bspfloat &
 
-# Custom things
+# Daemons
 emacs --daemon &
 deluged &
