@@ -27,10 +27,6 @@ alt + F1
 super + n
 	nmd
 
-# Rofi Themes Menu
-ctrl + alt + t
-	sh ~/.config/rofi/bin/themes
-
 # Rofi Menus/Applets
 super + {w,m,x,r,s}
 	sh ~/.config/rofi/bin/{windows,mpd,powermenu,asroot,screenshot}
