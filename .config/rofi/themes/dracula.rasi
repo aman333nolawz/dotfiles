@@ -29,7 +29,7 @@ window {
     border: 						1px;
     border-color: 					@selected;
     border-radius: 					0px;
-    width: 							500px;
+    width: 							900px;
     height: 						0px;
 }
 

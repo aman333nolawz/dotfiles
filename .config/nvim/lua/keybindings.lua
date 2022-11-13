@@ -56,3 +56,6 @@ map('n', '<A-9>', '<Cmd>BufferLineGoToBuffer 9<CR>')
 map('n', '<A-p>', '<Cmd>BufferLineTogglePin<CR>')
 -- Close buffer
 map('n', '<A-c>', '<Cmd>Bdelete<CR>')
+
+-- Latex
+map('n', '<C-c>', '<Cmd>!pdflatex %<CR>')
