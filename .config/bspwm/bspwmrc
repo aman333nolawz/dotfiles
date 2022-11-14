@@ -165,7 +165,7 @@ xfce4-power-manager &
 xsetroot -cursor_name left_ptr
 
 # Restore wallpaper
-nitrogen --restore
+nitrogen --restore &
 
 # Start mpd
 # exec mpd &
