@@ -12,6 +12,8 @@ BSPDIR="$HOME/.config/bspwm"
 
 ## Export bspwm/bin dir to PATH
 export PATH="${PATH}:$HOME/.config/bspwm/bin:$HOME/.local/bin"
+export GOPATH="$(go env GOPATH)"
+export PATH="${PATH}:${GOPATH}/bin"
 
 ## Run java applications without issues
 export _JAVA_AWT_WM_NONREPARENTING=1

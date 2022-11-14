@@ -9,11 +9,11 @@ My dotfiles
 ![Desktop](./screenshots/desktop.png "Desktop")
 ![Neofetch](./screenshots/neofetch.png "Neofetch")
 
-## Emacs (Doom)
+## Emacs
 
-![Doom Emacs](./screenshots/emacs.png "Doom Emacs")
+![Emacs](./screenshots/emacs.png "Emacs")
 
-![Doom Emacs](./screenshots/emacs2.png "Doom Emacs")
+![Emacs](./screenshots/emacs2.png "Emacs")
 
 ## Firefox
 
