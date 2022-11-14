@@ -17,7 +17,8 @@ My dotfiles
 
 ## Firefox
 
-Get the startpage from [aman333nolawz/startpage](https://github.com/aman333nolawz/startpage)
+Get the startpage from [aman333nolawz/startpage](https://github.com/aman333nolawz/startpage) or [aman333nolawz/startpage-v2](https://github.com/aman333nolawz/startpage-v2)
+
 ![Firefox](./screenshots/firefox.png "Firefox")
 
 ## Geany
