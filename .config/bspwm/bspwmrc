@@ -22,9 +22,6 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 ## Load current theme files to get colors for bspwm
 source "$BSPDIR"/themes/dracula.bash
 
-## Get the wallpaper from theme file
-CURRENT_WALLPAPER="$wallpaper"
-
 ## Get the colors from theme file
 FOREGROUND="$foreground"
 BACKGROUND="$background"
@@ -168,8 +165,7 @@ xfce4-power-manager &
 xsetroot -cursor_name left_ptr
 
 # Restore wallpaper
-# feh --no-fehbg --bg-fill "$CURRENT_WALLPAPER"
-~/.fehbg
+nitrogen --restore
 
 # Start mpd
 # exec mpd &
