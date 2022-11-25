@@ -1,7 +1,6 @@
 configuration {
-    show-icons:                     true;
-    display-drun: 					"";
-    drun-display-format:            "{icon} {name}";
+    show-icons:                     false;
+    display-run: 		            "";
     disable-history:                false;
     click-to-exit: 		            true;
     location:                       0;
@@ -10,10 +9,6 @@ configuration {
 @import "font.rasi"
 @import "colors.rasi"
 
-* {
-    background-color:             	@BG;
-}
-
 window {
     transparency:                   "real";
     background-color:               @BG;
@@ -21,27 +16,28 @@ window {
     border:                         2px;
     border-color:                   @BDR;
     border-radius:                  10px;
-    width:                          500px;
+    width:                          350px;
+    location:                       center;
     anchor:                         center;
     x-offset:                       0;
     y-offset:                       0;
 }
 
 prompt {
-    spacing: 						0;
-	  font:							"Iosevka Nerd Font 10";
-    border: 						0;
-    background-color:             	@IMG;
-    text-color: 					@BG;
-    padding:    					7px 10px;
+    enabled: 			            true;
+    padding: 			            8px;
+    background-color: 		        @BG;
+    text-color: 		            @IMG;
 }
 
 textbox-prompt-colon {
     expand: 			            false;
-    str: 			                "";
-color: @IMG;
-    margin: 0 10px;
-    padding:                        6px 4px 6px 4px;
+    str: 			                "ﲵ";
+    border-radius:                  100%;
+    background-color:               @BG;
+    text-color:                     @FG;
+    padding:                        8px 12px 8px 12px;
+	font:							"Iosevka Nerd Font 10";
 }
 
 entry {
@@ -50,23 +46,26 @@ entry {
     placeholder-color:              @FG;
     expand:                         true;
     horizontal-align:               0;
-    placeholder:                    "Search...";
-	  font:							"FiraCode Nerd Font 10";
+    placeholder:                    "Run...";
     blink:                          true;
-    border:                  	    0px 0px 2px 0px;
-    border-color:                   @BDR;
+    border:                  		0px 0px 2px 0px;
+    border-color:                  	@BDR;
     border-radius:                  10px;
     padding:                        8px;
 }
 
 inputbar {
+	children: 						[ textbox-prompt-colon, prompt, entry ];
     background-color:               @BG;
     text-color:                     @FG;
     expand:                         false;
-    border:                  	      0px;
-    children: 						[ prompt,textbox-prompt-colon,entry ];
+    border:                  		0px 0px 0px 0px;
+    border-radius:                  0px;
+    border-color:                  	@BDR;
+    margin:                         0px 0px 0px 0px;
+    padding:                        0px;
+    position:                       center;
 }
-
 
 case-indicator {
     background-color:               @BG;
@@ -78,7 +77,7 @@ case-indicator {
 listview {
     background-color:               @BG;
     columns:                        1;
-    lines:			                7;
+    lines:							5;
     spacing:                        4px;
     cycle:                          false;
     dynamic:                        true;
@@ -88,7 +87,7 @@ listview {
 mainbox {
     background-color:               @BG;
     children:                       [ inputbar, listview ];
-    spacing:                        15px;
+    spacing:                       	15px;
     padding:                        15px;
 }
 
@@ -98,21 +97,18 @@ element {
     orientation:                    horizontal;
     border-radius:                  4px;
     padding:                        6px 6px 6px 6px;
-	  font:							"FiraCode Nerd Font 10";
 }
 
 element-icon {
-    background-color: 	            inherit;
-    text-color:       		        inherit;
-    horizontal-align:               0.5;
-    vertical-align:                 0.5;
-    size:                           24px;
+    background-color: 				inherit;
+    text-color:       				inherit;
+    size:                           0px;
     border:                         0px;
 }
 
 element-text {
-    background-color: 		        inherit;
-    text-color:       		        inherit;
+    background-color: 				inherit;
+    text-color:       				inherit;
     expand:                         true;
     horizontal-align:               0;
     vertical-align:                 0.5;
@@ -135,9 +131,9 @@ element alternate.active {
 element selected {
     background-color:               @BGA;
     text-color:                     @SEL;
-    border:                  	    0px 0px 0px 0px;
+    border:                  		0px 0px 0px 0px;
     border-radius:                  10px;
-    border-color:                   @BDR;
+    border-color:                  	@BDR;
 }
 
 element selected.urgent {
