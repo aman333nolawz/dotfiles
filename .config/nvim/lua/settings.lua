@@ -1,7 +1,7 @@
 local g = vim.g
 local o = vim.o
 
-vim.cmd("colorscheme dracula")
+vim.cmd.colorscheme "catppuccin"
 o.termguicolors = true
 
 -- Number of screen lines to keep above and below the cursor

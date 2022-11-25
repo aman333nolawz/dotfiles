@@ -18,6 +18,7 @@ done
 
 source $ZSH/prompt.zsh
 source $ZSH/aliases.zsh
+source $ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 complete -F _complete_alias config
 

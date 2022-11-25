@@ -62,7 +62,7 @@ return require('packer').startup(function(use)
     end,
   })
 
-  use { 'dracula/vim', as = "dracula" }
+  use { "catppuccin/nvim", as = "catppuccin" }
 
   -----------------------------------
   -- Treesitter: Better Highlights --

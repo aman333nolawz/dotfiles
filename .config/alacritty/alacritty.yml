@@ -7,7 +7,7 @@
 
 ## Import files (Colors, Fonts, Etc)
 import:
-  - ~/.config/alacritty/colors.yml
+  - ~/.config/alacritty/catppuccin/catppuccin-mocha.yml
   - ~/.config/alacritty/fonts.yml
 
 ## Set environment variables
@@ -40,7 +40,7 @@ window:
 cursor:
   style:
     shape: Block
-    blinking: On
+    blinking: Off
 
   unfocused_hollow: false
 

@@ -1,13 +1,14 @@
 #!/bin/bash
 
-musics=$(cat $HOME/.local/bin/musics.txt | sort -R)
+declare -A stations=( ["lainon.life - Cafe"]="https://lainon.life/radio/cafe.ogg" )
 
-for line in $musics;
-do
-	mpv $musics --no-video
-	if [[ $? -gt 0 ]]
-	then
-		break
-	fi
-done
+menu() {
+  for station in "${!stations[@]}"
+  do
+    station="$stations[$station]"
+    printf "${station:1:-1}\n"
+  done
+}
 
+station=$(menu | rofi -dmenu)
+mpc add "${stations[$station]}"

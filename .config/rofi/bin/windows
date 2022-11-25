@@ -5,4 +5,4 @@
 
 DIR="$HOME/.config"
 
-rofi -no-lazy-grab -show window -theme "$DIR"/rofi/bin/themes/window.rasi
+rofi -no-lazy-grab -show window -theme "$DIR"/rofi/config/window.rasi

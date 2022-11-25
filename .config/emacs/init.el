@@ -89,13 +89,18 @@
   :config
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
-  (load-theme 'doom-dracula t)
-
   (doom-themes-visual-bell-config)
   (doom-themes-neotree-config)
   (setq doom-themes-treemacs-theme "doom-colors")
   (doom-themes-treemacs-config)
   (doom-themes-org-config))
+
+(elpaca-use-package (autothemer)
+  :ensure t
+  :config
+  (load "~/.config/emacs/themes/catppuccin-theme.el")
+  (load-theme 'catppuccin-mocha)
+  )
 
 (elpaca-use-package (treemacs)
   :config
@@ -135,10 +140,9 @@
 
 (elpaca all-the-icons)
 
-(elpaca (powerline :host github :repo "milkypostman/powerline"))
-(elpaca-use-package (powerline-evil)
+(elpaca-use-package (telephone-line)
   :config
-  (powerline-evil-center-color-theme))
+  (telephone-line-mode 1))
 
 ;; Completeion
 (elpaca-use-package (vertico)
