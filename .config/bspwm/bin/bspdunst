@@ -10,4 +10,4 @@ if [[ `pidof dunst` ]]; then
 	pkill dunst
 fi
 
-dunst -config "$DIR"/dunstrc &
+dunst &
