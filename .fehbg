@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-fill '/home/nolawz/.local/share/wallpapers/arseniy-chebynkin-tokyo-street-night.jpg' 
+feh --no-fehbg --bg-scale '/home/nolawz/.wallpapers/video/7/filename00060.jpg' 

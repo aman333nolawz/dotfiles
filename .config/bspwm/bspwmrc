@@ -12,17 +12,12 @@ BSPDIR="$HOME/.config/bspwm"
 
 ## Export bspwm/bin dir to PATH
 export PATH="${PATH}:$HOME/.config/bspwm/bin:$HOME/.local/bin"
-export GOPATH="$(go env GOPATH)"
-export PATH="${PATH}:${GOPATH}/bin"
 
 ## Run java applications without issues
 export _JAVA_AWT_WM_NONREPARENTING=1
 #wmname LG3D
 
 ## Current theme ---------------------------------------------#
-
-## Load current theme files to get colors for bspwm
-source "$BSPDIR"/themes/dracula.bash
 
 ## Get the colors from theme file
 BACKGROUND="#282A36"
@@ -82,29 +77,27 @@ bspc rule -a firefox desktop='^2' follow=on focus=on
 bspc rule -a chromium desktop='^2' follow=on focus=on
 
 ## 3 > files (always open file manager on workspace-3)
-declare -a files=(Pcmanfm Thunar qBittorrent)
+declare -a files=(Thunar qBittorrent)
 for i in ${files[@]}; do
    bspc rule -a $i desktop='^3' follow=on focus=on; done
 
 ## 4 > code (always open editors on workspace-4)
-declare -a code=(Geany code-oss Emacs)
+declare -a code=(Emacs)
 for i in ${code[@]}; do
    bspc rule -a $i desktop='^4' follow=on focus=on; done
 
 ## 5 > office and docs (always open office/doc apps on workspace-5)
-declare -a office=(Gucharmap Atril Evince \
-libreoffice-writer libreoffice-calc libreoffice-impress \
-libreoffice-startcenter libreoffice Soffice *:libreofficedev *:soffice)
+declare -a office=(Zathura)
 for i in ${office[@]}; do
    bspc rule -a $i desktop='^5' follow=on focus=on; done
 
 ## 6 > communication (always open communication apps on workspace-6)
-declare -a comm=(Thunderbird TelegramDesktop Hexchat)
+declare -a comm=(Discord)
 for i in ${comm[@]}; do
    bspc rule -a $i desktop='^6' follow=on focus=on; done
 
 ## 7 > media (always open media apps on workspace-7)
-declare -a media=(Audacity Music MPlayer Lxmusic Inkscape Gimp-2.10 obs mpv)
+declare -a media=(mpv)
 for i in ${media[@]}; do
    bspc rule -a $i desktop='^7' state=floating follow=on focus=on; done
 
@@ -118,8 +111,8 @@ for i in ${settings[@]}; do
    bspc rule -a $i desktop='^8' state=floating follow=on focus=on; done
 
 ## Always Floating Apps
-declare -a floating=(alacritty-float Pcmanfm Thunar Onboard Yad 'Firefox:Places' \
-Viewnior feh Nm-connection-editor)
+declare -a floating=(alacritty-float Thunar Yad 'Firefox:Places' \
+feh Nm-connection-editor)
 for i in ${floating[@]}; do
    bspc rule -a $i state=floating follow=on focus=on; done
 
@@ -129,7 +122,7 @@ bspc rule -a stalonetray state=floating manage=off
 ## Autostart -------------------------------------------------#
 
 # Kill if already running
-killall -9 xsettingsd sxhkd dunst ksuperkey xfce4-power-manager bspc deluged
+killall -9 xsettingsd sxhkd dunst ksuperkey xfce4-power-manager bspc
 
 # Lauch xsettingsd daemon
 xsettingsd --config="$BSPDIR"/xsettingsd &
@@ -140,7 +133,7 @@ if [[ ! `pidof xfce-polkit` ]]; then
 fi
 
 # Lauch keybindings daemon
-sxhkd -c "$HOME/.config/sxhkd/sxhkdrc" &
+sxhkd &
 
 # Enable Super Keys For Menu
 ksuperkey -e 'Super_L=Alt_L|F1' &
@@ -159,11 +152,7 @@ nitrogen --restore &
 # exec mpd &
 
 # Start bspwm scripts
-bspcolors
 bspbar
 bspcomp
 bspdunst
 bspfloat &
-
-# Daemons
-deluged &

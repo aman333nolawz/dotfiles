@@ -1,9 +1,9 @@
 ## Copyright (C) 2020-2022 Aditya Shakya <adi1090x@gmail.com>
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
-Net/ThemeName "Dracula"
-Net/IconThemeName "Nordic-Folders"
-Gtk/CursorThemeName "Sweet"
+Net/ThemeName "Catppuccin-Mocha-Standard-Lavender-Dark"
+Net/IconThemeName "Catppuccin-Mocha-Lavender"
+Gtk/CursorThemeName "Catppuccin-Mocha-Lavender"
 Net/EnableEventSounds "0"
 Net/EnableInputFeedbackSounds "0"
 Xft/DPI "-1"
