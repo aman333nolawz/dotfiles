@@ -47,7 +47,7 @@ super + p
 
 # Lockscreen
 ctrl + alt + l
-    betterlockscreen --lock
+    bsplock
 
 ##---------- System Keys ----------##
 

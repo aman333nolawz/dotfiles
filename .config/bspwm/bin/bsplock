@@ -1,0 +1,44 @@
+#!/bin/sh
+
+alpha='ff'
+background='#1e1e2e'
+selection='#181825'
+
+yellow='#f9e2af'
+orange='#fab387'
+red='#f38ba8'
+blue='#b4befe'
+cyan='#89dceb'
+green='#a6e3a1'
+
+i3lock \
+  --color=$background \
+  --insidever-color=$selection$alpha \
+  --insidewrong-color=$selection$alpha \
+  --inside-color=$selection$alpha \
+  --ringver-color=$green$alpha \
+  --ringwrong-color=$red$alpha \
+  --ringver-color=$green$alpha \
+  --ringwrong-color=$red$alpha \
+  --ring-color=$blue$alpha \
+  --keyhl-color=$yellow$alpha \
+  --bshl-color=$orange$alpha \
+  --separator-color=$selection$alpha \
+  --verif-color=$green \
+  --wrong-color=$red \
+  --layout-color=$blue \
+  --date-color=$blue \
+  --time-color=$blue \
+  --clock \
+  --indicator \
+  --radius=120 \
+  --ring-width=5 \
+  --pass-media-keys \
+  --pass-screen-keys \
+  --pass-volume-keys \
+ --time-font="FiraCode Nerd Font" \
+ --date-font="FiraCode Nerd Font" \
+ --layout-font="FiraCode Nerd Font" \
+ --verif-font="FiraCode Nerd Font" \
+ --wrong-font="FiraCode Nerd Font" 
+
