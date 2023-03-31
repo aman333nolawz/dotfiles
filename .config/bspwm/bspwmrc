@@ -23,7 +23,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 BACKGROUND="#282A36"
 CURSOR="'#F8F8F2"
 GREEN="#a6e3a1"
-BLUE="#89b4fa"
+BLUE="#b4befe"
 MAGENTA="#FF79C6"
 
 ## Bspwm appearance
