@@ -25,7 +25,7 @@ alt + F1
 
 # Rofi Network Menu
 super + n
-	nmd
+  networkmanager_dmenu
 
 # Rofi Menus/Applets
 super + {w,m,x,r,s}
@@ -43,7 +43,7 @@ ctrl + alt + {v,r,h}
 
 # Color Picker
 super + p
-	color-gpick
+	gpick -p
 
 # Lockscreen
 ctrl + alt + l
