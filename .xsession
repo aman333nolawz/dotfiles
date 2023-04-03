@@ -1,3 +1,4 @@
+#!/bin/sh
 export PATH="${PATH}:$HOME/.local/bin"
 
 ## Run java applications without issues

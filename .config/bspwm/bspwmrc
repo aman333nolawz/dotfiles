@@ -11,7 +11,7 @@
 BSPDIR="$HOME/.config/bspwm"
 
 ## Export bspwm/bin dir to PATH
-export PATH="${PATH}:$HOME/.local/bin"
+export PATH="${PATH}:$BSPDIR/bin"
 
 ## Current theme ---------------------------------------------#
 
