@@ -11,11 +11,7 @@
 BSPDIR="$HOME/.config/bspwm"
 
 ## Export bspwm/bin dir to PATH
-export PATH="${PATH}:$HOME/.config/bspwm/bin:$HOME/.local/bin"
-
-## Run java applications without issues
-export _JAVA_AWT_WM_NONREPARENTING=1
-#wmname LG3D
+export PATH="${PATH}:$HOME/.local/bin"
 
 ## Current theme ---------------------------------------------#
 
