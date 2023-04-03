@@ -3,7 +3,7 @@ rofi_command="rofi -theme $HOME/.config/rofi/config/screenshot.rasi"
 
 time=`date +%Y-%m-%d-%I-%M-%S`
 geometry=`xrandr | head -n1 | cut -d',' -f2 | tr -d '[:blank:],current'`
-dir="`xdg-user-dir PICTURES`/Screenshots"
+dir="$HOME/Pictures/Screenshots"
 file="Screenshot_${time}_${geometry}.png"
 
 # Icons
@@ -29,7 +29,6 @@ fi
 # Notify and view screenshot
 notify_view () {
 	dunstify -u low --replace=699 -i $icon1 "Copied to clipboard."
-	viewnior ${dir}/"$file"
 	if [[ -e "$dir/$file" ]]; then
 		dunstify -u low --replace=699 -i $icon1 "Screenshot Saved."
 	else
