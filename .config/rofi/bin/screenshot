@@ -29,6 +29,7 @@ fi
 # Notify and view screenshot
 notify_view () {
 	dunstify -u low --replace=699 -i $icon1 "Copied to clipboard."
+  exo-open "$dir/$file"
 	if [[ -e "$dir/$file" ]]; then
 		dunstify -u low --replace=699 -i $icon1 "Screenshot Saved."
 	else
