@@ -39,7 +39,7 @@ super + shift + {f,w,e}
 
 # Color Picker
 super + p
-	gpick -ps
+	xcolor -s clipboard
 
 # Lockscreen
 ctrl + alt + l
