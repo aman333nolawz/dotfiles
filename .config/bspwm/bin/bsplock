@@ -12,6 +12,7 @@ cyan='#89dceb'
 green='#a6e3a1'
 
 i3lock \
+  --greeter-text="$(fortune -s | grep -vE '\--.*' | tr '\n' ' ')" \
   --color=$background \
   --insidever-color=$selection$alpha \
   --insidewrong-color=$selection$alpha \
@@ -29,6 +30,7 @@ i3lock \
   --layout-color=$blue \
   --date-color=$blue \
   --time-color=$blue \
+  --greeter-color=$blue \
   --clock \
   --indicator \
   --radius=120 \
@@ -36,9 +38,4 @@ i3lock \
   --pass-media-keys \
   --pass-screen-keys \
   --pass-volume-keys \
- --time-font="FiraCode Nerd Font" \
- --date-font="FiraCode Nerd Font" \
- --layout-font="FiraCode Nerd Font" \
- --verif-font="FiraCode Nerd Font" \
- --wrong-font="FiraCode Nerd Font" 
-
+  --greeter-size=19
