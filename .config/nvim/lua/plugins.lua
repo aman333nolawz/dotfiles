@@ -81,6 +81,17 @@ require('lazy').setup({
 
   -- Utilities and LSP and productive stuffs
   'nvim-telescope/telescope.nvim',
+  -- Terminal
+  {
+    'akinsho/toggleterm.nvim',
+    config = function()
+      require('toggleterm').setup {
+        float_opts = {
+          border = "curved"
+        }
+      }
+    end
+  },
   -- Comment
   {
     'numToStr/Comment.nvim',

@@ -23,14 +23,10 @@ allow_for_physical_item_deletion = "no"
 ### Visualizer ###
 visualizer_data_source = "localhost:5555"
 visualizer_output_name = "mpd_visualizer"
-# visualizer_in_stereo   = "yes"
+visualizer_in_stereo   = "yes"
 visualizer_look 	   = ●●
 visualizer_type 	   = "ellipse"
-
-visualizer_in_stereo = "yes"
-# visualizer_type = "spectrum"
 visualizer_color = 7,5,8,3
-# visualizer_look = ".."
 
 ### Appearance ###
 playlist_display_mode = "columns"

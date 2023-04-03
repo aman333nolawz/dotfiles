@@ -1,3 +1,0 @@
-require("auto-save").setup {
-
-}

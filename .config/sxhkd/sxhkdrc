@@ -35,11 +35,7 @@ super + {w,m,x,r,s}
 
 # Launch Apps
 super + shift + {f,w,e}
-	{thunar,firefox,geany}
-
-# Terminal Apps
-ctrl + alt + {v,r,h}
-	alacritty --config-file ~/.config/alacritty/alacritty.yml -e {vim,ranger,htop}
+	{thunar,firefox,alacritty -e nvim}
 
 # Color Picker
 super + p

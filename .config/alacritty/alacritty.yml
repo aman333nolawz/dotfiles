@@ -1,24 +1,16 @@
-## Copyright (C) 2020-2021 Aditya Shakya <adi1090x@gmail.com>
-## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
-
-## Configuration for Alacritty, the GPU enhanced terminal emulator.
-## It's a very basic and simple config file, for full configuration...
-## See, /usr/share/doc/alacritty/example/alacritty.yml
-
-## Import files (Colors, Fonts, Etc)
 import:
-  - ~/.config/alacritty/catppuccin/catppuccin-mocha.yml
+  - ~/.config/alacritty/colors.yml
   - ~/.config/alacritty/fonts.yml
 
 ## Set environment variables
 env:
   TERM: alacritty
-  WINIT_X11_SCALE_FACTOR: '1.0'
+  WINIT_X11_SCALE_FACTOR: '1.5'
 
 ## Terminal window settings
 window:
   dimensions:
-    columns: 82
+    columns: 80
     lines: 25
 
   padding:

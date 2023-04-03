@@ -30,13 +30,11 @@ visualizer_type 	   = "ellipse"
 ### Appearance ###
 playlist_display_mode = "columns"
 colors_enabled 		  = "yes"
-#user_interface       = classic
 user_interface 		  = alternative
 volume_color 		  = "white"
 
 ### Window ###
 song_window_title_format = "Music Player"
-#song_window_title_format = "{%a - }{%t}|{%f}"
 statusbar_visibility 	 = "no"
 header_visibility 		 = "no"
 titles_visibility 		 = "yes"

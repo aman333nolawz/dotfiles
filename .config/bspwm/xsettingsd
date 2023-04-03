@@ -2,7 +2,7 @@
 ## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
 
 Net/ThemeName "Catppuccin-Mocha-Standard-Lavender-Dark"
-Net/IconThemeName "Catppuccin-Mocha-Lavender"
+Net/IconThemeName "Papirus"
 Gtk/CursorThemeName "Catppuccin-Mocha-Lavender"
 Net/EnableEventSounds "0"
 Net/EnableInputFeedbackSounds "0"
