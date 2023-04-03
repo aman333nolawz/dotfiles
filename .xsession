@@ -1,6 +1,8 @@
 #!/bin/sh
 export PATH="${PATH}:$HOME/.local/bin"
 
+export EDITOR="nvim"
+
 ## Run java applications without issues
 export _JAVA_AWT_WM_NONREPARENTING=1
 

@@ -15,4 +15,3 @@ bindkey -e
 # End of lines configured by zsh-newuser-install
 
 source ~/.config/zsh/zshrc
-export PATH=$PATH:$HOME/.local/bin/
