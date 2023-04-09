@@ -64,7 +64,7 @@ shot10 () {
 }
 
 shotwin () {
-	cd ${dir} && maim -u -f png -i `xdotool getactivewindow` | tee "$file" | xclip -selection clipboard -t image/png
+  cd ${dir} && maim -u -f png -i $(xdotool getactivewindow) | tee "$file" | xclip -selection clipboard -t image/png
 	notify_view
 }
 
