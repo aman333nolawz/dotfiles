@@ -80,7 +80,12 @@ require('lazy').setup({
   },
 
   -- Utilities and LSP and productive stuffs
-  'nvim-telescope/telescope.nvim',
+  {
+    "nvim-telescope/telescope.nvim",
+    config = function()
+      require("config.telescope")
+    end,
+  },
   -- Terminal
   {
     'akinsho/toggleterm.nvim',
