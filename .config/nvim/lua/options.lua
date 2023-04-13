@@ -26,6 +26,12 @@ vim.cmd.colorscheme "catppuccin"
 g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 
+-- Folding
+opt.foldcolumn = "auto"
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.foldenable = true
+opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
 -- For statusline (staline)
 opt.laststatus=2

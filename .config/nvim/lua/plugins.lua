@@ -107,23 +107,20 @@ require('lazy').setup({
   -- LSP
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
     config = function()
       require("config.lsp")
     end
   },
   {
-    "williamboman/mason.nvim",
-    config = function()
-      require("mason").setup({
-        PATH = "prepend",
-      })
-    end
-  },
-  {
-    "williamboman/mason-lspconfig.nvim",
-    config = function()
-      require("mason-lspconfig").setup()
-    end
+    'kevinhwang91/nvim-ufo',
+    dependencies = {
+      'kevinhwang91/promise-async',
+      'luukvbaal/statuscol.nvim'
+    }
   },
   -- Completions
   { 'L3MON4D3/LuaSnip' },

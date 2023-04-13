@@ -49,5 +49,9 @@ keymap('n', '<leader>tt', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open
 keymap('n', '<A-i>', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open Terminal' })
 keymap('t', '<A-i>', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open Terminal' })
 
+-- Folding
+keymap('n', 'zR', require('ufo').openAllFolds)
+keymap('n', 'zM', require('ufo').closeAllFolds)
+
 -- Keyracer
 keymap('n', '<leader>tb', ":DuckyType<CR>", { desc = "Start typing test" })

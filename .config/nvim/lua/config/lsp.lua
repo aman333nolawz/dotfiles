@@ -1,49 +1,44 @@
 local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
-
---Enable (broadcasting) snippet capability for completion
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-lspconfig.html.setup {
-  capabilities = capabilities,
+require('ufo').setup()
+require('mason').setup{
+  PATH = "prepend",
+}
+require('mason-lspconfig').setup{
+  ensure_installed = {
+    "pyright",
+    "emmet_ls",
+    "html",
+    "cssls",
+    "lua_ls"
+  }
 }
 
-lspconfig.cssls.setup {
-  capabilities = capabilities,
+local lsp_attach = function(_, _)
+  -- Create your keybindings here...
+end
+
+-- Folding
+
+local builtin = require("statuscol.builtin")
+require("statuscol").setup{
+	relculright = true,
+	segments = {
+		{ text = { "%s" }, click = "v:lua.ScSa" },
+		{ text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
+		{ text = { " ", builtin.foldfunc, " " }, click = "v:lua.ScFa" },
+}}
+capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true
 }
 
-lspconfig.emmet_ls.setup{}
-
-lspconfig.pyright.setup{}
-
-lspconfig.lua_ls.setup {
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
-}
-
-lspconfig.clangd.setup{}
+require('mason-lspconfig').setup_handlers({
+  function(server_name)
+    lspconfig[server_name].setup({
+      on_attach = lsp_attach,
+      capabilities = capabilities,
+    })
+  end
+})
