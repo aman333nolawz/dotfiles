@@ -56,6 +56,25 @@ require('lazy').setup({
     end,
   },
 
+  {"lukas-reineke/indent-blankline.nvim"},
+
+  {
+    "folke/zen-mode.nvim",
+    config = function()
+      require("zen-mode").setup{
+        window = {
+          backdrop = 1,
+          width = 0.85,
+          options = {
+            number = false,
+            relativenumber = false,
+            -- foldcolumn = "0",
+          }
+        }
+      }
+    end
+  },
+
   -- Buffer line & Status line
   {
     'akinsho/bufferline.nvim',
