@@ -107,7 +107,7 @@ for i in ${settings[@]}; do
    bspc rule -a $i desktop='^8' state=floating follow=on focus=on; done
 
 ## Always Floating Apps
-declare -a floating=(alacritty-float Thunar Yad 'Firefox:Places' \
+declare -a floating=(terminal-float Thunar Yad 'Firefox:Places' \
 feh Nm-connection-editor)
 for i in ${floating[@]}; do
    bspc rule -a $i state=floating follow=on focus=on; done

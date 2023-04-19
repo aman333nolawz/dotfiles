@@ -10,6 +10,8 @@ application/x-theme=geany.desktop;
 application/json=geany.desktop;
 application/xml=userapp-geany-991HS1.desktop;
 video/x-matroska=mpv.desktop;
+application/x-python-bytecode=nvim.desktop;
+application/zip=userapp-7z x-5CUW31.desktop;
 
 [Default Applications]
 image/gif=viewnior.desktop
@@ -17,3 +19,6 @@ image/svg+xml=viewnior.desktop
 application/x-extension-burp=install4j_1je7tfy-BurpSuiteCommunity.desktop
 application/pdf=org.pwmt.zathura.desktop
 image/jpeg=userapp-viewnior-G4BIS1.desktop
+application/x-python-bytecode=nvim.desktop
+application/zip=userapp-7z x-5CUW31.desktop
+inode/directory=thunar.desktop

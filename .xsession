@@ -2,9 +2,10 @@
 export PATH="${PATH}:$HOME/.local/bin"
 
 export EDITOR="nvim"
+export TERMINAL="kitty"
 export BAT_THEME="Catppuccin-mocha"
 
-## Run java applications without issues
+# Run java applications without issues
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Scaling
