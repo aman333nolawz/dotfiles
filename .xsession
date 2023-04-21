@@ -1,8 +1,8 @@
 #!/bin/sh
 export PATH="${PATH}:$HOME/.local/bin"
 
-export EDITOR="nvim"
-export TERMINAL="kitty"
+export EDITOR="/usr/bin/nvim"
+export TERMINAL="/usr/bin/kitty"
 export BAT_THEME="Catppuccin-mocha"
 
 # Run java applications without issues

@@ -1,14 +1,7 @@
-#!/bin/bash
+#! /usr/bin/env bash
 
-declare -A stations=( ["lainon.life - Cafe"]="https://lainon.life/radio/cafe.ogg" )
-
-menu() {
-  for station in "${!stations[@]}"
-  do
-    station="$stations[$station]"
-    printf "${station:1:-1}\n"
-  done
-}
-
-station=$(menu | rofi -dmenu)
-mpc add "${stations[$station]}"
+kitty @ set-tab-title music
+kitty @ set-window-title cover
+kitty @ new-window --title ncmpcpp ncmpcpp
+kitty @ resize-window --increment 93
+source "$HOME/.config/ncmpcpp/scripts/set-current-cover"

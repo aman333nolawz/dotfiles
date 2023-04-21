@@ -5,7 +5,7 @@
 
 ##---------- Keybindings for bspwm ----------##
 
-# Terminal (alacritty)
+# Terminal
 super + Return
 	bspterm
 
@@ -35,7 +35,7 @@ super + {w,m,x,r,s}
 
 # Launch Apps
 super + shift + {f,w,e}
-	{thunar,firefox,alacritty -e nvim}
+	{thunar,firefox,$TERMINAL $EDITOR}
 
 # Color Picker
 super + p
@@ -167,7 +167,7 @@ super + shift + i
 
 ##---------- Custom ----------##
 super + a
-  alacritty -e aniwrapper
+  $TERMINAL aniwrapper
 
 super + shift + p
   ~/.local/bin/pi
