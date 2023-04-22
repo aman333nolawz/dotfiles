@@ -143,7 +143,7 @@ require('lazy').setup({
   },
   -- Completions
   { 'L3MON4D3/LuaSnip' },
-  { 'hrsh7th/cmp-nvim-lsp' },
+  { 'hrsh7th/cmp-nvim-lsp', dependencies = { "onsails/lspkind.nvim" } },
   { 'hrsh7th/cmp-path' },
   { 'hrsh7th/cmp-buffer' },
   {
