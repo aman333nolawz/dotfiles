@@ -1,6 +1,8 @@
 set window-title-basename "true"
 set selection-clipboard "clipboard"
 
+set font "FiraCode Nerd Font 9"
+
 set default-fg                "#CDD6F4"
 set default-bg 			          "#1E1E2E"
 
