@@ -1,25 +1,20 @@
 local keymap = vim.keymap.set
 
 -- Save file
-keymap("n", "<C-S>", "<Cmd>:w!<CR>")
-keymap("i", "<C-S>", "<Cmd>:w!<CR>")
-keymap("", "<C-S>", "<Cmd>:w!<CR>")
+keymap({'n', 'i', 'v'}, "<C-S>", "<Cmd>:w!<CR>")
 
 -- Move lines highlighted
 keymap("v", "J", "<Cmd>:m '>+1<CR>gv=gv")
 keymap("v", "K", "<Cmd>:m '<-2<CR>gv=gv")
 
 -- Yank to system clipboard
-keymap("n", "<leader>y", "\"+y", { desc = "Yank to system clipboard" })
-keymap("v", "<leader>y", "\"+y", { desc = "Yank to system clipboard" })
-keymap("n", "<leader>Y", "\"+Y", { desc = "Yank to system clipboard" })
+keymap({"n", "v"}, "<leader>y", "\"+y", { desc = "Yank to system clipboard" })
 -- Paste from system clipboard
-keymap("n", "<leader>p", "\"+p", { desc = "Paste from system clipboard" })
-keymap("v", "<leader>p", "\"+p", { desc = "Paste from system clipboard" })
+keymap({"n","v"}, "<leader>p", "\"+p", { desc = "Paste from system clipboard" })
 keymap("n", "<leader>P", "\"+P", { desc = "Paste from system clipboard" })
 
 -- Add Semicolon to end of line
-keymap("n", ";", "A;<esc>")
+keymap("n", "<C-;>", "A;<esc>")
 
 -- Switch tabs
 keymap("n", "<A-1>", "<Cmd>:BufferLineGoToBuffer 1<CR>", { desc = "Switch to buffer 1" })
@@ -33,6 +28,10 @@ keymap("n", "<A-8>", "<Cmd>:BufferLineGoToBuffer 8<CR>", { desc = "Switch to buf
 keymap("n", "<A-9>", "<Cmd>:BufferLineGoToBuffer 9<CR>", { desc = "Switch to buffer 9" })
 keymap("n", "<A-c>", "<Cmd>:bdelete<CR>", { desc = "Close current buffer" })
 
+-- Vertical movement
+keymap("n", "<C-d>", "<C-d>zz")
+keymap("n", "<C-u>", "<C-u>zz")
+
 -- Open sidebar
 keymap("n", "<leader>k", "<Cmd>:NvimTreeToggle<CR>", { desc = "Toggle Side bar" })
 
@@ -45,9 +44,8 @@ keymap('n', '<leader>fh', builtin.help_tags, { desc = 'List help tags' })
 keymap('n', '<leader>fr', builtin.reloader, { desc = 'Reload' })
 
 -- Terminal
-keymap('n', '<leader>tt', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open Terminal' })
-keymap('n', '<A-i>', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open Terminal' })
-keymap('t', '<A-i>', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open Terminal' })
+keymap({'n', 'v'}, '<leader>tt', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open Terminal' })
+keymap({'n', 't'}, '<A-i>', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open Terminal' })
 
 -- Folding
 keymap('n', 'zR', require('ufo').openAllFolds)
