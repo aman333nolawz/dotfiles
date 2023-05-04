@@ -7,7 +7,7 @@
 
 # Get Volume
 get_volume() {
-  volume=`amixer get Master | tail -n1 | awk -F ' ' '{print $5}' | tr -d '[]'`
+  volume=`awk -F"[][]" '/Left:/ { print $2 }' <(amixer sget Master)`
   echo "$volume"
 }
 
