@@ -12,7 +12,6 @@ cyan='#89dceb'
 green='#a6e3a1'
 
 i3lock \
-  --greeter-text="$(fortune -s | grep -vE '\--.*' | tr '\n' ' ')" \
   --color=$background \
   --insidever-color=$selection$alpha \
   --insidewrong-color=$selection$alpha \
