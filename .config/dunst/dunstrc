@@ -1,7 +1,6 @@
-
 [global]
 icon_theme = Papirus
-enable_recursive_icon_lookup = true
+icon_path = /home/nolawz/.config/dunst/icons/
 frame_color = "#a4ade9"
 separator_color= frame
 font="FiraCode Nerd Font 8"
