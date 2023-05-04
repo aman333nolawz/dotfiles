@@ -163,11 +163,11 @@ alt + shift + {Left,Down,Up,Right}
 
 # Hide/Unhide Window
 super + shift + i
-	bspwinmask		
+	bspwinmask
 
 ##---------- Custom ----------##
 super + a
-  $TERMINAL aniwrapper
+  /usr/local/bin/jerry -p gogoanime
 
 super + shift + p
   ~/.local/bin/pi
