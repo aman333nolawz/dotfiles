@@ -181,20 +181,4 @@ require('lazy').setup({
       }
     end
   },
-
-  -- Fun
-  {
-    'kwakzalver/duckytype.nvim',
-    config = function()
-      require('duckytype').setup{
-        highlight = {
-          good = "Comment",
-        },
-        window_config = {
-          border = "rounded"
-        }
-      }
-    end
-  },
-  "alec-gibson/nvim-tetris"
 })
