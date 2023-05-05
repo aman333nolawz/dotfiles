@@ -65,15 +65,13 @@ bspc wm --adopt-orphans
 bspc rule -r *:*
 
 ## 1 > terminal (always open terminal on workspace-1)
-bspc rule -a Alacritty desktop='^1' follow=on focus=on
-bspc rule -a Xfce4-terminal desktop='^1' follow=on focus=on
+bspc rule -a kitty desktop='^1' follow=on focus=on
 
 ## 2 > web (always open web browser on workspace-2)
 bspc rule -a firefox desktop='^2' follow=on focus=on
-bspc rule -a chromium desktop='^2' follow=on focus=on
 
 ## 3 > files (always open file manager on workspace-3)
-declare -a files=(Thunar qBittorrent)
+declare -a files=(Thunar Deluge)
 for i in ${files[@]}; do
    bspc rule -a $i desktop='^3' follow=on focus=on; done
 
@@ -93,22 +91,18 @@ for i in ${comm[@]}; do
    bspc rule -a $i desktop='^6' follow=on focus=on; done
 
 ## 7 > media (always open media apps on workspace-7)
-declare -a media=(mpv)
+declare -a media=(mpv sxiv)
 for i in ${media[@]}; do
    bspc rule -a $i desktop='^7' state=floating follow=on focus=on; done
 
 ## 8 > system (always open system apps on workspace-8)
-bspc rule -a 'VirtualBox Manager' desktop='^8' follow=on focus=on
 bspc rule -a GParted desktop='^8' follow=on focus=on
-declare -a settings=(Lxappearance Lxtask Lxrandr Arandr \
-System-config-printer.py Pavucontrol Exo-helper-1 \
-Xfce4-power-manager-settings)
+declare -a settings=(Lxappearance Pavucontrol)
 for i in ${settings[@]}; do
    bspc rule -a $i desktop='^8' state=floating follow=on focus=on; done
 
 ## Always Floating Apps
-declare -a floating=(terminal-float Thunar Yad 'Firefox:Places' \
-feh Nm-connection-editor)
+declare -a floating=(terminal-float Thunar Yad 'Firefox:Places' Nm-connection-editor)
 for i in ${floating[@]}; do
    bspc rule -a $i state=floating follow=on focus=on; done
 
