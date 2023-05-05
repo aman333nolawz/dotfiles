@@ -7,15 +7,15 @@ DIR="$HOME/.config"
 rofi_cmd="rofi -theme $DIR/rofi/config/asroot.rasi"
 
 # Apps
-terminal=" Alacritty"
-files=" Thunar"
-editor=" Geany"
-clifm=" Ranger"
-vim=" Vim"
+terminal=" Terminal"
+files=" File Manager"
+editor=" Text Editor"
+clifm=" CLI File Manager"
+vim=" Neovim"
 
 # Variable passed to rofi
 options="$terminal\n$files\n$editor\n$clifm\n$vim"
-term='alacritty --class alacritty-float,alacritty-float --config-file /root/.config/bspwm/alacritty/alacritty.yml'
+term='kitty --class terminal-float'
 
 # Functions
 
@@ -28,12 +28,12 @@ case $chosen in
         bsproot 'dbus-run-session thunar'
         ;;
     $editor)
-        bsproot geany
+        bsproot "$EDITOR"
         ;;
     $clifm)
-        bsproot "$term -e ranger"
+        bsproot "$term --title 'LF' lf"
         ;;
     $vim)
-        bsproot "$term -e vim"
+        bsproot "$term --title 'neovim' nvim"
         ;;
 esac
