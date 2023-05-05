@@ -27,6 +27,10 @@ alt + F1
 super + n
   networkmanager_dmenu
 
+# Rofi Bluetooth Menu
+super + b
+  sh ~/.local/bin/blueconn
+
 # Rofi Menus/Applets
 super + {w,m,x,r,s}
 	sh ~/.config/rofi/bin/{windows,mpd,powermenu,asroot,screenshot}

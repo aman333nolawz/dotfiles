@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#bcn, Bluetooth Connect
+
+
+device_amount=$(bluetoothctl devices | wc -l)
+
+if [[ $device_amount = 1 ]]; then
+	select=$(bluetoothctl devices | cut -d' ' -f3-)
+	MAC=$(bluetoothctl devices | awk {'print $2'})
+		[ -z $MAC ] && MAC=NoDeviceFound # Prevents accidental disconnect error
+else
+	select=$(bluetoothctl devices | cut -d' ' -f3- | rofi -dmenu -l 10)
+	MAC=$(bluetoothctl devices | grep $select | awk {'print $2'}) 
+		[ -z $MAC ] && MAC=NoDeviceFound # Prevents accidental disconnect error
+fi
+
+connect=$(bluetoothctl info $MAC | grep Connected: | awk '{print $2}')
+if [[ $connect = no ]]; then 
+	notify-send "Connecting to $select" -i "bluetooth-connect"
+	bluetoothctl connect $MAC || notify-send "Failed to Connect"
+elif [[ $connect = yes ]]; then
+	notify-send "Disconnecting $select"
+	bluetoothctl disconnect $MAC 
+fi
