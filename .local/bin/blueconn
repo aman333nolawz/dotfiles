@@ -11,7 +11,7 @@ if [[ $device_amount = 1 ]]; then
 		[ -z $MAC ] && MAC=NoDeviceFound # Prevents accidental disconnect error
 else
 	select=$(bluetoothctl devices | cut -d' ' -f3- | rofi -dmenu -l 10)
-	MAC=$(bluetoothctl devices | grep $select | awk {'print $2'}) 
+	MAC=$(bluetoothctl devices | grep "$select" | awk {'print $2'}) 
 		[ -z $MAC ] && MAC=NoDeviceFound # Prevents accidental disconnect error
 fi
 
