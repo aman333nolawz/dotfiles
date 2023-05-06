@@ -112,15 +112,7 @@ bspc rule -a stalonetray state=floating manage=off
 ## Autostart -------------------------------------------------#
 
 # Kill if already running
-killall -9 xsettingsd sxhkd dunst ksuperkey xfce4-power-manager bspc
-
-# Lauch xsettingsd daemon
-xsettingsd --config="$BSPDIR"/xsettingsd &
-
-# polkit agent
-if [[ ! `pidof xfce-polkit` ]]; then
-	/usr/lib/xfce-polkit/xfce-polkit &
-fi
+killall -9 sxhkd dunst ksuperkey bspc
 
 # Lauch keybindings daemon
 sxhkd &
@@ -128,9 +120,6 @@ sxhkd &
 # Enable Super Keys For Menu
 ksuperkey -e 'Super_L=Alt_L|F1' &
 ksuperkey -e 'Super_R=Alt_L|F1' &
-
-# Enable power management
-xfce4-power-manager &
 
 # Fix cursor
 xsetroot -cursor_name left_ptr
