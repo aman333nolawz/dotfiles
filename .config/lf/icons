@@ -304,15 +304,10 @@ Vagrantfile             
 *.svgz  
 *.mng   
 *.pcx   
-*.mov   
 *.mpg   
 *.mpeg  
 *.m2v   
-*.mkv   
-*.webm  
 *.ogm   
-*.mp4   
-*.m4v   
 *.mp4v  
 *.vob   
 *.qt    
@@ -322,9 +317,7 @@ Vagrantfile             
 *.rm    
 *.rmvb  
 *.flc   
-*.avi   
 *.fli   
-*.flv   
 *.gl    
 *.dl    
 *.xcf   
@@ -352,6 +345,15 @@ Vagrantfile             
 *.opus  
 *.spx   
 *.xspf  
+
+# video formats
+*.mp4   
+*.mkv   
+*.mov   
+*.webm  
+*.flv   
+*.avi   
+*.m4v   
 
 # other formats
 *.pdf   
