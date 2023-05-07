@@ -14,5 +14,5 @@ alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 
 # Dotfiles config
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias reload="exec zsh"
