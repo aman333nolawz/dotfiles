@@ -1,5 +1,4 @@
 [global]
-icon_theme = Papirus
 icon_path = /home/nolawz/.config/dunst/icons/
 frame_color = "#a4ade9"
 separator_color= frame
