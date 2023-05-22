@@ -25,14 +25,6 @@ else
 		lock=""
 		suspend=""
 		logout=""
-  # Section 2
-#		shutdown="襤"
-#		reboot="ﰇ"
-#		lock=""
-#		suspend="鈴"
-#		logout=" "
-
-
 	else
   # Section 1
 		shutdown=" Shutdown"
@@ -40,13 +32,7 @@ else
 		lock=" Lock"
 		suspend=" Sleep"
 		logout=" Logout"
-  # Section 2
-#		shutdown="襤Shutdown"
-#		reboot="ﰇ Restart"
-#		lock=" Lock"
-#		suspend="鈴Sleep"
-#		logout=" Logout"
-	fi
+ 	fi
 	ddir="$HOME/.config/rofi/config"
 fi
 
@@ -61,7 +47,7 @@ rofi -dmenu\
 
 # Display Help
 show_msg() {
-	rofi -theme "$ddir/askpass.rasi" -e "Options : yes / no / y / n"
+	rofi -theme "$ddir/confirm.rasi" -e "Options : yes / no / y / n"
 }
 
 # Variable passed to rofi
@@ -90,7 +76,7 @@ case $chosen in
         fi
         ;;
     $lock)
-        sh $HOME/.config/bspwm/bin/bsplock
+        sh $HOME/.config/hypr/scripts/lock.sh
         ;;
     $suspend)
 		ans=$(rdialog &)
@@ -105,7 +91,7 @@ case $chosen in
     $logout)
 		ans=$(rdialog &)
 		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
-			bspc quit
+			hyprctl dispatch exit
 		elif [[ $ans == "no" ]] || [[ $ans == "NO" ]] || [[ $ans == "n" ]]; then
 			exit
         else

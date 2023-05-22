@@ -7,7 +7,8 @@
 
 # Get Volume
 get_volume() {
-  volume=`awk -F"[][]" '/Left:/ { print $2 }' <(amixer sget Master)`
+  volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d" " -f2)
+  volume=$(python -c "print(round(100*${volume}))")
   echo "$volume"
 }
 
@@ -16,7 +17,7 @@ get_icon() {
   vol="$(get_volume)"
   current="${vol%%%}"
   current=$((current))
-  if [[ ($current -ge 60) && ($current -le 100) ]]; then
+  if [[ ($current -ge 60) ]]; then
     icon="$HOME/.config/dunst/icons/volume-high.svg"
   elif [[ ($current -ge 30) && ($current -le 60) ]]; then
     icon="$HOME/.config/dunst/icons/volume-medium.svg"
@@ -29,22 +30,22 @@ get_icon() {
 
 # Increase brightness
 inc_volume() {
-  amixer -Mq set Master,0 5%+ unmute && get_icon && dunstify -u low --replace=69 -i "$icon" "Volume : $(get_volume)"
+  wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+&& get_icon && dunstify -u low --replace=69 -i "$icon" "Volume : $(get_volume)"
 }
 
 # Decrease brightness
 dec_volume() {
-  amixer -Mq set Master,0 5%- unmute && get_icon && dunstify -u low --replace=69 -i "$icon" "Volume : $(get_volume)"
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && get_icon && dunstify -u low --replace=69 -i "$icon" "Volume : $(get_volume)"
 }
 
 toggle_mute() {
-  status=`amixer get Master | tail -n1 | grep -wo 'on'`
+  status=`pactl get-sink-mute @DEFAULT_SINK@ | grep -wo 'yes'`
 
-  if [[ "$status" == "on" ]]; then
-    amixer set Master toggle && icon="$HOME/.config/dunst/icons/volume-muted.svg" && dunstify -u low --replace=69 -i "$icon" "Mute"
+  if [[ "$status" == "yes" ]]; then
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ 0 && get_icon && dunstify -u low --replace=69 -i "$icon" "Unmute"
   else
-    amixer set Master toggle && get_icon && dunstify -u low --replace=69 -i "$icon" "Unmute"
-  fi
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ 1 && icon="$HOME/.config/dunst/icons/volume-muted.svg" && dunstify -u low --replace=69 -i "$icon" "Mute"
+ fi
 }
 
 # Execute accordingly

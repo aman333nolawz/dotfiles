@@ -32,6 +32,9 @@ keymap("n", "<A-c>", "<Cmd>:bdelete<CR>", { desc = "Close current buffer" })
 keymap("n", "<C-d>", "<C-d>zz")
 keymap("n", "<C-u>", "<C-u>zz")
 
+-- Refactoring
+keymap("n", "<leader>lrr", vim.lsp.buf.rename, { desc = "Rename variable" })
+
 -- Open sidebar
 keymap("n", "<leader>k", "<Cmd>:NvimTreeToggle<CR>", { desc = "Toggle Side bar" })
 

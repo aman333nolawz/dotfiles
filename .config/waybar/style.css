@@ -1,0 +1,87 @@
+@import "mocha.css";
+
+* {
+  font-family: "FiraCode Nerd Font";
+  font-size: 11px;
+  min-height: 10px;
+}
+
+window#waybar {
+  background: @base;
+  color: @text;
+}
+
+#workspaces {
+  background-color: @surface0;
+}
+
+#workspaces button {
+  color: @lavender;
+  transition: none;
+  padding: 5px;
+}
+
+#workspaces button.active {
+  color: @green;
+}
+
+#workspaces button:hover {
+  color: @green;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+#mpd,
+#backlight,
+#clock,
+#battery,
+#pulseaudio,
+#custom-lock,
+#custom-power {
+  background-color: @surface0;
+  padding: 5px;
+}
+
+#mpd {
+  padding: 5px 10px;
+  color: @lavender;
+}
+
+#clock {
+  color: @peach;
+}
+
+#battery {
+  color: @sky;
+}
+
+#battery.charging {
+  color: @green;
+}
+
+#battery.warning:not(.charging) {
+  color: @red;
+}
+
+#backlight {
+  color: @yellow;
+}
+
+#pulseaudio {
+  color: @lavender;
+}
+
+#pulseaudio.muted {
+  color: @red;
+}
+
+tooltip {
+    background: @base;
+    font-family: Lato, Arial, sans-serif;
+}
+
+tooltip label {
+    color: @text;
+}

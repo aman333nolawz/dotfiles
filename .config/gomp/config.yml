@@ -1,6 +1,0 @@
-DEFAULT_IMAGE_PATH   : "~/.config/gomp/logo.png"
-ADDITIONAL_PADDING_X : 40
-ADDITIONAL_PADDING_Y : 45
-IMAGE_WIDTH_EXTRA_X  : -1.1
-togglePlayBack : [ "p", "SPACE", "]" ]
-showChildrenContent  : ["l", "ENTER"]

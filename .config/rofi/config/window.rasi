@@ -1,14 +1,3 @@
-/* Copyright (C) 2020-2022 Aditya Shakya <adi1090x@gmail.com> */
-/* Everyone is permitted to copy and distribute copies of this file under GNU-GPL3 */
-
-configuration {
-    show-icons:                     false;
-    display-window: 				"";
-    window-format: 					"{w} · {c} · {t}";
-    disable-history:                false;
-	click-to-exit: 					true;
-}
-
 @import "font.rasi"
 @import "colors.rasi"
 
@@ -19,7 +8,7 @@ window {
     border:                  		1px;
     border-color:                  	@BGA;
     border-radius:                  10px;
-    width:                          500px;
+    width:                          350px;
     location:                       center;
     anchor:                         center;
     x-offset:                       0;

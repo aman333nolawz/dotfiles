@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-if [ "$1" == "--float" ]; then
-	kitty --class 'terminal-float'
-elif [ "$1" == "--full" ]; then
-	kitty --start-as fullscreen
-else
-	kitty
-fi
