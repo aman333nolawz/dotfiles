@@ -12,6 +12,7 @@ application/xml=userapp-geany-991HS1.desktop;
 video/x-matroska=mpv.desktop;
 application/x-python-bytecode=nvim.desktop;
 application/zip=userapp-7z x-5CUW31.desktop;
+text/x-python=userapp-python-2WH241.desktop;
 
 [Default Applications]
 image/gif=viewnior.desktop
