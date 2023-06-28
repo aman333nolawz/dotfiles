@@ -1,0 +1,143 @@
+#!/bin/env python3
+# Pomodoro timer using pygame and using catppuccin theme
+import pygame
+import numpy as np
+import time
+from threading import Thread
+from pygame import gfxdraw
+
+
+pygame.init()
+
+win = pygame.display.set_mode((500, 500), pygame.RESIZABLE)
+
+def create_bell_sound():
+    duration = 500  # Duration of the sound in milliseconds
+    sample_rate = 44100  # Number of samples per second
+    frequency = 440  # Frequency of the fundamental tone in Hz
+    decay_factor = 0.99  # Decay factor for the sound
+
+    num_samples = int(duration * sample_rate / 1000)
+    buffer_size = int(sample_rate / frequency)
+    buffer = np.random.uniform(-1, 1, buffer_size)
+    samples = np.zeros(num_samples)
+
+    # Generate the bell sound
+    for i in range(num_samples):
+        samples[i] = buffer[0]
+        average = decay_factor * 0.5 * (buffer[0] + buffer[1])
+        buffer = np.roll(buffer, -1)
+        buffer[-1] = average
+
+        # Normalize the samples to fit within the [-1, 1] range
+    samples /= np.max(np.abs(samples))
+    samples *= 32767
+
+    # Convert samples to 16-bit signed integers
+    samples = samples.astype(np.int16)
+    # Duplicate the mono samples for both stereo channels
+    return pygame.sndarray.make_sound(np.column_stack((samples, samples)))
+
+
+class Timer:
+    def __init__(self, duration):
+        self.duration = duration
+        self.elapsed_time = 0
+        self.mode = "pomodoro"
+        self.total_pomos = 0
+        self.paused = False
+        bell_sound.play()
+        Thread(target=self.countdown).start()
+
+    def get_time(self):
+        time_left = self.duration - self.elapsed_time
+        
+        if time_left <= 0:
+            time_left = 0
+            self.change_mode()
+
+        return time_left
+    
+    def countdown(self):
+        while 1:
+            if not self.paused:
+                self.elapsed_time += 1
+                time.sleep(1)
+
+    def change_mode(self):
+        if self.mode == "pomodoro":
+            self.total_pomos += 1
+            self.mode = "break"
+
+            if self.total_pomos % 3 == 0:
+                self.duration = 25*60
+            else:
+                self.duration = 5*60
+        else:
+            self.mode = "pomodoro"
+            self.duration = 25*60
+            self.elapsed_time = 0
+
+        bell_sound.play()
+
+    def toggle_pause(self):
+        if self.paused:
+            self.paused = False
+        else:
+            self.paused = True
+
+    def reset(self):
+        self.elapsed_time = 0
+        bell_sound.play()
+
+    def display(self, win, pos, color):
+        time_left = self.get_time()
+        minutes, seconds = divmod(time_left, 60)
+        minutes, seconds = int(minutes), int(seconds)
+        # Render time
+        time_text = time_font.render(f"{minutes:02d}:{seconds:02d}", True, color)
+        time_text_rect = time_text.get_rect(center=pos)
+        win.blit(time_text, time_text_rect)
+
+        # Render completed pomodoros
+        pomos_text = pomos_font.render(f"x{self.total_pomos}", True, "#A6E3A1")
+        pomos_text_rect = pomos_text.get_rect(center=(pos[0], pos[1]+70))
+        win.blit(pomos_text, pomos_text_rect)
+
+bell_sound = create_bell_sound()
+
+time_font = pygame.font.SysFont('FiraCode Nerd Font', 70)
+pomos_font = pygame.font.SysFont('FiraCode Nerd Font', 40)
+
+pomodoro_duration = 25*60
+timer = Timer(pomodoro_duration)
+
+while True:
+    W, H = win.get_size()
+    win.fill("#1e1e2e")
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                timer.toggle_pause()
+            elif event.key == pygame.K_r:
+                timer.reset()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            circle_rect = pygame.Rect(W//2-150, H//2-150, 300, 300)
+            if circle_rect.collidepoint(event.pos):
+                timer.toggle_pause()
+
+    if timer.mode == "pomodoro":
+        primary_color = (180, 190, 254)
+    else:
+        primary_color = (166, 227, 161)
+
+    if timer.paused:
+        primary_color = (249, 226, 175)
+
+    gfxdraw.aacircle(win, W//2, H//2, 150, primary_color)
+    timer.display(win, (W//2, H//2), primary_color)
+
+    pygame.display.flip()

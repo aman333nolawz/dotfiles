@@ -17,6 +17,8 @@ visualizer_in_stereo = no
 visualizer_type = wave_filled
 visualizer_look = "█┇"
 visualizer_color =  blue, 40, blue, 40
+visualizer_spectrum_smooth_look = yes
+visualizer_fps = 60
 
 [ui]
 song_list_format = "$5%t $8·$5 {%a}|{%D}$8 $R $4%l"
