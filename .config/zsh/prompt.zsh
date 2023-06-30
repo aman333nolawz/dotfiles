@@ -1,26 +1,89 @@
-#!/bin/zsh
+# colors
+local color1=#1da1f2
+local color2=#0ff
+local color3=#2d8
+local color4=#f80
+local color5=#efb974
 
 autoload -Uz vcs_info
-autoload -U colors && colors
+setopt PROMPT_SUBST
 
-zstyle ':vcs_info:*' enable git 
+function create_separator() {
+	local sep=""
 
-precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcs_info )
-setopt prompt_subst
+	local terminal_width=$(tput cols)
+	local prompt_len=${#${(%):---- %n-%m- - %2~ }}
+	local git_prompt_skel=""
 
+	if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+		local unstaged_count=$(git diff --numstat | wc -l)
+		local staged_count=$(git diff --cached --numstat | wc -l)
+		local untracked_count=$(git ls-files --others --exclude-standard | wc -l)
 
-zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-# 
-+vi-git-untracked(){
-    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-        git status --porcelain | grep '??' &> /dev/null ; then
-        hook_com[staged]+='!' # signify new files with a bang
-    fi
+		local current_branch=$(git branch --show-current)
+
+		git_prompt_skel+=" ${current_branch} "
+
+		if ((staged_count!=0)); then
+			git_prompt_skel+="${staged_count}+ "
+		fi
+
+		if ((unstaged_count!=0)); then
+			git_prompt_skel+="${unstaged_count}* "
+		fi
+
+		if ((untracked_count!=0)); then
+			git_prompt_skel+="${untracked_count}! "
+		fi
+	fi
+
+	local git_prompt_len=${#git_prompt_skel}
+
+	separator_len=$((terminal_width - prompt_len - git_prompt_len))
+
+	for ((i=0; i < separator_len; i++)); do
+		sep+="󰍴"
+	done
+
+	echo "$sep"
 }
 
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:git:*' formats " %{$fg[blue]%}(%{$fg[red]%}%m%u%c%{$fg[yellow]%}%{$fg[magenta]%} %b%{$fg[blue]%})%{$reset_color%}"
+precmd() {
+	vcs_info
 
-PROMPT="%B%{$fg[yellow]%}% %(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )%{$fg[cyan]%}%c%{$reset_color%}"
-PROMPT+="\$vcs_info_msg_0_ "
+	if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+		prompt_char="○ "
+
+		local unstaged_count=$(git diff --numstat | wc -l)
+		local staged_count=$(git diff --cached --numstat | wc -l)
+		local untracked_count=$(git ls-files --others --exclude-standard | wc -l)
+
+		local current_branch=$(git branch --show-current)
+
+		git_prompt="%B%F{$color5}%K{$color5}%F{black}%F{black} ${current_branch} "
+
+		if ((staged_count!=0)); then
+			git_prompt+="%F{#080}${staged_count} "
+		fi
+
+		if ((unstaged_count!=0)); then
+			git_prompt+="%F{black}${unstaged_count} "
+		fi
+
+		if ((untracked_count!=0)); then
+			git_prompt+="%F{black}${untracked_count}! "
+		fi
+
+	else
+		prompt_char="○"
+		git_prompt=""
+	fi
+
+	prompt_top="╭──%B%F{black}%K{${color1}} %n%K{${color2}}%F{${color1}}%F{black}%m%f%k%F{${color2}} %B%F{yellow}%F{${color3}} %b%2~ %f"
+	prompt_below="%f╰──${prompt_char}%f "
+}
+
+PROMPT='${prompt_top}%F{#644}$(create_separator)$git_prompt%f%k%b
+${prompt_below}'
+
+RPROMPT='%F{#f00}$(if [ $? -ne 0 ]; then echo "󰌑%? "; fi)%f $(date "+%I:%M:%S %p")'
