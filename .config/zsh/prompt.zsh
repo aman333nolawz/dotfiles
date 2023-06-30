@@ -1,9 +1,8 @@
 # colors
-local color1=#1da1f2
-local color2=#0ff
-local color3=#2d8
-local color4=#f80
-local color5=#efb974
+local color1=#b4befe
+local color2=#94e2d5
+local color3=#f80
+local color4=#efb974
 
 autoload -Uz vcs_info
 setopt PROMPT_SUBST
@@ -41,8 +40,8 @@ function create_separator() {
 
 	separator_len=$((terminal_width - prompt_len - git_prompt_len))
 
-	for ((i=0; i < separator_len; i++)); do
-		sep+="󰍴"
+	for ((i=0; i < separator_len+10; i++)); do
+		sep+="-"
 	done
 
 	echo "$sep"
@@ -60,7 +59,7 @@ precmd() {
 
 		local current_branch=$(git branch --show-current)
 
-		git_prompt="%B%F{$color5}%K{$color5}%F{black}%F{black} ${current_branch} "
+		git_prompt="%B%F{$color4}%K{$color4}%F{black}%F{black} ${current_branch} "
 
 		if ((staged_count!=0)); then
 			git_prompt+="%F{#080}${staged_count} "
@@ -79,11 +78,11 @@ precmd() {
 		git_prompt=""
 	fi
 
-	prompt_top="╭──%B%F{black}%K{${color1}} %n%K{${color2}}%F{${color1}}%F{black}%m%f%k%F{${color2}} %B%F{cyan}%F{${color3}} %b%2~ %f"
+  prompt_top="╭──%B%F{black}%K{${color1}} %F{black}%n%f%k%F{${color1}} %B%F{cyan}%F{${color2}} %b%2~ %f"
 	prompt_below="%f╰──${prompt_char}%f "
 }
 
-PROMPT='${prompt_top}%F{#644}$(create_separator)$git_prompt%f%k%b
+PROMPT='${prompt_top}%F{black}$(create_separator)$git_prompt%f%k%b
 ${prompt_below}'
 
-RPROMPT='%F{#f00}$(if [ $? -ne 0 ]; then echo "󰌑%? "; fi)%f $(date "+%I:%M:%S %p")'
+RPROMPT='%F{red}$(if [ $? -ne 0 ]; then echo "󰌑%? "; fi)%f'
