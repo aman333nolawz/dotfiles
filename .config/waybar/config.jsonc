@@ -1,4 +1,5 @@
 {
+    "layer": "top",
     "position": "bottom",
     "modules-left": ["wlr/workspaces"],
     "modules-center": ["mpd"],

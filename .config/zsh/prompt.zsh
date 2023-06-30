@@ -79,7 +79,7 @@ precmd() {
 		git_prompt=""
 	fi
 
-	prompt_top="╭──%B%F{black}%K{${color1}} %n%K{${color2}}%F{${color1}}%F{black}%m%f%k%F{${color2}} %B%F{yellow}%F{${color3}} %b%2~ %f"
+	prompt_top="╭──%B%F{black}%K{${color1}} %n%K{${color2}}%F{${color1}}%F{black}%m%f%k%F{${color2}} %B%F{cyan}%F{${color3}} %b%2~ %f"
 	prompt_below="%f╰──${prompt_char}%f "
 }
 
