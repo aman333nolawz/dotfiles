@@ -1,7 +1,0 @@
-#! /usr/bin/env bash
-
-kitty @ set-tab-title music
-kitty @ set-window-title cover
-kitty @ new-window --title ncmpcpp ncmpcpp
-kitty @ resize-window --increment 93
-source "$HOME/.config/ncmpcpp/scripts/set-current-cover"
