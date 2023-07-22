@@ -1,91 +1,98 @@
 {
-    "layer": "top",
-    "position": "bottom",
-    "modules-left": ["wlr/workspaces"],
-    "modules-center": ["mpd"],
-    "modules-right": ["pulseaudio", "backlight", "battery", "clock", "tray"],
-    // Modules configuration
-    "mpd": {
-        "format": "{stateIcon} {title}",
-        "format-disconnected": "Disconnected ",
-        "max-length": 30,
-        "unknown-tag": "N/A",
-        "interval": 2,
-        "state-icons": {
-            "paused": "",
-            "playing": ""
-        },
-        "on-click": "mpc toggle",
-        "tooltip-format": "MPD (connected)",
-        "tooltip-format-disconnected": "MPD (disconnected)"
+  "layer": "top",
+  "position": "top", 
+  "height": 60,
+  "modules-left": ["wlr/workspaces"],
+  "modules-center": ["mpd"],
+  "modules-right": ["tray", "pulseaudio", "backlight", "battery", "clock", "custom/powermenu"],
+  "wlr/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "󰉋",
+      "4": "",
+      "5": "",
+      "6": "",
+      "7": "",
+      "8": "",
+      "urgent": "",
+      "active": "",
+      "default": ""
     },
-    "clock": {
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-         "format": "{: %I:%M %p}",
-        "format-alt": " {:%Y-%m-%d}"
+    "persistent_workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+      "6": [],
+      "7": [],
+      "8": [],
     },
-    "backlight": {
-        "format": "{icon} {percent}%",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    "sort-by-number": true
+  },
+  "mpd": {
+    "format": "{stateIcon} {title}",
+    "format-disconnected": "Disconnected ",
+    "max-length": 30,
+    "unknown-tag": "N/A",
+    "interval": 2,
+    "state-icons": {
+      "paused": "",
+      "playing": ""
     },
-    "battery": {
-        "states": {
-            "good": 95,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{icon}  {capacity}%",
-        "format-charging": " {capacity}%",
-        "format-plugged": " {capacity}%",
-        "format-alt": "{icon}  {time}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+    "on-click": "mpc toggle",
+    "tooltip-format": "MPD (connected)",
+    "tooltip-format-disconnected": "MPD (disconnected)"
+  },
+  "custom/powermenu": {
+    "2": [],
+    "format": " ",
+    "tooltip": false,
+    "on-click": "~/.config/rofi/bin/powermenu"
+  },
+  "tray": {
+    "icon-size": 13,
+    "spacing": 10
+  },
+  "clock": {
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format": "󰅐 {:%H:%M}",
+    "format-alt": " {:%Y-%m-%d}",
+  },
+  "backlight": {
+    "format": "{icon} {percent}%",
+    "format-icons": ["", "", "", "", "", "", "", "", ""]
+  },
+  "battery": {
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 15
     },
-    "pulseaudio": {
-      "format": "{icon} {volume}%",
-      "format-bluetooth": "{icon} {volume}%",
-      "format-muted": " {volume}%",
-      "format-icons": {
-        "headphone": "",
-        "hands-free": "",
-        "headset": "",
-        "phone": "",
-        "portable": "",
-        "car": "",
-        "default": ["", "", ""]
-      },
-      "scroll-step": 1,
-      "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-      "ignored-sinks": ["Easy Effects Sink"]
-    },
-    "wlr/workspaces": {
-      "format": "{icon}",
-      "on-click": "activate",
-      "format-icons": {
-        "1": "",
-        "2": "",
-        "3": "󰉋",
-        "4": "",
-        "5": "",
-        "6": "",
-        "7": "",
-        "8": "",
-        "urgent": "",
-        "active": "",
-        "default": ""
-      },
-      "persistent_workspaces": {
-        "1": [],
-        "2": [],
-        "3": [],
-        "4": [],
-        "5": [],
-        "6": [],
-        "7": [],
-        "8": [],
-      },
-      "sort-by-number": true
+    "format": "{icon} {capacity}%",
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰂄{capacity}%",
+    "format-alt": "{icon} {time}",
+    "format-full": "󱈑 {capacity}%",
+    "format-icons": ["󱊡", "󱊢", "󱊣"]
+  },
+  "pulseaudio": {
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "ignored-sinks": ["Easy Effects Sink"],
+    "format": "{icon}  {volume}%",
+    "format-bluetooth": "{icon} {volume}%",
+    "format-muted": "󰖁 Muted",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
     }
+  }
 }
-

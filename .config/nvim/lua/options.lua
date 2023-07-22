@@ -19,7 +19,6 @@ opt.swapfile = false
 opt.backup = false
 
 -- Colors
-opt.termguicolors = true
 vim.cmd.colorscheme "catppuccin"
 
 -- For nvim-tree.lua
@@ -27,12 +26,8 @@ g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 
 -- Folding
-opt.foldcolumn = "auto"
-opt.foldlevel = 99
-opt.foldlevelstart = 99
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldenable = true
+opt.foldlevelstart = 99
 opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
-
--- For statusline (staline)
-opt.laststatus=2
-opt.showtabline=2

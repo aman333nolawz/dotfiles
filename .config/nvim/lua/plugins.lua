@@ -29,21 +29,35 @@ require('lazy').setup({
   },
 
   {
-    'nvim-treesitter/nvim-treesitter',
-    build = function()
-      local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-      ts_update()
-    end,
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function () 
+      local configs = require("nvim-treesitter.configs")
+
+      configs.setup({
+        ensure_installed = { "c", "lua", "javascript", "html", "python" },
+        highlight = { enable = true },
+        indent = { enable = true },
+        incremental_selection = { enable = true }
+      })
+    end
   },
 
   -- Color scheme
-  { "catppuccin/nvim", name = "catppuccin" },
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    config = function()
+      require("config.catppuccin")
+    end
+  },
 
   -- File explorer
   {
     'nvim-tree/nvim-tree.lua',
+    after="catppuccin",
     config = function ()
-      require("nvim-tree").setup{}
+      require("config.nvim-tree")
     end
   },
 
@@ -56,7 +70,16 @@ require('lazy').setup({
     end,
   },
 
-  {"lukas-reineke/indent-blankline.nvim"},
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    config = function ()
+      require("indent_blankline").setup {
+        space_char_blankline = " ",
+        show_current_context = true,
+        show_current_context_start = true,
+      }
+    end
+  },
 
   {
     "folke/zen-mode.nvim",
@@ -78,17 +101,20 @@ require('lazy').setup({
   -- Buffer line & Status line
   {
     'akinsho/bufferline.nvim',
+    after = "catppuccin",
     config = function()
-      require("bufferline").setup{}
+      require("bufferline").setup{
+        highlights = require("catppuccin.groups.integrations.bufferline").get()
+      }
     end
   },
   {
-    "tamton-aquib/staline.nvim",
-    event = { "BufReadPre", "BufNew" },
-    dependencies = "nvim-tree/nvim-web-devicons",
-    config = function()
-	    require("staline").setup()
-    end,
+    'freddiehaddad/feline.nvim',
+    config = function ()
+      require("feline").setup{
+        components = require("catppuccin.groups.integrations.feline").get()
+      }
+    end
   },
 
   {
@@ -109,11 +135,7 @@ require('lazy').setup({
   {
     'akinsho/toggleterm.nvim',
     config = function()
-      require('toggleterm').setup {
-        float_opts = {
-          border = "curved"
-        }
-      }
+      require("config.toggleterm")
     end
   },
   -- Comment

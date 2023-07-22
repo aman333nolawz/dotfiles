@@ -1,87 +1,101 @@
 @import "mocha.css";
-
 * {
-  font-family: "FiraCode Nerd Font";
-  font-size: 11px;
-  min-height: 10px;
+    border: none;
+    border-radius: 0;
+    font-family: Iosevka Nerd Font;
+    font-size: 14px;
+    min-height: 10px;
 }
 
 window#waybar {
-  background: @base;
-  color: @text;
+    background: transparent;
+    color: @text;
 }
 
-#workspaces {
-  background-color: @surface0;
+tooltip {
+	background: @mantle;
 }
 
 #workspaces button {
-  color: @lavender;
-  transition: none;
-  padding: 5px;
+    padding: 5px;
+    color: @lavender;
 }
 
 #workspaces button.active {
-  color: @green;
+    color: @green;
+}
+#workspaces button.focused {
+    background-color: @red;
+    border-radius: 15px;
+}
+
+#workspaces button.urgent {
+    color: @mantle;
+    background-color: #fab387;
+    border-radius: 15px;
 }
 
 #workspaces button:hover {
-  color: @green;
-  background: none;
-  border: none;
-  outline: none;
-  box-shadow: none;
+	color: @green;
 }
 
-#mpd,
-#backlight,
+#workspaces,
 #clock,
 #battery,
 #pulseaudio,
-#custom-lock,
-#custom-power {
-  background-color: @surface0;
-  padding: 5px;
+#backlight,
+#network,
+#workspaces,
+#tray,
+#custom-powermenu,
+#mpd {
+	background-color: @base;
+	padding: 5px 10px;
+	margin: 10px 0px 0px 0px;
 }
 
-#mpd {
-  padding: 5px 10px;
-  color: @lavender;
+#workspaces {
+	border-radius: 15px 0 0 15px;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+#custom-powermenu {
+	color: @red;
+	border-radius: 0px 15px 15px 0px;
+  margin-right: 20px;
 }
 
 #clock {
-  color: @peach;
+    color: @mauve;
+    
 }
 
 #battery {
-  color: @sky;
+    color: @green;
 }
 
 #battery.charging {
-  color: @green;
+    color: @sky;
 }
 
 #battery.warning:not(.charging) {
-  color: @red;
+    background-color: @orange;
+    color: @mantle;
 }
 
-#backlight {
-  color: @yellow;
+#network {
+	color: @yellow;
 }
 
 #pulseaudio {
-  color: @lavender;
+	color: @sky;
 }
 
 #pulseaudio.muted {
   color: @red;
 }
 
-tooltip {
-    background: @base;
-    font-family: Lato, Arial, sans-serif;
-}
-
-tooltip label {
-    color: @text;
+#backlight {
+  color: @yellow;
 }

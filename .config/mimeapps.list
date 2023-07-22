@@ -4,7 +4,7 @@ image/jpeg=imv.desktop;userapp-viewnior-G4BIS1.desktop;gcr-viewer.desktop;viewni
 image/gif=viewnior.desktop;
 image/svg+xml=viewnior.desktop;imv.desktop;imv-dir.desktop;
 text/x-csrc=geany.desktop;
-text/plain=nvim.desktop;geany.desktop;
+text/plain=emacs.desktop;nvim.desktop;geany.desktop;
 application/x-shellscript=geany.desktop;
 application/x-theme=geany.desktop;
 application/json=geany.desktop;
@@ -14,6 +14,7 @@ application/x-python-bytecode=nvim.desktop;
 application/zip=userapp-7z x-5CUW31.desktop;
 text/x-python=userapp-python-2WH241.desktop;
 application/x-zerosize=nvim.desktop;
+application/octet-stream=userapp-kitty nvim-NFOM71.desktop;userapp-kitty -c nvim-O3FL71.desktop;
 
 [Default Applications]
 image/gif=viewnior.desktop
@@ -25,3 +26,4 @@ application/x-python-bytecode=nvim.desktop
 application/zip=userapp-7z x-5CUW31.desktop
 inode/directory=thunar.desktop
 application/x-zerosize=nvim.desktop
+application/octet-stream=userapp-kitty -c nvim-O3FL71.desktop

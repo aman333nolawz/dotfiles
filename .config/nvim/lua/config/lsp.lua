@@ -37,6 +37,24 @@ capabilities.textDocument.foldingRange = {
 require('mason-lspconfig').setup_handlers({
   function(server_name)
     lspconfig[server_name].setup({
+      native_lsp = {
+        enabled = true,
+        virtual_text = {
+          errors = { "italic" },
+          hints = { "italic" },
+          warnings = { "italic" },
+          information = { "italic" },
+        },
+        underlines = {
+          errors = { "underline" },
+          hints = { "underline" },
+          warnings = { "underline" },
+          information = { "underline" },
+        },
+        inlay_hints = {
+          background = true,
+        },
+      },
       on_attach = lsp_attach,
       capabilities = capabilities,
     })
