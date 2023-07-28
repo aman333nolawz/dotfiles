@@ -80,8 +80,8 @@ tooltip {
 }
 
 #battery.warning:not(.charging) {
-    background-color: @orange;
-    color: @mantle;
+    background-color: @base;
+    color: @red;
 }
 
 #network {

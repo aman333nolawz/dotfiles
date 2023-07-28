@@ -22,5 +22,3 @@ source $ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 complete -F _complete_alias dots
 complete -F _complete_alias ls
-
-krabby random | tail -n +2
