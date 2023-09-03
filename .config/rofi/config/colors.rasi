@@ -1,12 +1,1 @@
-* {
-    BG:    #1E1D2F;
-    BGA:   #b4befe;
-    FG:    #D9E0EE;
-    FGA:   #F28FAD;
-    BDR:   #b4befe;
-    SEL:   #1E1E2E;
-    UGT:   #F28FAD;
-    IMG:   #FAE3B0;
-    OFF:   #575268;
-    ON:    #ABE9B3;
-}
+/home/nolawz/.config/rofi/config/themes/Mocha.rasi

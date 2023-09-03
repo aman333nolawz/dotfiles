@@ -1,11 +1,8 @@
 configuration{
     modi: "run,drun,window";
-    icon-theme: "Oranchelo";
     show-icons: true;
-    font: "JetBrainsMono Nerd Font 12";
     terminal: "kitty";
     drun-display-format: "{icon} {name}";
-    location: 0;
     disable-history: false;
     hide-scrollbar: true;
     display-drun: "   Apps ";
@@ -15,5 +12,5 @@ configuration{
     sidebar-mode: true;
 }
 
-@theme "catppuccin-mocha"
+@theme "~/.config/rofi/config/launcher"
 

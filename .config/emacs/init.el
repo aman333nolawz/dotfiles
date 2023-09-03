@@ -52,6 +52,8 @@
 
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "themes"))
 (load-theme 'catppuccin t)
+(setq catppuccin-flavor 'mocha)
+(catppuccin-reload)
 
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
 (load "packages")

@@ -31,4 +31,5 @@ swaylock \
   --indicator-idle-visible \
   --indicator-caps-lock \
   --indicator-radius=120 \
-  --indicator-thickness=5
+  --indicator-thickness=5 \
+  --layout-bg-color=$background$alpha

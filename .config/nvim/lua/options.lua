@@ -18,9 +18,6 @@ opt.wrap = false -- No wrap
 opt.swapfile = false
 opt.backup = false
 
--- Colors
-vim.cmd.colorscheme "catppuccin"
-
 -- For nvim-tree.lua
 g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
@@ -31,3 +28,37 @@ opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldenable = true
 opt.foldlevelstart = 99
 opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-mocha"
+vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-mocha"

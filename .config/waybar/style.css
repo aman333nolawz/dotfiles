@@ -1,10 +1,9 @@
-@import "mocha.css";
+@import "theme.css";
 * {
     border: none;
     border-radius: 0;
     font-family: Iosevka Nerd Font;
-    font-size: 14px;
-    min-height: 10px;
+    font-size: 12px;
 }
 
 window#waybar {

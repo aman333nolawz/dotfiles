@@ -1,0 +1,101 @@
+@import "font.rasi"
+@import "colors.rasi"
+
+element-text, element-icon , mode-switcher {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+window {
+    height: 360px;
+    border: 2px;
+    border-radius: 10px;
+    border-color: @BGA;
+    background-color: @BG;
+}
+
+mainbox {
+    background-color: @BG;
+}
+
+inputbar {
+    children: [prompt,entry];
+    background-color: @BG;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+prompt {
+    background-color: @BGA;
+    padding: 6px;
+    text-color: @BG;
+    border-radius: 3px;
+    margin: 20px 0px 0px 20px;
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: ":";
+}
+
+entry {
+    padding: 6px;
+    margin: 20px 0px 0px 10px;
+    text-color: @FG;
+    background-color: @BG;
+}
+
+listview {
+    border: 0px 0px 0px;
+    padding: 6px 0px 0px;
+    margin: 10px 0px 0px 20px;
+    columns: 2;
+    lines: 5;
+    background-color: @BG;
+}
+
+element {
+    padding: 5px;
+    background-color: @BG;
+    text-color: @FG  ;
+}
+
+element-icon {
+    size: 25px;
+}
+
+element selected {
+    background-color:  @SEL ;
+    text-color: @FGA  ;
+}
+
+mode-switcher {
+    spacing: 0;
+  }
+
+button {
+    padding: 10px;
+    background-color: @BG;
+    text-color: @OFF;
+    vertical-align: 0.5; 
+    horizontal-align: 0.5;
+}
+
+button selected {
+  background-color: @BG;
+  text-color: @BGA;
+}
+
+message {
+    background-color: @BG;
+    margin: 2px;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+textbox {
+    padding: 6px;
+    margin: 20px 0px 0px 20px;
+    text-color: @BGA;
+    background-color: @BG;
+}

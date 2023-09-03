@@ -1,11 +1,5 @@
 ZSH=~/.config/zsh
 
-# Settings for prompt
-#autoload -Uz vcs_info
-#precmd() { vcs_info }
-#zstyle ':vcs_info:git:*' formats '%b '
-#setopt PROMPT_SUBST
-
 for file in $ZSH/lib/*;
 do
     source $file

@@ -2,9 +2,8 @@
 rofi_command="rofi -theme $HOME/.config/rofi/config/screenshot.rasi"
 
 time=`date +%Y-%m-%d-%I-%M-%S`
-geometry=`xrandr | head -n1 | cut -d',' -f2 | tr -d '[:blank:],current'`
 dir="$HOME/Pictures/Screenshots"
-file="Screenshot_${time}_${geometry}.png"
+file="Screenshot_${time}.png"
 
 # Icons
 icon1="$HOME/.config/dunst/icons/collections.svg"

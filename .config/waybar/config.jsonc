@@ -1,7 +1,6 @@
 {
   "layer": "top",
   "position": "top", 
-  "height": 60,
   "modules-left": ["wlr/workspaces"],
   "modules-center": ["mpd"],
   "modules-right": ["tray", "pulseaudio", "backlight", "battery", "clock", "custom/powermenu"],
@@ -17,19 +16,9 @@
       "6": "",
       "7": "",
       "8": "",
-      "urgent": "",
-      "active": "",
+      // "urgent": "",
+      // "active": "",
       "default": ""
-    },
-    "persistent_workspaces": {
-      "1": [],
-      "2": [],
-      "3": [],
-      "4": [],
-      "5": [],
-      "6": [],
-      "7": [],
-      "8": [],
     },
     "sort-by-number": true
   },
