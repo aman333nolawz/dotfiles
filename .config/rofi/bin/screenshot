@@ -46,7 +46,7 @@ countdown () {
 
 # take shots
 shotnow () {
-	cd ${dir} && sleep 0.5 && grim - | tee "$file" | wl-copy
+	cd ${dir} && sleep 0.8 && grim - | tee "$file" | wl-copy
 	notify_view
 }
 

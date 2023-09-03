@@ -8,9 +8,8 @@ My dotfiles
 
 ![Desktop](./screenshots/desktop.png "Desktop")
 ![Desktop](./screenshots/desktop2.png "Desktop")
-![Neofetch](./screenshots/neofetch.png "Neofetch")
 
-## Screen Locker (i3lock-color)
+## Screen Locker (swaylock)
 ![Screen Locker](./screenshots/screenlock.png "Screen Locker")
 
 ## Firefox
@@ -22,17 +21,25 @@ Get the firefox theme from [andreasgrafen/cascade](https://github.com/andreasgra
 ![Firefox](./screenshots/firefox.png "Firefox")
 ![Firefox](./screenshots/firefox2.png "Firefox")
 
-## TUI File Manager (Ranger)
+## TUI File Manager (Lf)
 
-![Ranger](./screenshots/ranger.png "Ranger")
+![Ranger](./screenshots/lf.png "lf")
 
 ## Ncmpcpp
 
 ![ncmpcpp](./screenshots/ncmpcpp.png "ncmpcpp")
 
-## Neovim
+## Text editor (Emacs & Neovim)
+
+### Emacs
+
+![Emacs](./screenshots/emacs.png "Emacs")
+![Emacs2](./screenshots/emacs2.png "Coding in emacs")
+
+### Neovim
 
 ![Neovim](./screenshots/neovim.png "Neovim")
+![Neovim2](./screenshots/neovim2.png "Neovim2")
 
 ## Zathura
 
