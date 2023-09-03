@@ -47,6 +47,7 @@ require('lazy').setup({
   {
     "catppuccin/nvim",
     name = "catppuccin",
+    priority = 1000,
     config = function()
       require("config.catppuccin")
     end
@@ -55,7 +56,7 @@ require('lazy').setup({
   -- File explorer
   {
     'nvim-tree/nvim-tree.lua',
-    after="catppuccin",
+    dependencies="catppuccin",
     config = function ()
       require("config.nvim-tree")
     end
@@ -101,9 +102,9 @@ require('lazy').setup({
   -- Buffer line & Status line
   {
     'akinsho/bufferline.nvim',
-    after = "catppuccin",
+    dependencies = "catppuccin",
     config = function()
-      require("bufferline").setup{
+      require("bufferline").setup {
         highlights = require("catppuccin.groups.integrations.bufferline").get()
       }
     end
@@ -114,16 +115,6 @@ require('lazy').setup({
       require("feline").setup{
         components = require("catppuccin.groups.integrations.feline").get()
       }
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        pattern = "*",
-        callback = function()
-          package.loaded["feline"] = nil
-          package.loaded["catppuccin.groups.integrations.feline"] = nil
-          require("feline").setup {
-            components = require("catppuccin.groups.integrations.feline").get(),
-          }
-        end,
-      })
     end
   },
 
@@ -213,4 +204,15 @@ require('lazy').setup({
       }
     end
   },
+})
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = function()
+    package.loaded["feline"] = nil
+    package.loaded["catppuccin.groups.integrations.feline"] = nil
+    require("feline").setup {
+      components = require("catppuccin.groups.integrations.feline").get(),
+    }
+  end,
 })

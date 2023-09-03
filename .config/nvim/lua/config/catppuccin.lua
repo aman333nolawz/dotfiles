@@ -2,33 +2,9 @@ local transparent_background = false
 local clear = {}
 
 require("catppuccin").setup({
-  flavour = "mocha", -- Can be one of: latte, frappe, macchiato, mocha
-  background = { light = "latte", dark = "mocha" },
-  dim_inactive = {
-    enabled = false,
-    -- Dim inactive splits/windows/buffers.
-    -- NOT recommended if you use old palette (a.k.a., mocha).
-    shade = "dark",
-    percentage = 0.15,
-  },
+  flavour = "mocha",
   transparent_background = transparent_background,
-  show_end_of_buffer = false, -- show the '~' characters after the end of buffers
   term_colors = true,
-  compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
-  styles = {
-    comments = { "italic" },
-    properties = { "italic" },
-    functions = { "bold" },
-    keywords = { "italic" },
-    operators = { "bold" },
-    conditionals = { "bold" },
-    loops = { "bold" },
-    booleans = { "bold", "italic" },
-    numbers = {},
-    types = {},
-    strings = {},
-    variables = {},
-  },
   integrations = {
     treesitter = true,
     native_lsp = {
@@ -55,7 +31,6 @@ require("catppuccin").setup({
     treesitter_context = true,
     which_key = true,
   },
-  color_overrides = {},
   highlight_overrides = {
     ---@param cp palette
     all = function(cp)
@@ -124,3 +99,5 @@ require("catppuccin").setup({
     end,
   },
 })
+
+vim.cmd.colorscheme "catppuccin"

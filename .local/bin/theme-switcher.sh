@@ -6,9 +6,11 @@ flavor="Mocha"
 if [[ "$theme" == "" ]]
 then
   flavor="Mocha"
+  sed -i "s/local color3=.*/local color3=black/g" ~/.config/zsh/prompt.zsh
 elif [[ "$theme" == "" ]]
 then
   flavor="Latte"
+  sed -i "s/local color3=.*/local color3=white/g" ~/.config/zsh/prompt.zsh
 else
   exit
 fi
@@ -20,6 +22,6 @@ ln -sf ~/.config/waybar/themes/$flavor.css ~/.config/waybar/theme.css
 ln -sf ~/.config/zathura/themes/${flavor} ~/.config/zathura/zathurarc
 
 sed -i "s/catppuccin-flavor '[^)]*/catppuccin-flavor '${flavor,,}/g" ~/.config/emacs/init.el
-echo "vim.cmd.colorscheme \"catppuccin-${flavor,,}\"" >> ~/.config/nvim/lua/options.lua
+sed -i "s/flavour.*=.*/flavour = \"${flavor,,}\",/g" ~/.config/nvim/lua/config/catppuccin.lua
 
 killall waybar; waybar&

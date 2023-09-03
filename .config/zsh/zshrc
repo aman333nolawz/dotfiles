@@ -10,9 +10,9 @@ do
     source $plugin
 done
 
-source $ZSH/prompt.zsh
 source $ZSH/aliases.zsh
 source $ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $ZSH/prompt.zsh
 
 complete -F _complete_alias dots
 complete -F _complete_alias ls

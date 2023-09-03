@@ -1,8 +1,8 @@
 # colors
-local color1=4
-local color2=6
-local color3=#f80
-local color4=#efb974
+local color1="blue"
+local color2="cyan"
+local color3=black
+local color4="yellow"
 
 autoload -Uz vcs_info
 setopt PROMPT_SUBST
@@ -59,18 +59,18 @@ precmd() {
 
 		local current_branch=$(git branch --show-current)
 
-		git_prompt="%B%F{$color4}%K{$color4}%F{black}%F{black} ${current_branch} "
+		git_prompt="%B%F{$color4}%K{$color4}%F{${color3}}%F{${color3}} ${current_branch} "
 
 		if ((staged_count!=0)); then
-			git_prompt+="%F{#080}${staged_count} "
+			git_prompt+="%F{2}${staged_count} "
 		fi
 
 		if ((unstaged_count!=0)); then
-			git_prompt+="%F{black}${unstaged_count} "
+			git_prompt+="%F{${color3}}${unstaged_count} "
 		fi
 
 		if ((untracked_count!=0)); then
-			git_prompt+="%F{black}${untracked_count}! "
+			git_prompt+="%F{${color3}}${untracked_count}! "
 		fi
 
 	else
@@ -78,11 +78,11 @@ precmd() {
 		git_prompt=""
 	fi
 
-  prompt_top="╭──%B%F{black}%K{${color1}} %F{black}%n%f%k%F{${color1}} %B%F{cyan}%F{${color2}} %b%2~ %f"
+  prompt_top="╭──%B%F{${color3}}%K{${color1}} %F{${color3}}%n%f%k%F{${color1}} %B%F{cyan}%F{${color2}} %b%2~ %f"
 	prompt_below="%f╰──${prompt_char}%f "
 }
 
-PROMPT='${prompt_top}%F{black}$(create_separator)$git_prompt%f%k%b
+PROMPT='${prompt_top}%F{${color3}}$(create_separator)$git_prompt%f%k%b
 ${prompt_below}'
 
 RPROMPT='%F{red}$(if [ $? -ne 0 ]; then echo "󰌑%? "; fi)%f'
