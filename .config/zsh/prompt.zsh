@@ -1,6 +1,6 @@
 # colors
-local color1=#b4befe
-local color2=#94e2d5
+local color1=4
+local color2=6
 local color3=#f80
 local color4=#efb974
 
