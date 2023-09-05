@@ -1,12 +1,11 @@
 {
   "layer": "top",
   "position": "top", 
-  "modules-left": ["wlr/workspaces"],
+  "modules-left": ["hyprland/workspaces"],
   "modules-center": ["mpd"],
   "modules-right": ["tray", "pulseaudio", "backlight", "battery", "clock", "custom/powermenu"],
-  "wlr/workspaces": {
+  "hyprland/workspaces": {
     "format": "{icon}",
-    "on-click": "activate",
     "format-icons": {
       "1": "",
       "2": "",
