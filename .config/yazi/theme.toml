@@ -1,0 +1,150 @@
+[tab]
+active    = { fg = "#181825", bg = "#b4befe" }
+inactive  = { fg = "#cdd6f4", bg = "#45475a" }
+max_width = 1
+
+[status]
+primary	  = { normal = "#b4befe", select = "#89b4fa", unset = "#fab387" }
+secondary = { normal = "#181825", select = "#1e1e2e", unset = "#1e1e2e" }
+tertiary  = { normal = "#6c7086", select = "#6c7086", unset = "#6c7086" }
+body      = { normal = "#45475a", select = "#45475a", unset = "#45475a" }
+emphasis  = { normal = "#cdd6f4", select = "#cdd6f4", unset = "#cdd6f4" }
+info      = { normal = "#74c7ec", select = "#74c7ec", unset = "#74c7ec" }
+success   = { normal = "#a6e3a1", select = "#a6e3a1", unset = "#a6e3a1" }
+warning   = { normal = "#f9e2af", select = "#f9e2af", unset = "#f9e2af" }
+danger    = { normal = "#f38ba8", select = "#f38ba8", unset = "#f38ba8" }
+separator = { opening = "", closing = "" }
+
+[progress]
+gauge = { fg = "#fab387", bg = "#45475a" }
+label = { fg = "#FFFFFF", bold = true }
+
+[selection]
+hovered = { fg = "#181825", bg = "#b4befe" }
+
+[marker]
+selecting = { fg = "#a6e3a1", bg = "#a6e3a1" }
+selected  = { fg = "#f9e2af", bg = "#f9e2af" }
+
+[preview]
+hovered       = { underline = true }
+syntect_theme = "~/.config/bat/themes/Catppuccin-mocha.tmTheme"
+
+[filetype]
+
+rules = [
+	# Images
+	{ mime = "image/*", fg = "#74c7ec" },
+
+	# Videos
+	{ mime = "video/*", fg = "#f9e2af" },
+	{ mime = "audio/*", fg = "#f9e2af" },
+
+	# Archives
+	{ mime = "application/zip", fg = "#89b4fa" },
+	{ mime = "application/gzip", fg = "#89b4fa" },
+	{ mime = "application/x-tar", fg = "#89b4fa" },
+	{ mime = "application/x-bzip", fg = "#89b4fa" },
+	{ mime = "application/x-bzip2", fg = "#89b4fa" },
+	{ mime = "application/x-7z-compressed", fg = "#89b4fa" },
+	{ mime = "application/x-rar", fg = "#89b4fa" },
+
+	# Fallback
+	{ name = "*", fg = "#cdd6f4" },
+	{ name = "*/", fg = "#89b4fa" }
+]
+
+[icons]
+
+"Desktop/"     = ""
+"Documents/"   = ""
+"Downloads/"   = ""
+"Pictures/"    = ""
+"Music/"       = ""
+"Movies/"      = ""
+"Videos/"      = ""
+"Public/"      = ""
+"Library/"     = ""
+"Development/" = ""
+".config/"     = ""
+
+# Git
+".git/"          = ""
+".gitignore"     = ""
+".gitmodules"    = ""
+".gitattributes" = ""
+
+# Dotfiles
+".DS_Store"    = ""
+".bashrc"      = ""
+".bashprofile" = ""
+".zshrc"       = ""
+".zshenv"      = ""
+".zprofile"    = ""
+".vimrc"       = ""
+
+# Text
+"*.txt" = ""
+"*.md"  = ""
+
+# Archives
+"*.zip" = ""
+"*.tar" = ""
+"*.gz"  = ""
+"*.7z"  = ""
+
+# Audio
+"*.mp3"  = ""
+"*.flac" = ""
+"*.wav"  = ""
+
+# Movies
+"*.mp4" = ""
+"*.mkv" = ""
+"*.avi" = ""
+"*.mov" = ""
+
+# Images
+"*.jpg"  = ""
+"*.jpeg" = ""
+"*.png"  = ""
+"*.gif"  = ""
+"*.webp" = ""
+"*.avif" = ""
+"*.bmp"  = ""
+"*.ico"  = ""
+"*.svg"  = ""
+
+# Programming
+"*.c"     = ""
+"*.cpp"   = ""
+"*.h"     = ""
+"*.hpp"   = ""
+"*.rs"    = ""
+"*.go"    = ""
+"*.py"    = ""
+"*.js"    = ""
+"*.ts"    = ""
+"*.tsx"   = ""
+"*.jsx"   = ""
+"*.rb"    = ""
+"*.php"   = ""
+"*.java"  = ""
+"*.sh"    = ""
+"*.fish"  = ""
+"*.swift" = ""
+"*.vim"   = ""
+"*.lua"   = ""
+"*.html"  = ""
+"*.css"   = ""
+"*.scss"  = ""
+"*.json"  = ""
+"*.toml"  = ""
+"*.yml"   = ""
+"*.yaml"  = ""
+"*.ini"   = ""
+"*.conf"  = ""
+
+# Default
+"*"  = ""
+"*/" = ""

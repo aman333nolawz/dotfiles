@@ -1,29 +1,16 @@
 [Added Associations]
-image/png=viewnior.desktop;
-image/jpeg=imv.desktop;userapp-viewnior-G4BIS1.desktop;gcr-viewer.desktop;viewnior.desktop;userapp-viewnior-2P2NS1.desktop;
-image/gif=viewnior.desktop;
-image/svg+xml=viewnior.desktop;imv.desktop;imv-dir.desktop;
-text/x-csrc=geany.desktop;
-text/plain=emacs.desktop;nvim.desktop;geany.desktop;
-application/x-shellscript=geany.desktop;
-application/x-theme=geany.desktop;
-application/json=geany.desktop;
-application/xml=userapp-geany-991HS1.desktop;
+image/png=imv.desktop;
+image/jpeg=imv.desktop;
+image/gif=imv.desktop;
+image/svg+xml=imv.desktop;imv-dir.desktop;
+text/plain=emacs.desktop;nvim.desktop;
 video/x-matroska=mpv.desktop;
-application/x-python-bytecode=nvim.desktop;
 application/zip=userapp-7z x-5CUW31.desktop;
-text/x-python=userapp-python-2WH241.desktop;
-application/x-zerosize=nvim.desktop;
-application/octet-stream=userapp-kitty nvim-NFOM71.desktop;userapp-kitty -c nvim-O3FL71.desktop;
 
 [Default Applications]
-image/gif=viewnior.desktop
+image/gif=imv-dir.desktop
 image/svg+xml=imv-dir.desktop
-application/x-extension-burp=install4j_1je7tfy-BurpSuiteCommunity.desktop
 application/pdf=org.pwmt.zathura.desktop
-image/jpeg=imv.desktop
-application/x-python-bytecode=nvim.desktop
-application/zip=userapp-7z x-5CUW31.desktop
+image/jpeg=imv-dir.desktop
+image/png=imv-dir.desktop
 inode/directory=thunar.desktop
-application/x-zerosize=nvim.desktop
-application/octet-stream=userapp-kitty -c nvim-O3FL71.desktop

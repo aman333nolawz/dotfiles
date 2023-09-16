@@ -1,6 +1,7 @@
 [global]
 ncmpcpp_directory = ~/.config/ncmpcpp
 lyrics_directory = ~/.local/share/lyrics
+mpd_music_dir = ~/Music
 playlist_disable_highlight_delay = 1
 message_delay_time = 1
 colors_enabled = yes

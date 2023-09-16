@@ -236,6 +236,11 @@
 
 (use-package format-all)
 
+;; Terminal
+(use-package vterm
+    :ensure t)
+
+
 ;; --------------- LSP ----------------
 (use-package lsp-mode
   :init

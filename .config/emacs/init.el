@@ -31,7 +31,7 @@
  view-read-only t					; Toggle ON or OFF with M-x view-mode (or use e to exit view-mode).
  use-dialog-box nil                 ; Don't pop up UI dialogs when prompting.
  require-final-newline t            ; require final new line.
- display-line-numbers 'relative
+ display-line-numbers-type 'relative
  )
 
 (global-display-line-numbers-mode)

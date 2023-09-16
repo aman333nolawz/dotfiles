@@ -1,3 +1,4 @@
-timeout 600 '~/.config/hypr/scripts/lock.sh'
-timeout 610 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
+timeout 300 '~/.config/hypr/scripts/lock.sh'
+timeout 600 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on'
+timeout 700 'systemctl suspend'
 before-sleep '~/.config/hypr/scripts/lock.sh'
