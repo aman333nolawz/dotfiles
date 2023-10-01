@@ -10,6 +10,7 @@ configuration{
     display-window: " 﩯  Window";
     display-Network: " 󰤨  Network";
     sidebar-mode: true;
+    icon-theme: "Papirus";
 }
 
 @theme "~/.config/rofi/config/launcher"

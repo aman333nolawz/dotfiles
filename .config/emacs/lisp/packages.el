@@ -287,6 +287,8 @@
   :mode "\\.go\\'"
   :custom (gofmt-command "goimports"))
 
+(use-package glsl-mode)
+
 (use-package rustic
   :config
   (setq rustic-format-on-save-method t

@@ -80,6 +80,11 @@ tooltip {
 
 #battery.warning:not(.charging) {
     background-color: @base;
+    color: @pink;
+}
+
+#battery.critical:not(.charging) {
+    background-color: @base;
     color: @red;
 }
 
