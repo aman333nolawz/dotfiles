@@ -46,7 +46,7 @@ tooltip {
 #network,
 #workspaces,
 #tray,
-#custom-powermenu,
+#custom-notification,
 #mpd {
 	background-color: @base;
 	padding: 5px 10px;
@@ -59,8 +59,9 @@ tooltip {
 	margin-right: 20px;
 }
 
-#custom-powermenu {
-	color: @red;
+#custom-notification {
+  color: @yellow;
+  padding-right: 20px;
 	border-radius: 0px 15px 15px 0px;
   margin-right: 20px;
 }

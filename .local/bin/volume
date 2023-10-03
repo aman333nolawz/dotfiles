@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-## Copyright (C) 2020-2021 Aditya Shakya <adi1090x@gmail.com>
-## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
-
-## Script To Manage Volume For Archcraft
+ICONS_FOLDER="$HOME/.config/swaync/icons"
 
 # Get Volume
 get_volume() {
@@ -18,33 +15,33 @@ get_icon() {
   current="${vol%%%}"
   current=$((current))
   if [[ ($current -ge 60) ]]; then
-    icon="$HOME/.config/dunst/icons/volume-high.svg"
+    icon="$ICONS_FOLDER/volume-high.svg"
   elif [[ ($current -ge 30) && ($current -le 60) ]]; then
-    icon="$HOME/.config/dunst/icons/volume-medium.svg"
+    icon="$ICONS_FOLDER/volume-medium.svg"
   elif [[ ($current -ge 0) && ($current -le 30) ]]; then
-    icon="$HOME/.config/dunst/icons/volume-low.svg"
+    icon="$ICONS_FOLDER/volume-low.svg"
   elif [[ ($current -ge 0) ]]; then
-    icon="$HOME/.config/dunst/icons/volume-muted.svg"
+    icon="$ICONS_FOLDER/volume-muted.svg"
   fi
 }
 
 # Increase brightness
 inc_volume() {
-  wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+&& get_icon && dunstify -u low --replace=69 -i "$icon" "Volume : $(get_volume)"
+  wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+&& get_icon && notify-send -u low -h string:synchronous:my-progress -i "$icon" -h int:value:$(get_volume) "$(get_volume)%"
 }
 
 # Decrease brightness
 dec_volume() {
-  wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && get_icon && dunstify -u low --replace=69 -i "$icon" "Volume : $(get_volume)"
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && get_icon && notify-send -u low -h string:synchronous:my-progress -i "$icon" -h int:value:$(get_volume) "$(get_volume)%"
 }
 
 toggle_mute() {
   status=`pactl get-sink-mute @DEFAULT_SINK@ | grep -wo 'yes'`
 
   if [[ "$status" == "yes" ]]; then
-    wpctl set-mute @DEFAULT_AUDIO_SINK@ 0 && get_icon && dunstify -u low --replace=69 -i "$icon" "Unmute"
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ 0 && get_icon && notify-send -u low -h string:synchronous:my-progress -i "$icon" "Unmute"
   else
-    wpctl set-mute @DEFAULT_AUDIO_SINK@ 1 && icon="$HOME/.config/dunst/icons/volume-muted.svg" && dunstify -u low --replace=69 -i "$icon" "Mute"
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ 1 && icon="$ICONS_FOLDER/volume-muted.svg" && notify-send -u low -h string:synchronous:my-progress -i "$icon" "Mute"
  fi
 }
 

@@ -11,13 +11,14 @@ export XAUTHORITY=/home/nolawz/.Xauthority
 export DISPLAY=:0
 export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
 
+ICONS_FOLDER="$HOME/.config/swaync/icons"
 BATTERY_CHARGING=$1
 BATTERY_LEVEL=$(cat /sys/class/power_supply/*/capacity)
 
 # Send notifications
 if [ "$BATTERY_CHARGING" -eq 1 ]; then
-    /usr/bin/notify-send "Charging" "${BATTERY_LEVEL}% of battery charged." -u low -i "$HOME/.config/dunst/icons/battery-charging.svg" -t 5000 -r 9991
+    /usr/bin/notify-send "Charging" "${BATTERY_LEVEL}% of battery charged." -u low -i "$ICONS_FOLDER/battery-charging.svg" -t 5000 -r 9991
 elif [ "$BATTERY_CHARGING" -eq 0 ]; then
-    /usr/bin/notify-send "Discharging" "${BATTERY_LEVEL}% of battery remaining." -u low -i "$HOME/.config/dunst/icons/battery.svg" -t 5000 -r 9991
+    /usr/bin/notify-send "Discharging" "${BATTERY_LEVEL}% of battery remaining." -u low -i "$ICONS_FOLDER/battery.svg" -t 5000 -r 9991
 fi
 
