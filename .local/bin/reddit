@@ -30,5 +30,5 @@ curl -H "User-agent: sth" "https://www.reddit.com/r/$subreddit.json?limit=75" | 
     aria2c "$line"
   done
   notify-send "Reddit" "Downloaded all the reddit images!"
-  sxiv -a *
+  imv -f *
 

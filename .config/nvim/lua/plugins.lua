@@ -183,6 +183,20 @@ require('lazy').setup({
     end,
   },
 
+	{
+		"kawre/leetcode.nvim",
+		build = ":TSUpdate html",
+    dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-telescope/telescope.nvim",
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+		},
+		opts = {
+        lang = "python"
+    },
+	},
+
   -- Color
   {
     "uga-rosa/ccc.nvim",

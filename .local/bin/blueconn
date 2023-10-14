@@ -17,7 +17,7 @@ fi
 
 connect=$(bluetoothctl info $MAC | grep Connected: | awk '{print $2}')
 if [[ $connect = no ]]; then 
-	notify-send "Connecting to $select" -i "bluetooth-connect"
+	notify-send "Connecting to $select" -i ~/.config/swaync/icons/bluetooth-connect.svg
 	bluetoothctl connect $MAC || notify-send "Failed to Connect"
 elif [[ $connect = yes ]]; then
 	notify-send "Disconnecting $select"

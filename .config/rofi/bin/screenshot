@@ -6,8 +6,8 @@ dir="$HOME/Pictures/Screenshots"
 file="Screenshot_${time}.png"
 
 # Icons
-icon1="$HOME/.config/dunst/icons/collections.svg"
-icon2="$HOME/.config/dunst/icons/timer.svg"
+icon1="$HOME/.config/swaync/icons/collections.svg"
+icon2="$HOME/.config/swaync/icons/timer.svg"
 
 # Buttons
 layout=`cat $HOME/.config/rofi/config/screenshot.rasi | grep BUTTON | cut -d'=' -f2 | tr -d '[:blank:],*/'`
@@ -25,51 +25,35 @@ else
 	inten="福 Take in 10s"
 fi
 
-# Notify and view screenshot
-notify_view () {
-	dunstify -u low --replace=699 -i $icon1 "Copied to clipboard."
-  exo-open "$dir/$file"
-	if [[ -e "$dir/$file" ]]; then
-		dunstify -u low --replace=699 -i $icon1 "Screenshot Saved."
-	else
-		dunstify -u low --replace=699 -i $icon1 "Screenshot Deleted."
-	fi
-}
-
 # countdown
 countdown () {
 	for sec in `seq $1 -1 1`; do
-		dunstify -t 1000 --replace=699 -i $icon2 "Taking shot in : $sec"
+		notify-send -t 1000 -h string:synchronous:my-progress -i $icon2 "Taking shot in : $sec"
 		sleep 1
 	done
 }
 
 # take shots
 shotnow () {
-	cd ${dir} && sleep 0.8 && grim - | tee "$file" | wl-copy
-	notify_view
+	cd ${dir} && sleep 0.8 && grim - | satty --filename - --fullscreen --output-filename "$file"
 }
 
 shot5 () {
 	countdown '3'
-	sleep 1 && cd ${dir} && grim - | tee "$file" | wl-copy
-	notify_view
+	sleep 1 && cd ${dir} && grim - | satty --filename - --fullscreen --output-filename "$file"
 }
 
 shot10 () {
 	countdown '10'
-	sleep 1 && cd ${dir} && grim - | tee "$file" | wl-copy
-	notify_view
+	sleep 1 && cd ${dir} && grim - | satty --filename - --fullscreen --output-filename "$file"
 }
 
 shotwin () {
-  cd ${dir} && sleep 0.5 && grim -g "$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')" - | tee "$file" | wl-copy
-	notify_view
+  cd ${dir} && sleep 0.5 && grim -g "$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')" - | satty --filename - --fullscreen --output-filename "$file"
 }
 
 shotarea () {
-	cd ${dir} && grim -g "$(slurp)" - | tee "$file" | wl-copy
-	notify_view
+	cd ${dir} && grim -g "$(slurp)" - | satty --filename - --fullscreen --output-filename "$file"
 }
 
 if [[ ! -d "$dir" ]]; then
@@ -80,6 +64,7 @@ fi
 options="$screen\n$area\n$window\n$infive\n$inten"
 
 chosen="$(echo -e "$options" | $rofi_command -p 'Take A Shot' -dmenu -selected-row 0)"
+sleep 0.5;
 case $chosen in
     $screen)
 		shotnow
