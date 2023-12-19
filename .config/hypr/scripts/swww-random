@@ -1,15 +1,28 @@
 #!/bin/bash
 
-swww init
+sleep 2
 if [[ $# -lt 1 ]] || [[ ! -d $1   ]]; then
 	echo "Usage:
 	$0 <dir containing images>"
 	exit 1
 fi
 
-while true;
-do
-  img=$(find "$1" -type f | shuf -n1)
-  swww img "$img" --transition-type=wipe --transition-angle=30 --transition-step=90
-  sleep 1800
+# Edit below to control the images transition
+export SWWW_TRANSITION_FPS=144
+export SWWW_TRANSITION_STEP=10
+export SWWW_TRANSITION_TYPE=random
+
+# This controls (in seconds) when to switch to the next image
+INTERVAL=1800
+
+while true; do
+	find "$1" \
+		| while read -r img; do
+			echo "$((RANDOM % 1000)):$img"
+		done \
+		| sort -n | cut -d':' -f2- \
+		| while read -r img; do
+			swww img "$img"
+			sleep $INTERVAL
+		done
 done

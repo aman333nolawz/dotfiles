@@ -11,11 +11,11 @@ green='#a6e3a1'
 
 image=$(find ~/.config/wallpapers/ -type f | shuf -n1)
 
-swaylock \
+swaylock --daemonize \
   --image "$image" \
   --clock --timestr "%H:%M" --datestr "%d/%m/%y" \
   --effect-blur 7x5 \
-	--effect-vignette 0.3:0.9 \
+  --effect-vignette 0.3:0.9 \
   --inside-color=$selection \
   --inside-ver-color=$green \
   --inside-wrong-color=$red \

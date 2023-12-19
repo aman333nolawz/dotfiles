@@ -11,7 +11,7 @@ export XAUTHORITY=/home/nolawz/.Xauthority
 export DISPLAY=:0
 export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus"
 
-ICONS_FOLDER="$HOME/.config/swaync/icons"
+ICONS_FOLDER="$HOME/.local/share/icons/custom"
 BATTERY_CHARGING=$1
 BATTERY_LEVEL=$(cat /sys/class/power_supply/*/capacity)
 

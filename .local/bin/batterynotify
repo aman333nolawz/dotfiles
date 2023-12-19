@@ -12,7 +12,7 @@ WARNING_LEVEL=30
 BATTERY_DISCHARGING=$(cat /sys/class/power_supply/*/status | grep -c "Discharging")
 BATTERY_LEVEL=$(cat /sys/class/power_supply/*/capacity)
 
-ICONS_FOLDER="$HOME/.config/swaync/icons"
+ICONS_FOLDER="$HOME/.local/share/icons/custom"
 
 # Use two files to store whether we've shown a notification or not (to prevent multiple notifications)
 EMPTY_FILE=/tmp/batteryempty
