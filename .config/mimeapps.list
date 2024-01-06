@@ -1,4 +1,3 @@
-
 [Default Applications]
 video/quicktime=mpv.desktop
 video/mp4=mpv.desktop
@@ -61,6 +60,9 @@ image/vnd.djvu+multipage=org.pwmt.zathura.desktop
 image/vnd.djvu=org.pwmt.zathura.desktop
 text/x-tex=code-oss.desktop
 text/x-csrc=code-oss.desktop
-text/html=code-oss.desktop
+text/html=firefox.desktop
 text/plain=code-oss.desktop
 text/x-makefile=code-oss.desktop
+
+[Added Associations]
+text/html=firefox.desktop;
