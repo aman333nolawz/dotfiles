@@ -12,7 +12,12 @@
     min-height: 1.364rem;
     min-width: 1.364rem;
     margin: 0.17rem;
+    padding: 0.136rem 0.205rem;
+    border-radius: 0.409rem;
+    -gtk-outline-radius: 0.409rem;
     color: $primary;
+    border: 0.068rem solid $primary;
+    box-shadow: 0rem 0.136rem 0rem $primary;
     font-weight: 500;
 }
 
@@ -26,7 +31,7 @@
 // .cheatsheet-action {}
 
 .cheatsheet-closebtn {
-    @include menu_decel;
+    @include element_decel;
     @include full-rounding;
     min-width: 2.386rem;
     min-height: 2.386rem;
@@ -34,15 +39,14 @@
 
 .cheatsheet-closebtn:hover,
 .cheatsheet-closebtn:focus {
-    background-color: $surfaceVariant;
+    background-color: $hovercolor;
 }
 
 .cheatsheet-closebtn:active {
-    background-color: mix($surfaceVariant, $onSurfaceVariant, 70%);
+    background-color: $activecolor;
 }
 
 .cheatsheet-category-title {
     @include titlefont;
     font-size: 1.705rem;
-    color: $primary;
 }

@@ -1,5 +1,9 @@
-const { GLib, Gio } = imports.gi;
-import { App, Service, Utils, Widget } from '../../imports.js';
+const { GLib } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import Service from 'resource:///com/github/Aylur/ags/service.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+
 import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 const { execAsync, exec } = Utils;
 const { Box, Label, Button, Revealer, EventBox } = Widget;
@@ -14,16 +18,18 @@ const TimeAndDate = () => Box({
         Label({
             className: 'bg-time-clock',
             xalign: 0,
-            connections: [[5000, label => {
+            label: GLib.DateTime.new_now_local().format("%H:%M"),
+            setup: (self) => self.poll(5000, label => {
                 label.label = GLib.DateTime.new_now_local().format("%H:%M");
-            }]],
+            }),
         }),
         Label({
             className: 'bg-time-date',
             xalign: 0,
-            connections: [[5000, label => {
+            label: GLib.DateTime.new_now_local().format("%A, %d/%m/%Y"),
+            setup: (self) => self.poll(5000, label => {
                 label.label = GLib.DateTime.new_now_local().format("%A, %d/%m/%Y");
-            }]],
+            }),
         }),
     ]
 })
@@ -46,7 +52,7 @@ const QuickLaunches = () => Box({
                 },
                 className: 'bg-quicklaunch-btn',
                 child: Label({
-                    label: `${ item["name"]}`,
+                    label: `${item["name"]}`,
                 }),
                 setup: (self) => {
                     setupCursorHover(self);
@@ -60,7 +66,7 @@ export default () => Box({
     hpack: 'start',
     vpack: 'end',
     vertical: true,
-    className: 'bg-time-box spacing-v-20',
+    className: 'bg-time-box spacing-h--10',
     children: [
         TimeAndDate(),
         // QuickLaunches(),

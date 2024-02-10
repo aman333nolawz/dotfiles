@@ -1,4 +1,7 @@
-import { Widget, Utils, Service } from '../../imports.js';
+const { GLib } = imports.gi;
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+
 import Bluetooth from 'resource:///com/github/Aylur/ags/service/bluetooth.js';
 import Network from 'resource:///com/github/Aylur/ags/service/network.js';
 const { execAsync, exec } = Utils;
@@ -6,89 +9,143 @@ import { BluetoothIndicator, NetworkIndicator } from "../../lib/statusicons.js";
 import { setupCursorHover } from "../../lib/cursorhover.js";
 import { MaterialIcon } from '../../lib/materialicon.js';
 
+function expandTilde(path) {
+    if (path.startsWith('~')) {
+        return GLib.get_home_dir() + path.slice(1);
+    } else {
+        return path;
+    }
+}
+
 export const ToggleIconWifi = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Wifi | Right-click to configure',
-    onClicked: Network.toggleWifi,
+    onClicked: () => Network.toggleWifi(),
     onSecondaryClickRelease: () => {
-        execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center wifi', '&']);
+        execAsync(['networkmanager_dmenu']);
+        App.closeWindow('sideright');
     },
     child: NetworkIndicator(),
-    connections: [
-        [Network, button => {
-            button.toggleClassName('sidebar-button-active', Network.wifi?.internet == 'connected' || Network.wired?.internet == 'connected')
-        }],
-        [Network, button => {
+    setup: (self) => {
+        setupCursorHover(self);
+        self.hook(Network, button => {
+            button.toggleClassName('sidebar-button-active', [Network.wifi?.internet, Network.wired?.internet].includes('connected'))
             button.tooltipText = (`${Network.wifi?.ssid} | Right-click to configure` || 'Unknown');
-        }],
-    ],
-    setup: setupCursorHover,
+        });
+    },
     ...props,
 });
 
 export const ToggleIconBluetooth = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Bluetooth | Right-click to configure',
-    onClicked: () => { // Provided service doesn't work hmmm
+    onClicked: () => {
         const status = Bluetooth?.enabled;
-        if (status) {
+        if (status)
             exec('rfkill block bluetooth');
-        }
-        else {
+        else
             exec('rfkill unblock bluetooth');
-        }
     },
     onSecondaryClickRelease: () => {
-        execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center bluetooth', '&']);
+        execAsync(['bash', '-c', 'blueberry &']);
+        App.closeWindow('sideright');
     },
     child: BluetoothIndicator(),
-    connections: [
-        [Bluetooth, button => {
+    setup: (self) => {
+        setupCursorHover(self);
+        self.hook(Bluetooth, button => {
             button.toggleClassName('sidebar-button-active', Bluetooth?.enabled)
-        }],
-    ],
-    setup: setupCursorHover,
+        });
+    },
     ...props,
 });
 
-export const HyprToggleIcon = (icon, name, hyprlandConfigValue, props = {}) => Widget.Button({
-    className: 'txt-small sidebar-iconbutton',
-    tooltipText: `${name}`,
-    onClicked: (button) => {
-        // Set the value to 1 - value
-        Utils.execAsync(`hyprctl -j getoption ${hyprlandConfigValue}`).then((result) => {
-            const currentOption = JSON.parse(result).int;
-            execAsync(['bash', '-c', `hyprctl keyword ${hyprlandConfigValue} ${1 - currentOption} &`]).catch(print);
-            button.toggleClassName('sidebar-button-active', currentOption == 0);
-        }).catch(print);
-    },
-    child: MaterialIcon(icon, 'norm', { hpack: 'center' }),
-    setup: button => {
-        button.toggleClassName('sidebar-button-active', JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1);
-        setupCursorHover(button);
-    },
-    ...props,
-})
+export const HyprToggleIcon = async (icon, name, hyprlandConfigValue, props = {}) => {
+    try {
+        return Widget.Button({
+            className: 'txt-small sidebar-iconbutton',
+            tooltipText: `${name}`,
+            onClicked: (button) => {
+                // Set the value to 1 - value
+                Utils.execAsync(`hyprctl -j getoption ${hyprlandConfigValue}`).then((result) => {
+                    const currentOption = JSON.parse(result).int;
+                    execAsync(['bash', '-c', `hyprctl keyword ${hyprlandConfigValue} ${1 - currentOption} &`]).catch(print);
+                    button.toggleClassName('sidebar-button-active', currentOption == 0);
+                }).catch(print);
+            },
+            child: MaterialIcon(icon, 'norm', { hpack: 'center' }),
+            setup: button => {
+                button.toggleClassName('sidebar-button-active', JSON.parse(Utils.exec(`hyprctl -j getoption ${hyprlandConfigValue}`)).int == 1);
+                setupCursorHover(button);
+            },
+            ...props,
+        })
+    } catch {
+        return null;
+    }
+}
 
-export const ModuleNightLight = (props = {}) => Widget.Button({
+export const ModuleNightLight = (props = {}) => Widget.Button({ // TODO: Make this work
+    attribute: {
+        enabled: false,
+        yellowlight: undefined,
+    },
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Night Light',
-    onClicked: (button) => {
-        // Set the value to 1 - value
-        const shaderPath = JSON.parse(exec('hyprctl -j getoption decoration:screen_shader')).str;
-        if (shaderPath != "[[EMPTY]]" && shaderPath != "") {
-            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ''`]).catch(print);
-            button.toggleClassName('sidebar-button-active', false);
-        }
-        else {
-            execAsync(['bash', '-c', `hyprctl keyword decoration:screen_shader ~/.config/hypr/shaders/extradark.frag`]).catch(print);
-            button.toggleClassName('sidebar-button-active', true);
-        }
+    onClicked: (self) => {
+        self.attribute.enabled = !self.attribute.enabled;
+        self.toggleClassName('sidebar-button-active', self.attribute.enabled);
+        // if (self.attribute.enabled) Utils.execAsync(['bash', '-c', 'wlsunset & disown'])
+        if (self.attribute.enabled) Utils.execAsync('gammastep')
+        else Utils.execAsync('pkill gammastep');
     },
     child: MaterialIcon('nightlight', 'norm'),
+    setup: (self) => {
+        setupCursorHover(self);
+        self.attribute.enabled = !!exec('pidof gammastep');
+        self.toggleClassName('sidebar-button-active', self.attribute.enabled);
+    },
+    ...props,
+});
+
+export const ModuleWallpaper = (props = {}) => Widget.Button({
+    className: 'txt-small sidebar-iconbutton',
+    tooltipText: 'Random wallpaper',
+    onClicked: () => {
+        execAsync(['waypaper-engine', 'random']);
+  },
+    child: MaterialIcon('wallpaper', 'norm'),
     setup: setupCursorHover,
     ...props,
-})
+
+});
+
+export const ModuleIdleInhibitor = (props = {}) => Widget.Button({ // TODO: Make this work
+    attribute: {
+        enabled: false,
+        inhibitor: undefined,
+    },
+    className: 'txt-small sidebar-iconbutton',
+    tooltipText: 'Keep system awake',
+    onClicked: (self) => {
+        self.attribute.enabled = !self.attribute.enabled;
+        self.toggleClassName('sidebar-button-active', self.attribute.enabled);
+        if (self.attribute.enabled) {
+            self.attribute.inhibitor = Utils.subprocess(
+                ['wayland-idle-inhibitor.py'],
+                (output) => print(output),
+                (err) => logError(err),
+                self,
+            );
+        }
+        else {
+            self.attribute.inhibitor.force_exit();
+        }
+    },
+    child: MaterialIcon('coffee', 'norm'),
+    setup: setupCursorHover,
+    ...props,
+});
 
 export const ModuleEditIcon = (props = {}) => Widget.Button({ // TODO: Make this work
     ...props,
@@ -106,9 +163,9 @@ export const ModuleEditIcon = (props = {}) => Widget.Button({ // TODO: Make this
 export const ModuleReloadIcon = (props = {}) => Widget.Button({
     ...props,
     className: 'txt-small sidebar-iconbutton',
-    tooltipText: 'Reload Hyprland',
+    tooltipText: 'Reload Environment config',
     onClicked: () => {
-        execAsync(['bash', '-c', 'hyprctl reload &']);
+        execAsync(['bash', '-c', 'hyprctl reload || swaymsg reload &']);
         App.toggleWindow('sideright');
     },
     child: MaterialIcon('refresh', 'norm'),
@@ -122,7 +179,7 @@ export const ModuleSettingsIcon = (props = {}) => Widget.Button({
     className: 'txt-small sidebar-iconbutton',
     tooltipText: 'Open Settings',
     onClicked: () => {
-        execAsync(['nwg-look']);
+        execAsync(['bash', '-c', 'XDG_CURRENT_DESKTOP="gnome" gnome-control-center', '&']);
         App.toggleWindow('sideright');
     },
     child: MaterialIcon('settings', 'norm'),

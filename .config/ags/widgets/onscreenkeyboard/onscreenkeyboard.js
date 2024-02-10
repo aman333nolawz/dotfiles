@@ -1,6 +1,9 @@
-const { GLib, Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Widget } from '../../imports.js';
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
+const { Gtk } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import Service from 'resource:///com/github/Aylur/ags/service.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+
 const { Box, EventBox, Button, Revealer } = Widget;
 const { execAsync, exec } = Utils;
 import { MaterialIcon } from '../../lib/materialicon.js';
@@ -15,7 +18,7 @@ execAsync(`ydotoold`).catch(print); // Start ydotool daemon
 function releaseAllKeys() {
     const keycodes = Array.from(Array(249).keys());
     execAsync([`ydotool`, `key`, ...keycodes.map(keycode => `${keycode}:0`)])
-        .then(console.log('Released all keys'))
+        .then(console.log('[OSK] Released all keys'))
         .catch(print);
 }
 var modsPressed = false;
@@ -66,7 +69,7 @@ const keyboardControls = Box({
         Button({
             className: 'osk-control-button txt-norm icon-material',
             onClicked: () => { // TODO: Proper clipboard widget, since fuzzel doesn't receive mouse inputs
-                execAsync([`bash`, `-c`, "pkill fuzzel || cliphist list | fuzzel --no-fuzzy --dmenu | cliphist decode | wl-copy"]).catch(print);
+                execAsync([`bash`, `-c`, "cliphist list | rofi -dmenu | cliphist decode | wl-copy"]).catch(print);
             },
             label: 'assignment',
         }),
@@ -83,7 +86,7 @@ const keyboardItself = (kbJson) => {
             children: row.map(key => {
                 return Button({
                     className: `osk-key osk-key-${key.shape}`,
-                    hexpand: (key.shape == "space" || key.shape == "expand"),
+                    hexpand: ["space", "expand"].includes(key.shape),
                     label: key.label,
                     setup: (button) => {
                         let pressed = false;
@@ -133,31 +136,41 @@ const keyboardWindow = Box({
             ],
         })
     ],
-    connections: [[App, (box, name, visible) => { // Update on open
+    setup: (self) => self.hook(App, (box, name, visible) => { // Update on open
         if (name == 'osk' && visible) {
             keyboardWindow.setCss(`margin-bottom: -0px;`);
         }
-    }],],
+    }),
 });
 
 const gestureEvBox = EventBox({ child: keyboardWindow })
 const gesture = Gtk.GestureDrag.new(gestureEvBox);
-gesture.connect('drag-begin', () => {
-    Hyprland.sendMessage('j/cursorpos').then((out) => {
-        gesture.startY = JSON.parse(out).y;
-    }).catch(print);
+gesture.connect('drag-begin', async () => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        Hyprland.sendMessage('j/cursorpos').then((out) => {
+            gesture.startY = JSON.parse(out).y;
+        }).catch(print);
+    } catch {
+        return;
+    }
 });
-gesture.connect('drag-update', () => {
-    Hyprland.sendMessage('j/cursorpos').then((out) => {
-        const currentY = JSON.parse(out).y;
-        const offset = gesture.startY - currentY;
+gesture.connect('drag-update', async () => {
+    try {
+        const Hyprland = (await import('resource:///com/github/Aylur/ags/service/hyprland.js')).default;
+        Hyprland.sendMessage('j/cursorpos').then((out) => {
+            const currentY = JSON.parse(out).y;
+            const offset = gesture.startY - currentY;
 
-        if (offset > 0) return;
+            if (offset > 0) return;
 
-        keyboardWindow.setCss(`
+            keyboardWindow.setCss(`
             margin-bottom: ${offset}px;
         `);
-    }).catch(print);
+        }).catch(print);
+    } catch {
+        return;
+    }
 });
 gesture.connect('drag-end', () => {
     var offset = gesture.get_offset()[2];

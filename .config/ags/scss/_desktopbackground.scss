@@ -1,3 +1,8 @@
+.bg-wallpaper-transition {
+    transition: 1000ms cubic-bezier(0.05, 0.7, 0.1, 1);
+    font-size: 1px;
+}
+
 @mixin bg-textshadow {
     // text-shadow: mix($shadow, $secondaryContainer, 50%) 1px 0px 3px;
 }
@@ -32,7 +37,7 @@
     @include bg-textshadow;
     font-family: 'Gabarito';
     font-size: 1.432rem;
-    color: $primary;
+    color: $onBackground;
 }
 
 .bg-distro-name {
@@ -86,5 +91,4 @@
     font-size: 0px;
     padding: 0rem;
     background-color: $surfaceVariant;
-    color: $primary;
 }

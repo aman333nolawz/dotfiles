@@ -1,6 +1,7 @@
-const { Gio, Gdk, GLib, Gtk } = imports.gi;
-import { App, Widget, Utils } from '../../imports.js';
-const { Box, Button, CenterBox, Label, Revealer } = Widget;
+const { Gio } = imports.gi;
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+const { Box, Button, Label } = Widget;
 import { MaterialIcon } from "../../lib/materialicon.js";
 import { getCalendarLayout } from "../../lib/calendarlayout.js";
 import { setupCursorHover } from "../../lib/cursorhover.js";
@@ -65,12 +66,14 @@ const CalendarWidget = () => {
         }
     });
     const addCalendarChildren = (box, calendarJson) => {
+        const children = box.get_children();
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            child.destroy();
+        }
         box.children = calendarJson.map((row, i) => Widget.Box({
-            // homogeneous: true,
             className: 'spacing-h-5',
-            children: row.map((day, i) =>
-                CalendarDay(day.day, day.today)
-            )
+            children: row.map((day, i) => CalendarDay(day.day, day.today)),
         }))
     }
     function shiftCalendarXMonths(x) {
@@ -156,7 +159,7 @@ const contentStack = Widget.Stack({
 })
 
 const StackButton = (stackItemName, icon, name) => Widget.Button({
-    className: 'button-minsize sidebar-navrail-btn sidebar-button-alone txt-small spacing-h-5',
+    className: 'button-minsize sidebar-navrail-btn txt-small spacing-h-5',
     onClicked: (button) => {
         contentStack.shown = stackItemName;
         const kids = button.get_parent().get_children();
@@ -180,8 +183,8 @@ const StackButton = (stackItemName, icon, name) => Widget.Button({
         ]
     }),
     setup: (button) => Utils.timeout(1, () => {
-        button.toggleClassName('sidebar-navrail-btn-active', defaultShown === stackItemName);
         setupCursorHover(button);
+        button.toggleClassName('sidebar-navrail-btn-active', defaultShown === stackItemName);
     })
 });
 

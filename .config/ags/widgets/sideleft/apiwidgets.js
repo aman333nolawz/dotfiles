@@ -1,264 +1,215 @@
-const { Gdk, GLib, Gtk, Pango } = imports.gi;
-import { App, Utils, Widget } from '../../imports.js';
-const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
+const { Gtk, Gdk } = imports.gi;
+import App from 'resource:///com/github/Aylur/ags/app.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import AgsWidget from "resource:///com/github/Aylur/ags/widgets/widget.js";
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+const { Box, Button, CenterBox, Entry, EventBox, Icon, Label, Overlay, Revealer, Scrollable, Stack } = Widget;
 const { execAsync, exec } = Utils;
-import ChatGPT from '../../services/chatgpt.js';
-import { MaterialIcon } from "../../lib/materialicon.js";
 import { setupCursorHover, setupCursorHoverInfo } from "../../lib/cursorhover.js";
-import { SystemMessage, ChatMessage } from "./chatmessage.js";
-import { ConfigToggle } from '../../lib/configwidgets.js';
-import { markdownTest } from './md2pango.js';
+import { contentStack } from './sideleft.js';
+// APIs
+import ChatGPT from '../../services/chatgpt.js';
+import Gemini from '../../services/gemini.js';
+import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
+import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
+import { waifuView, waifuCommands, sendMessage as waifuSendMessage, waifuTabIcon } from './apis/waifu.js';
+const TextView =  Widget.subclass(Gtk.TextView, "AgsTextView");
 
-const chatGPTInfo = Box({
-    vertical: true,
-    className: 'spacing-v-15',
-    children: [
-        Icon({
-            hpack: 'center',
-            className: 'sidebar-chat-welcome-logo',
-            icon: `${App.configDir}/assets/openai-logomark.svg`,
-            setup: (self) => Utils.timeout(1, () => {
-                const styleContext = self.get_style_context();
-                const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
-                const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                self.size = Math.max(width, height, 1) * 116 / 180; // Why such a specific proportion? See https://openai.com/brand#logos
-            })
-        }),
-        Label({
-            className: 'txt txt-title-small sidebar-chat-welcome-txt',
-            wrap: true,
-            justify: Gtk.Justification.CENTER,
-            label: 'ChatGPT',
-        }),
-        Box({
-            className: 'spacing-h-5',
-            hpack: 'center',
-            children: [
-                Label({
-                    className: 'txt-smallie txt-subtext',
-                    wrap: true,
-                    justify: Gtk.Justification.CENTER,
-                    label: 'Powered by OpenAI',
-                }),
-                Button({
-                    className: 'txt-subtext txt-norm icon-material',
-                    label: 'info',
-                    tooltipText: 'Uses the gpt-3.5-turbo model.\nNot affiliated, endorsed, or sponsored by OpenAI.',
-                    setup: setupCursorHoverInfo,
-                }),
-            ]
-        }),
-    ]
-})
 
-const apiKeyInstructions = Box({
-    homogeneous: true,
-    children: [Revealer({
-        transition: 'slide_down',
-        transitionDuration: 150,
-        connections: [[ChatGPT, (self, hasKey) => {
-            self.revealChild = (ChatGPT.key.length == 0);
-        }, 'hasKey']],
-        child: Button({
-            child: Label({
-                useMarkup: true,
-                wrap: true,
-                className: 'txt sidebar-chat-welcome-txt',
-                justify: Gtk.Justification.CENTER,
-                label: 'An OpenAI API key is required\nYou can grab one <u>here</u>, then enter it below'
-            }),
-            setup: setupCursorHover,
-            onClicked: () => {
-                Utils.execAsync(['bash', '-c', `xdg-open https://platform.openai.com/api-keys &`]);
+const EXPAND_INPUT_THRESHOLD = 30;
+const APIS = [
+    {
+        name: 'Assistant (ChatGPT 3.5)',
+        sendCommand: chatGPTSendMessage,
+        contentWidget: chatGPTView,
+        commandBar: chatGPTCommands,
+        tabIcon: chatGPTTabIcon,
+        placeholderText: 'Message ChatGPT...',
+    },
+    {
+        name: 'Assistant (Gemini Pro)',
+        sendCommand: geminiSendMessage,
+        contentWidget: geminiView,
+        commandBar: geminiCommands,
+        tabIcon: geminiTabIcon,
+        placeholderText: 'Message Gemini...',
+    },
+    {
+        name: 'Waifus',
+        sendCommand: waifuSendMessage,
+        contentWidget: waifuView,
+        commandBar: waifuCommands,
+        tabIcon: waifuTabIcon,
+        placeholderText: 'Enter tags',
+    },
+];
+let currentApiId = 0;
+APIS[currentApiId].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', true);
+
+function apiSendMessage(textView) {
+    // Get text
+    const buffer = textView.get_buffer();
+    const [start, end] = buffer.get_bounds();
+    const text = buffer.get_text(start, end, true).trimStart();
+    if (!text || text.length == 0) return;
+    // Send
+    APIS[currentApiId].sendCommand(text)
+    // Reset
+    buffer.set_text("", -1);
+    chatEntryWrapper.toggleClassName('sidebar-chat-wrapper-extended', false);
+    chatEntry.set_valign(Gtk.Align.CENTER);
+}
+
+export const chatEntry = TextView({
+    hexpand: true,
+    wrapMode: Gtk.WrapMode.WORD_CHAR,
+    acceptsTab: false,
+    className: 'sidebar-chat-entry txt txt-smallie',
+    setup: (self) => self
+        .hook(ChatGPT, (self) => {
+            if (APIS[currentApiId].name != 'Assistant (ChatGPT 3.5)') return;
+            self.placeholderText = (ChatGPT.key.length > 0 ? 'Message ChatGPT...' : 'Enter OpenAI API Key...');
+        }, 'hasKey')
+        .hook(Gemini, (self) => {
+            if (APIS[currentApiId].name != 'Assistant (Gemini Pro)') return;
+            self.placeholderText = (Gemini.key.length > 0 ? 'Message Gemini...' : 'Enter Google AI API Key...');
+        }, 'hasKey')
+        .on("key-press-event", (widget, event) => {
+            const keyval = event.get_keyval()[1];
+            if (event.get_keyval()[1] === Gdk.KEY_Return && event.get_state()[1] == Gdk.ModifierType.MOD2_MASK) {
+                apiSendMessage(widget);
+                return true;
+            }
+            // Global keybinds
+            if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
+                event.get_keyval()[1] === Gdk.KEY_Page_Down) {
+                const toSwitchTab = contentStack.get_visible_child();
+                toSwitchTab.attribute.nextTab();
+            }
+            else if (!(event.get_state()[1] & Gdk.ModifierType.CONTROL_MASK) &&
+                event.get_keyval()[1] === Gdk.KEY_Page_Up) {
+                const toSwitchTab = contentStack.get_visible_child();
+                toSwitchTab.attribute.prevTab();
             }
         })
-    })]
+    ,
 });
 
-const chatGPTSettings = Revealer({
-    transition: 'slide_down',
-    transitionDuration: 150,
-    revealChild: true,
-    connections: [
-        [ChatGPT, (self) => {
-            self.revealChild = false;
-        }, 'newMsg'],
-        [ChatGPT, (self) => {
-            self.revealChild = true;
-        }, 'clear'],
-    ],
-    child: Box({
-        vertical: true,
-        hpack: 'fill',
-        className: 'sidebar-chat-settings',
-        children: [
-            ConfigToggle({
-                icon: 'cycle',
-                name: 'Cycle models',
-                desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nTurn this on if you message rapidly.',
-                initValue: ChatGPT.cycleModels,
-                onChange: (self, newValue) => {
-                    ChatGPT.cycleModels = newValue;
-                },
-            }),
-            ConfigToggle({
-                icon: 'description',
-                name: 'Assistant prompt',
-                desc: 'Tells ChatGPT\n  1. It\'s a sidebar assistant on Linux\n  2. Be short and concise\n  3. Use markdown features extensively\nTurn this off for a vanilla ChatGPT experience.',
-                initValue: ChatGPT.assistantPrompt,
-                onChange: (self, newValue) => {
-                    ChatGPT.assistantPrompt = newValue;
-                },
-            }),
-        ]
-    })
-});
-
-const chatWelcome = Box({
-    vexpand: true,
-    homogeneous: true,
-    child: Box({
-        className: 'spacing-v-15',
-        vpack: 'center',
-        vertical: true,
-        children: [
-            chatGPTInfo,
-            apiKeyInstructions,
-            chatGPTSettings,
-        ]
-    })
-})
-
-const chatContent = Box({
-    className: 'spacing-v-15',
-    vertical: true,
-    connections: [
-        [ChatGPT, (box, id) => {
-            const message = ChatGPT.messages[id];
-            if (!message) return;
-            box.add(ChatMessage(message))
-        }, 'newMsg'],
-        [ChatGPT, (box) => {
-            box.children = [chatWelcome];
-        }, 'clear'],
-        [ChatGPT, (box) => {
-            box.children = [chatWelcome];
-        }, 'initialized'],
-    ]
-});
-
-const chatView = Scrollable({
-    className: 'sidebar-chat-viewport',
-    vexpand: true,
-    child: chatContent,
-    setup: (scrolledWindow) => {
-        scrolledWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        const vScrollbar = scrolledWindow.get_vscrollbar();
-        vScrollbar.get_style_context().add_class('sidebar-scrollbar');
-
-        Utils.timeout(1, () => {
-            const viewport = scrolledWindow.child;
-            viewport.set_focus_vadjustment(new Gtk.Adjustment(undefined));
-        })
-    }
-})
-
-const chatCommands = Box({
-    className: 'spacing-h-5',
-    children: [
-        Box({ hexpand: true }),
-        Button({
-            className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
-            onClicked: () => chatEntry.text = '/key',
-            setup: setupCursorHover,
-            label: '/key',
-        }),
-        Button({
-            className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
-            onClicked: () => chatContent.add(SystemMessage(
-                `Currently using \`${ChatGPT.modelName}\``,
-                '/model'
-            )),
-            setup: setupCursorHover,
-            label: '/model',
-        }),
-        Button({
-            className: 'sidebar-chat-chip sidebar-chat-chip-action txt txt-small',
-            onClicked: () => ChatGPT.clear(),
-            setup: setupCursorHover,
-            label: '/clear',
-        }),
-    ]
-});
-
-const sendChatMessage = () => {
-    // Check if text or API key is empty
-    if (chatEntry.text.length == 0) return;
-    if (ChatGPT.key.length == 0) {
-        ChatGPT.key = chatEntry.text;
-        chatContent.add(SystemMessage(`Key saved to\n\`${ChatGPT.keyPath}\``, 'API Key'));
-        chatEntry.text = '';
-        return;
-    }
-    // Commands
-    if (chatEntry.text.startsWith('/')) {
-        if (chatEntry.text.startsWith('/clear')) ChatGPT.clear();
-        else if (chatEntry.text.startsWith('/model')) chatContent.add(SystemMessage(`Currently using \`${ChatGPT.modelName}\``, '/model'))
-        else if (chatEntry.text.startsWith('/key')) {
-            const parts = chatEntry.text.split(' ');
-            if (parts.length == 1) chatContent.add(SystemMessage(`See \`${ChatGPT.keyPath}\``, '/key'));
-            else {
-                ChatGPT.key = parts[1];
-                chatContent.add(SystemMessage(`Updated API Key at\n\`${ChatGPT.keyPath}\``, '/key'));
-            }
-        }
-        else if (chatEntry.text.startsWith('/test'))
-            chatContent.add(SystemMessage(markdownTest, `Markdown test`));
-        else
-            chatContent.add(SystemMessage(`Invalid command.`, 'Error'))
+chatEntry.get_buffer().connect("changed", (buffer) => {
+    const bufferText = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), true);
+    chatSendButton.toggleClassName('sidebar-chat-send-available', bufferText.length > 0);
+    chatPlaceholderRevealer.revealChild = (bufferText.length == 0);
+    if (buffer.get_line_count() > 1 || bufferText.length > EXPAND_INPUT_THRESHOLD) {
+        chatEntryWrapper.toggleClassName('sidebar-chat-wrapper-extended', true);
+        chatEntry.set_valign(Gtk.Align.FILL);
+        chatPlaceholder.set_valign(Gtk.Align.FILL);
     }
     else {
-        ChatGPT.send(chatEntry.text);
+        chatEntryWrapper.toggleClassName('sidebar-chat-wrapper-extended', false);
+        chatEntry.set_valign(Gtk.Align.CENTER);
+        chatPlaceholder.set_valign(Gtk.Align.CENTER);
     }
+});
 
-    chatEntry.text = '';
-}
+const chatEntryWrapper = Scrollable({
+    className: 'sidebar-chat-wrapper',
+    hscroll: 'never',
+    vscroll: 'always',
+    child: chatEntry,
+});
 
 const chatSendButton = Button({
     className: 'txt-norm icon-material sidebar-chat-send',
-    vpack: 'center',
+    vpack: 'end',
     label: 'arrow_upward',
     setup: setupCursorHover,
-    onClicked: (btn) => sendChatMessage(),
+    onClicked: (self) => {
+        APIS[currentApiId].sendCommand(chatEntry.get_buffer().text);
+        chatEntry.get_buffer().set_text("", -1);
+    },
 });
 
-export const chatEntry = Entry({
-    className: 'sidebar-chat-entry',
-    hexpand: true,
-    connections: [
-        [ChatGPT, (self, hasKey) => {
-            self.placeholderText = (ChatGPT.key.length > 0 ? 'Ask a question...' : 'Enter OpenAI API Key...');
-        }, 'hasKey']
-    ],
-    onChange: (entry) => {
-        chatSendButton.toggleClassName('sidebar-chat-send-available', entry.text.length > 0);
-    },
-    onAccept: () => sendChatMessage(),
+const chatPlaceholder = Label({
+    className: 'txt-subtext txt-smallie margin-left-5',
+    hpack: 'start',
+    vpack: 'center',
+    label: APIS[currentApiId].placeholderText,
 });
+
+const chatPlaceholderRevealer = Revealer({
+    revealChild: true,
+    transition: 'crossfade',
+    transitionDuration: 200,
+    child: chatPlaceholder,
+});
+
+const textboxArea = Box({ // Entry area
+    className: 'sidebar-chat-textarea',
+    children: [
+        Overlay({
+            passThrough: true,
+            child: chatEntryWrapper,
+            overlays: [chatPlaceholderRevealer],
+        }),
+        Box({ className: 'width-10' }),
+        chatSendButton,
+    ]
+});
+
+const apiContentStack = Stack({
+    vexpand: true,
+    transition: 'slide_left_right',
+    items: APIS.map(api => [api.name, api.contentWidget]),
+})
+
+const apiCommandStack = Stack({
+    transition: 'slide_up_down',
+    items: APIS.map(api => [api.name, api.commandBar]),
+})
+
+function switchToTab(id) {
+    APIS[currentApiId].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', false);
+    APIS[id].tabIcon.toggleClassName('sidebar-chat-apiswitcher-icon-enabled', true);
+    apiContentStack.shown = APIS[id].name;
+    apiCommandStack.shown = APIS[id].name;
+    chatPlaceholder.label = APIS[id].placeholderText;
+    currentApiId = id;
+}
+
+const apiSwitcher = CenterBox({
+    centerWidget: Box({
+        className: 'sidebar-chat-apiswitcher spacing-h-5',
+        hpack: 'center',
+        children: APIS.map((api, id) => Button({
+            child: api.tabIcon,
+            tooltipText: api.name,
+            setup: setupCursorHover,
+            onClicked: () => {
+                switchToTab(id);
+            }
+        })),
+    }),
+    endWidget: Button({
+        hpack: 'end',
+        className: 'txt-subtext txt-norm icon-material',
+        label: 'lightbulb',
+        tooltipText: 'Use PageUp/PageDown to switch between API pages',
+        setup: setupCursorHoverInfo,
+    }),
+})
 
 export default Widget.Box({
+    attribute: {
+        'nextTab': () => switchToTab(Math.min(currentApiId + 1, APIS.length - 1)),
+        'prevTab': () => switchToTab(Math.max(0, currentApiId - 1)),
+    },
     vertical: true,
     className: 'spacing-v-10',
     homogeneous: false,
     children: [
-        chatView,
-        chatCommands,
-        Box({ // Entry area
-            className: 'sidebar-chat-textarea spacing-h-10',
-            children: [
-                chatEntry,
-                chatSendButton,
-            ]
-        }),
-    ]
+        apiSwitcher,
+        apiContentStack,
+        apiCommandStack,
+        textboxArea,
+    ],
 });

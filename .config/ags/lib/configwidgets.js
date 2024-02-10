@@ -1,10 +1,10 @@
-const { Gdk, Gtk } = imports.gi;
-import { App, Service, Utils, Variable, Widget } from '../imports.js';
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import { MaterialIcon } from './materialicon.js';
 import { setupCursorHover } from './cursorhover.js';
-const { Box, Button, Entry, EventBox, Icon, Label, Revealer, Scrollable, Stack } = Widget;
+const { Box, Button, Label, Revealer } = Widget;
 
-export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...props }) => {
+export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...rest }) => {
     let value = initValue;
     const toggleIcon = Label({
         className: `icon-material txt-bold ${value ? '' : 'txt-poof'}`,
@@ -37,25 +37,90 @@ export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...pr
         ]
     });
     const interactionWrapper = Button({
-        ...props,
-        child: widgetContent,
-        setup: setupCursorHover,
-        onClicked: () => { // mouse up/kb press
-            value = !value;
-            toggleIcon.toggleClassName('switch-fg-toggling-false', false);
-            toggleIcon.label = `${value ? 'check' : ''}`;
-            toggleIcon.toggleClassName('txt-poof', !value);
-            toggleButtonIndicator.toggleClassName('switch-fg-true', value);
-            toggleButton.toggleClassName('switch-bg-true', value);
-            onChange(interactionWrapper, value);
+        attribute: {
+            toggle: (newValue) => {
+                value = !value;
+                toggleIcon.toggleClassName('switch-fg-toggling-false', false);
+                if (!value) {
+                    toggleIcon.label = '';
+                    toggleIcon.toggleClassName('txt-poof', true);
+                }
+                toggleButtonIndicator.toggleClassName('switch-fg-true', value);
+                toggleButton.toggleClassName('switch-bg-true', value);
+                if (value) Utils.timeout(1, () => {
+                    toggleIcon.label = 'check';
+                    toggleIcon.toggleClassName('txt-poof', false);
+                })
+                onChange(interactionWrapper, value);
+            }
         },
+        child: widgetContent,
+        onClicked: (self) => self.attribute.toggle(self),
         setup: (button) => {
-            button.connect('pressed', () => { // mouse down
-                toggleIcon.toggleClassName('txt-poof', true);
-                toggleIcon.toggleClassName('switch-fg-true', false);
-                if(!value) toggleIcon.toggleClassName('switch-fg-toggling-false', true);
-            });
-        }
+            setupCursorHover(button),
+                button.connect('pressed', () => { // mouse down
+                    toggleIcon.toggleClassName('txt-poof', true);
+                    toggleIcon.toggleClassName('switch-fg-true', false);
+                    if (!value) toggleIcon.toggleClassName('switch-fg-toggling-false', true);
+                });
+        },
+        ...rest,
     });
     return interactionWrapper;
 }
+
+export const ConfigSegmentedSelection = ({
+    icon, name, desc = '',
+    options = [{ name: 'Option 1', value: 0 }, { name: 'Option 2', value: 1 }],
+    initIndex = 0,
+    onChange,
+    ...rest
+}) => {
+    let lastSelected = initIndex;
+    let value = options[initIndex].value;
+    const widget = Box({
+        tooltipText: desc,
+        className: 'segment-container',
+        // homogeneous: true,
+        children: options.map((option, id) => {
+            const selectedIcon = Revealer({
+                revealChild: id == initIndex,
+                transition: 'slide_right',
+                transitionDuration: 150,
+                child: MaterialIcon('check', 'norm')
+            });
+            return Button({
+                setup: setupCursorHover,
+                className: `segment-btn ${id == initIndex ? 'segment-btn-enabled' : ''}`,
+                child: Box({
+                    hpack: 'center',
+                    className: 'spacing-h-5',
+                    children: [
+                        selectedIcon,
+                        Label({
+                            label: option.name,
+                        })
+                    ]
+                }),
+                onClicked: (self) => {
+                    value = option.value;
+                    const kids = widget.get_children();
+                    kids[lastSelected].toggleClassName('segment-btn-enabled', false);
+                    kids[lastSelected].get_children()[0].get_children()[0].revealChild = false;
+                    lastSelected = id;
+                    self.toggleClassName('segment-btn-enabled', true);
+                    selectedIcon.revealChild = true;
+                    onChange(option.value, option.name);
+                }
+            })
+        }),
+        ...rest,
+    });
+    return widget;
+
+}
+
+export const ConfigGap = ({ vertical = true, size = 5, ...rest }) => Box({
+    className: `gap-${vertical ? 'v' : 'h'}-${size}`,
+    ...rest,
+})

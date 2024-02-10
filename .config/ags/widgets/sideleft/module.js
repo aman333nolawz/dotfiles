@@ -1,7 +1,5 @@
-const { Gdk, Gtk } = imports.gi;
-import { Utils, Widget } from '../../imports.js';
-const { execAsync, exec } = Utils;
-const { Box, Button, EventBox, Label, Scrollable } = Widget;
+import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+const { Box, Button, Label } = Widget;
 
 export const SidebarModule = ({
     name,
@@ -17,6 +15,9 @@ export const SidebarModule = ({
                         Label({
                             className: 'txt-small txt',
                             label: `${name}`,
+                        }),
+                        Box({
+                            hexpand: true,
                         }),
                         Label({
                             className: 'sidebar-module-btn-arrow',

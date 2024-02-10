@@ -1,8 +1,8 @@
 // This file is for the actual widget for each single notification
 
 const { GLib, Gdk, Gtk } = imports.gi;
-import { Utils, Widget } from '../imports.js';
-const { lookUpIcon, timeout } = Utils;
+import Widget from 'resource:///com/github/Aylur/ags/widget.js'
+import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 const { Box, EventBox, Icon, Overlay, Label, Button, Revealer } = Widget;
 import { MaterialIcon } from "./materialicon.js";
 import { setupCursorHover } from "./cursorhover.js";
@@ -18,6 +18,10 @@ function guessMessageType(summary) {
     if (summary.includes('update')) return 'update';
     if (summary.startsWith('file')) return 'folder_copy';
     return 'chat';
+}
+
+function exists(widget) {
+    return widget !== null;
 }
 
 const NotificationIcon = (notifObject) => {
@@ -37,191 +41,272 @@ const NotificationIcon = (notifObject) => {
     }
 
     let icon = 'NO_ICON';
-    if (lookUpIcon(notifObject.appIcon))
+    if (Utils.lookUpIcon(notifObject.appIcon))
         icon = notifObject.appIcon;
-    if (lookUpIcon(notifObject.appEntry))
+    if (Utils.lookUpIcon(notifObject.appEntry))
         icon = notifObject.appEntry;
 
     return Box({
-        valign: Gtk.Align.CENTER,
+        vpack: 'center',
         hexpand: false,
-        className: 'notif-icon',
-        setup: box => {
-            if (icon != 'NO_ICON') box.pack_start(Icon({
-                icon: icon,
-                halign: Gtk.Align.CENTER, hexpand: true,
-                valign: Gtk.Align.CENTER,
-                setup: (self) => {
-                    box.toggleClassName(`notif-icon-material-${notifObject.urgency}`, true);
-                    Utils.timeout(1, () => {
+        className: `notif-icon notif-icon-material-${notifObject.urgency}`,
+        homogeneous: true,
+        children: [
+            (icon != 'NO_ICON' ?
+                Icon({
+                    vpack: 'center',
+                    icon: icon,
+                    setup: (self) => Utils.timeout(1, () => {
                         const styleContext = self.get_parent().get_style_context();
                         const width = styleContext.get_property('min-width', Gtk.StateFlags.NORMAL);
                         const height = styleContext.get_property('min-height', Gtk.StateFlags.NORMAL);
-                        self.size = Math.max(width * 0.9, height * 0.9, 1); // im too lazy to add another box lol
-                    })
-                },
-            }), false, true, 0);
-            else box.pack_start(MaterialIcon(`${notifObject.urgency == 'critical' ? 'release_alert' : guessMessageType(notifObject.summary.toLowerCase())}`, 'hugerass', {
-                hexpand: true,
-                setup: () => box.toggleClassName(`notif-icon-material-${notifObject.urgency}`, true),
-            }), false, true, 0)
-        }
+                        self.size = Math.max(width * 0.7, height * 0.7, 1); // im too lazy to add another box lol
+                    }, self),
+                })
+                :
+                MaterialIcon(`${notifObject.urgency == 'critical' ? 'release_alert' : guessMessageType(notifObject.summary.toLowerCase())}`, 'hugerass', {
+                    hexpand: true,
+                })
+            )
+        ],
     });
 };
 
 export default ({
     notifObject,
     isPopup = false,
-    popupTimeout = 3000,
     props = {},
 } = {}) => {
+    const popupTimeout = notifObject.timeout || (notifObject.urgency == 'critical' ? 8000 : 3000);
     const command = (isPopup ?
         () => notifObject.dismiss() :
         () => notifObject.close()
     )
     const destroyWithAnims = () => {
         widget.sensitive = false;
-        notificationBox.setCss(rightAnim1);
+        notificationBox.setCss(middleClickClose);
         Utils.timeout(200, () => {
-            wholeThing.revealChild = false;
-        });
+            if (wholeThing) wholeThing.revealChild = false;
+        }, wholeThing);
         Utils.timeout(400, () => {
             command();
-            wholeThing.destroy();
-        });
+            if (wholeThing) {
+                wholeThing.destroy();
+                wholeThing = null;
+            }
+        }, wholeThing);
     }
     const widget = EventBox({
         onHover: (self) => {
             self.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grab'));
-            if (!wholeThing._hovered)
-                wholeThing._hovered = true;
+            if (!wholeThing.attribute.hovered)
+                wholeThing.attribute.hovered = true;
         },
         onHoverLost: (self) => {
             self.window.set_cursor(null);
-            if (wholeThing._hovered)
-                wholeThing._hovered = false;
+            if (wholeThing.attribute.hovered)
+                wholeThing.attribute.hovered = false;
             if (isPopup) {
                 command();
             }
         },
         onMiddleClick: (self) => {
             destroyWithAnims();
+        },
+        setup: (self) => {
+            self.on("button-press-event", () => {
+                wholeThing.attribute.held = true;
+                notificationContent.toggleClassName(`${isPopup ? 'popup-' : ''}notif-clicked-${notifObject.urgency}`, true);
+                Utils.timeout(800, () => {
+                    if (wholeThing?.attribute.held) {
+                        Utils.execAsync(['wl-copy', `${notifObject.body}`])
+                        notifTextSummary.label = notifObject.summary + " (copied)";
+                        Utils.timeout(3000, () => notifTextSummary.label = notifObject.summary)
+                    }
+                })
+            }).on("button-release-event", () => {
+                wholeThing.attribute.held = false;
+                notificationContent.toggleClassName(`${isPopup ? 'popup-' : ''}notif-clicked-${notifObject.urgency}`, false);
+            })
         }
     });
-    const wholeThing = Revealer({
-        properties: [
-            ['id', notifObject.id],
-            ['close', undefined],
-            ['hovered', false],
-            ['dragging', false],
-            ['destroyWithAnims', () => destroyWithAnims]
-        ],
+    let wholeThing = Revealer({
+        attribute: {
+            'close': undefined,
+            'destroyWithAnims': destroyWithAnims,
+            'dragging': false,
+            'held': false,
+            'hovered': false,
+            'id': notifObject.id,
+        },
         revealChild: false,
         transition: 'slide_down',
         transitionDuration: 200,
         child: Box({ // Box to make sure css-based spacing works
             homogeneous: true,
-        })
+        }),
     });
 
     const display = Gdk.Display.get_default();
+    const notifTextPreview = Revealer({
+        transition: 'slide_down',
+        transitionDuration: 120,
+        revealChild: true,
+        child: Label({
+            xalign: 0,
+            className: `txt-smallie notif-body-${notifObject.urgency}`,
+            useMarkup: true,
+            xalign: 0,
+            justify: Gtk.Justification.LEFT,
+            maxWidthChars: 24,
+            truncate: 'end',
+            label: notifObject.body.split("\n")[0],
+        }),
+    });
+    const notifTextExpanded = Revealer({
+        transition: 'slide_up',
+        transitionDuration: 120,
+        revealChild: false,
+        child: Box({
+            vertical: true,
+            className: 'spacing-v-10',
+            children: [
+                Label({
+                    xalign: 0,
+                    className: `txt-smallie notif-body-${notifObject.urgency}`,
+                    useMarkup: true,
+                    xalign: 0,
+                    justify: Gtk.Justification.LEFT,
+                    maxWidthChars: 24,
+                    wrap: true,
+                    label: notifObject.body,
+                }),
+                Box({
+                    className: 'notif-actions spacing-h-5',
+                    children: [
+                        Button({
+                            hexpand: true,
+                            className: `notif-action notif-action-${notifObject.urgency}`,
+                            onClicked: () => destroyWithAnims(),
+                            child: Label({
+                                label: 'Close',
+                            })
+                        }),
+                        ...notifObject.actions.map(action => Widget.Button({
+                            hexpand: true,
+                            className: `notif-action notif-action-${notifObject.urgency}`,
+                            onClicked: () => notifObject.invoke(action.id),
+                            child: Label({
+                                label: action.label,
+                            })
+                        }))
+                    ],
+                })
+            ]
+        }),
+    });
+    const notifIcon = Box({
+        vpack: 'start',
+        homogeneous: true,
+        children: [
+            Overlay({
+                child: NotificationIcon(notifObject),
+                overlays: isPopup ? [AnimatedCircProg({
+                    className: `notif-circprog-${notifObject.urgency}`,
+                    vpack: 'center', hpack: 'center',
+                    initFrom: (isPopup ? 100 : 0),
+                    initTo: 0,
+                    initAnimTime: popupTimeout,
+                })] : [],
+            }),
+        ]
+    });
+    let notifTime = '';
+    const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
+    if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year())
+        notifTime = messageTime.format('%H:%M');
+    else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1)
+        notifTime = 'Yesterday';
+    else
+        notifTime = messageTime.format('%d/%m');
+    const notifTextSummary = Label({
+        xalign: 0,
+        className: 'txt-small txt-semibold titlefont',
+        justify: Gtk.Justification.LEFT,
+        hexpand: true,
+        maxWidthChars: 24,
+        truncate: 'end',
+        ellipsize: 3,
+        useMarkup: notifObject.summary.startsWith('<'),
+        label: notifObject.summary,
+    });
+    const notifTextBody = Label({
+        vpack: 'center',
+        justification: 'right',
+        className: 'txt-smaller txt-semibold',
+        label: notifTime,
+    });
+    const notifText = Box({
+        valign: Gtk.Align.CENTER,
+        vertical: true,
+        hexpand: true,
+        children: [
+            Box({
+                children: [
+                    notifTextSummary,
+                    notifTextBody,
+                ]
+            }),
+            notifTextPreview,
+            notifTextExpanded,
+        ]
+    });
+    const notifExpandButton = Button({
+        vpack: 'start',
+        className: 'notif-expand-btn',
+        onClicked: (self) => {
+            if (notifTextPreview.revealChild) { // Expanding...
+                notifTextPreview.revealChild = false;
+                notifTextExpanded.revealChild = true;
+                self.child.label = 'expand_less';
+                expanded = true;
+            }
+            else {
+                notifTextPreview.revealChild = true;
+                notifTextExpanded.revealChild = false;
+                self.child.label = 'expand_more';
+                expanded = false;
+            }
+        },
+        child: MaterialIcon('expand_more', 'norm', {
+            vpack: 'center',
+        }),
+        setup: setupCursorHover,
+    });
     const notificationContent = Box({
         ...props,
         className: `${isPopup ? 'popup-' : ''}notif-${notifObject.urgency} spacing-h-10`,
         children: [
-            NotificationIcon(notifObject),
+            notifIcon,
             Box({
-                valign: Gtk.Align.CENTER,
-                vertical: true,
-                hexpand: true,
+                className: 'spacing-h-5',
                 children: [
-                    Box({
-                        children: [
-                            Label({
-                                xalign: 0,
-                                className: 'txt-small txt-semibold titlefont',
-                                justify: Gtk.Justification.LEFT,
-                                hexpand: true,
-                                maxWidthChars: 24,
-                                truncate: 'end',
-                                ellipsize: 3,
-                                wrap: true,
-                                useMarkup: notifObject.summary.startsWith('<'),
-                                label: notifObject.summary,
-                            }),
-                            Label({
-                                valign: Gtk.Align.CENTER,
-                                className: 'txt-smaller txt-semibold',
-                                justify: Gtk.Justification.RIGHT,
-                                setup: (label) => {
-                                    // Let's ignore how it won't work for Jan1 cuz I'm lazy
-                                    const messageTime = GLib.DateTime.new_from_unix_local(notifObject.time);
-                                    if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year()) {
-                                        label.label = messageTime.format('%H:%M');
-                                    }
-                                    else if (messageTime.get_day_of_year() == GLib.DateTime.new_now_local().get_day_of_year() - 1) {
-                                        label.label = messageTime.format('Yesterday');
-                                    }
-                                    else {
-                                        label.label = messageTime.format('%d/%m');
-                                    }
-                                }
-                            }),
-                        ]
-                    }),
-                    Label({
-                        xalign: 0,
-                        className: `txt-smallie notif-body-${notifObject.urgency}`,
-                        useMarkup: true,
-                        xalign: 0,
-                        justify: Gtk.Justification.LEFT,
-                        wrap: true,
-                        label: notifObject.body,
-                    }),
+                    notifText,
+                    notifExpandButton,
                 ]
-            }),
-            Overlay({
-                child: AnimatedCircProg({
-                    className: `notif-circprog-${notifObject.urgency}`,
-                    valign: Gtk.Align.CENTER,
-                    initFrom: (isPopup ? 100 : 0),
-                    initTo: 0,
-                    initAnimTime: popupTimeout,
-                }),
-                overlays: [
-                    Button({
-                        className: 'notif-close-btn',
-                        onClicked: () => {
-                            destroyWithAnims()
-                        },
-                        child: MaterialIcon('close', 'large', {
-                            valign: Gtk.Align.CENTER,
-                        }),
-                        setup: setupCursorHover,
-                    }),
-                ]
-            }),
-
-            // what is this? i think it should be at the bottom not on the right
-            // Box({
-            //     className: 'actions',
-            //     children: actions.map(action => Button({
-            //         className: 'action-button',
-            //         onClicked: () => Notifications.invoke(id, action.id),
-            //         hexpand: true,
-            //         child: Label(action.label),
-            //     })),
-            // }),
+            })
         ]
     })
 
     // Gesture stuff
-
     const gesture = Gtk.GestureDrag.new(widget);
-    var initialDir = 0;
+    var initDirX = 0;
+    var initDirVertical = -1; // -1: unset, 0: horizontal, 1: vertical
+    var expanded = false;
     // in px
     const startMargin = 0;
-    const dragThreshold = 100;
+    const MOVE_THRESHOLD = 10;
+    const DRAG_CONFIRM_THRESHOLD = 100;
     // in rem
     const maxOffset = 10.227;
     const endMargin = 20.455;
@@ -236,57 +321,84 @@ export default ({
                         margin-right: -${Number(maxOffset + endMargin)}rem;
                         opacity: 0;`;
 
+    const middleClickClose = `transition: 200ms cubic-bezier(0.85, 0, 0.15, 1);
+                              margin-left:   ${Number(maxOffset + endMargin)}rem;
+                              margin-right: -${Number(maxOffset + endMargin)}rem;
+                              opacity: 0;`;
+
     const notificationBox = Box({
-        properties: [
-            ['leftAnim1', leftAnim1],
-            ['rightAnim1', rightAnim1],
-            ['ready', false],
-        ],
+        attribute: {
+            'leftAnim1': leftAnim1,
+            'rightAnim1': rightAnim1,
+            'middleClickClose': middleClickClose,
+            'ready': false,
+        },
         homogeneous: true,
         children: [notificationContent],
-        connections: [
-            [gesture, self => {
-                var offset = gesture.get_offset()[1];
-                if (initialDir == 0 && offset != 0)
-                    initialDir = (offset > 0 ? 1 : -1)
-
-                if (offset > 0) {
-                    if (initialDir < 0)
+        setup: (self) => self
+            .hook(gesture, self => {
+                var offset_x = gesture.get_offset()[1];
+                var offset_y = gesture.get_offset()[2];
+                // Which dir?
+                if (initDirVertical == -1) {
+                    if (Math.abs(offset_y) > MOVE_THRESHOLD)
+                        initDirVertical = 1;
+                    if (initDirX == 0 && Math.abs(offset_x) > MOVE_THRESHOLD) {
+                        initDirVertical = 0;
+                        initDirX = (offset_x > 0 ? 1 : -1);
+                    }
+                }
+                // Horizontal drag
+                if (initDirVertical == 0 && offset_x > MOVE_THRESHOLD) {
+                    if (initDirX < 0)
                         self.setCss(`margin-left: 0px; margin-right: 0px;`);
                     else
                         self.setCss(`
-                            margin-left:   ${Number(offset + startMargin)}px;
-                            margin-right: -${Number(offset + startMargin)}px;
+                            margin-left:   ${Number(offset_x + startMargin - MOVE_THRESHOLD)}px;
+                            margin-right: -${Number(offset_x + startMargin - MOVE_THRESHOLD)}px;
                         `);
                 }
-                else if (offset < 0) {
-                    if (initialDir > 0)
+                else if (initDirVertical == 0 && offset_x < -MOVE_THRESHOLD) {
+                    if (initDirX > 0)
                         self.setCss(`margin-left: 0px; margin-right: 0px;`);
                     else {
-                        offset = Math.abs(offset);
+                        offset_x = Math.abs(offset_x);
                         self.setCss(`
-                            margin-right: ${Number(offset + startMargin)}px;
-                            margin-left: -${Number(offset + startMargin)}px;
+                            margin-right: ${Number(offset_x + startMargin - MOVE_THRESHOLD)}px;
+                            margin-left: -${Number(offset_x + startMargin - MOVE_THRESHOLD)}px;
                         `);
                     }
                 }
+                // Update dragging
+                wholeThing.attribute.dragging = Math.abs(offset_x) > MOVE_THRESHOLD;
+                if (Math.abs(offset_x) > MOVE_THRESHOLD ||
+                    Math.abs(offset_y) > MOVE_THRESHOLD) wholeThing.attribute.held = false;
+                widget.window?.set_cursor(Gdk.Cursor.new_from_name(display, 'grabbing'));
+                // Vertical drag
+                if (initDirVertical == 1 && offset_y > MOVE_THRESHOLD && !expanded) {
+                    notifTextPreview.revealChild = false;
+                    notifTextExpanded.revealChild = true;
+                    expanded = true;
+                    notifExpandButton.child.label = 'expand_less';
+                }
+                else if (initDirVertical == 1 && offset_y < -MOVE_THRESHOLD && expanded) {
+                    notifTextPreview.revealChild = true;
+                    notifTextExpanded.revealChild = false;
+                    expanded = false;
+                    notifExpandButton.child.label = 'expand_more';
+                }
 
-                wholeThing._dragging = Math.abs(offset) > 10;
-
-                if (widget.window)
-                    widget.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grabbing'));
-            }, 'drag-update'],
-
-            [gesture, self => {
-                if (!self._ready) {
+            }, 'drag-update')
+            .hook(gesture, self => {
+                if (!self.attribute.ready) {
                     wholeThing.revealChild = true;
-                    self._ready = true;
+                    self.attribute.ready = true;
                     return;
                 }
-                const offset = gesture.get_offset()[1];
+                const offset_h = gesture.get_offset()[1];
 
-                if (Math.abs(offset) > dragThreshold && offset * initialDir > 0) {
-                    if (offset > 0) {
+                if (Math.abs(offset_h) > DRAG_CONFIRM_THRESHOLD && offset_h * initDirX > 0) {
+                    if (offset_h > 0) {
                         self.setCss(rightAnim1);
                         widget.sensitive = false;
                     }
@@ -295,12 +407,15 @@ export default ({
                         widget.sensitive = false;
                     }
                     Utils.timeout(200, () => {
-                        wholeThing.revealChild = false
-                    });
+                        if (wholeThing) wholeThing.revealChild = false;
+                    }, wholeThing);
                     Utils.timeout(400, () => {
                         command();
-                        wholeThing.destroy();
-                    });
+                        if (wholeThing) {
+                            wholeThing.destroy();
+                            wholeThing = null;
+                        }
+                    }, wholeThing);
                 }
                 else {
                     self.setCss(`transition: margin 200ms cubic-bezier(0.05, 0.7, 0.1, 1), opacity 200ms cubic-bezier(0.05, 0.7, 0.1, 1);
@@ -311,15 +426,26 @@ export default ({
                     if (widget.window)
                         widget.window.set_cursor(Gdk.Cursor.new_from_name(display, 'grab'));
 
-                    wholeThing._dragging = false;
+                    wholeThing.attribute.dragging = false;
                 }
-                initialDir = 0;
-            }, 'drag-end'],
-
-        ],
+                initDirX = 0;
+                initDirVertical = -1;
+            }, 'drag-end')
+        ,
     })
     widget.add(notificationBox);
     wholeThing.child.children = [widget];
-
+    if (isPopup) Utils.timeout(popupTimeout, () => {
+        if (wholeThing) {
+            wholeThing.revealChild = false;
+            Utils.timeout(200, () => {
+                if (wholeThing) {
+                    wholeThing.destroy();
+                    wholeThing = null;
+                }
+                command();
+            }, wholeThing);
+        }
+    })
     return wholeThing;
 }

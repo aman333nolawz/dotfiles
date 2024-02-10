@@ -16,6 +16,16 @@
     caret-color: $primary;
 }
 
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 menu {
     @include elevation-border-softer;
     padding: 0.681rem;
@@ -23,16 +33,21 @@ menu {
     color: $onSurfaceVariant;
     border-radius: 1.159rem;
     -gtk-outline-radius: 1.159rem;
+
+    animation-name: appear;
+    animation-duration: 40ms;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
 }
 
-menubar>menuitem {
+menubar > menuitem {
     border-radius: 0.545rem;
     -gtk-outline-radius: 0.545rem;
     min-width: 13.636rem;
     min-height: 2.727rem;
 }
 
-menu>menuitem {
+menu > menuitem {
     padding: 0.4em 1.5rem;
     background: transparent;
     transition: 0.2s ease background;
@@ -40,18 +55,38 @@ menu>menuitem {
     -gtk-outline-radius: 0.545rem;
 }
 
-menu>menuitem:hover,
-menu>menuitem:focus {
+menu > menuitem:hover,
+menu > menuitem:focus {
     background-color: mix($surfaceVariant, $onSurfaceVariant, 90%);
 }
+menu > menuitem:active {
+    background-color: mix($surfaceVariant, $onSurfaceVariant, 80%);
+}
 
-.separator-line {
-    background-color: $surfaceVariant;
-    min-width: 0.068rem;
-    min-height: 0.068rem;
+radio {
+    @include full-rounding;
+    margin: 0.273rem;
+    min-width: 15px;
+    min-height: 15px;
+    border: 0.068rem solid $outline;
+}
+
+// radio:first-child {
+//     background-color: red;
+// }
+
+radio:checked {
+    min-width: 8px;
+    min-height: 8px;
+    background-color: $onPrimary;
+    border: 0.477rem solid $primary;
 }
 
 tooltip {
+    animation-name: appear;
+    animation-duration: 100ms;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
     @include normal-rounding;
     background-color: $surfaceVariant;
     color: $onSurfaceVariant;
@@ -59,17 +94,16 @@ tooltip {
 }
 
 .configtoggle-box {
-    padding: 0.205rem;
+    padding: 0.205rem 0.341rem;
     border: 0.136rem solid transparent;
 }
 
 .configtoggle-box:focus {
-    padding: 0.205rem;
     border: 0.136rem solid mix($onSurface, $surface, 40%);
 }
 
 .switch-bg {
-    @include menu_decel;
+    @include element_decel;
     @include full-rounding;
     background-color: mix($surface, $background, 50%);
     border: 0.136rem solid $onSurface;
@@ -104,4 +138,69 @@ tooltip {
     @include menu_decel;
     min-width: 1.636rem;
     min-height: 0.819rem;
+}
+
+.segment-container {
+    @include full-rounding;
+    border: 0.068rem solid $outline;
+}
+
+.segment-container > *:first-child {
+    border-top-left-radius: 9999px;
+    border-bottom-left-radius: 9999px;
+}
+
+.segment-container > * {
+    border-right: 0.068rem solid $outline;
+    padding: 0.341rem 0.682rem;
+}
+
+.segment-container > *:last-child {
+    border-right: 0rem solid transparent;
+    border-top-right-radius: 9999px;
+    border-bottom-right-radius: 9999px;
+}
+
+.segment-btn {
+    color: $onSurface;
+}
+
+.segment-btn:focus,
+.segment-btn:hover {
+    background-color: $hovercolor;
+}
+
+.segment-btn-enabled {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.segment-btn-enabled:hover,
+.segment-btn-enabled:focus {
+    background-color: $secondaryContainer;
+    color: $onSecondaryContainer;
+}
+
+.gap-v-5 {
+    min-height: 0.341rem;
+}
+
+.gap-h-5 {
+    min-width: 0.341rem;
+}
+
+.gap-v-10 {
+    min-height: 0.682rem;
+}
+
+.gap-h-10 {
+    min-width: 0.682rem;
+}
+
+.gap-v-15 {
+    min-height: 1.023rem;
+}
+
+.gap-h-15 {
+    min-width: 1.023rem;
 }
