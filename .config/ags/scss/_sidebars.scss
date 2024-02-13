@@ -777,3 +777,9 @@ $waifu_image_overlay_transparency: 0.7;
 .sidebar-waifu-image-action:active {
     background-color: rgba(60, 60, 60, $waifu_image_overlay_transparency);
 }
+
+.calculator-btn {
+    background-color: $onSystem;
+    min-width: 9.272rem;
+    min-height: 9.272rem;
+}

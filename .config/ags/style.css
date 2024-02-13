@@ -1990,6 +1990,11 @@ tooltip {
 .sidebar-waifu-image-action:active {
   background-color: rgba(60, 60, 60, 0.7); }
 
+.calculator-btn {
+  background-color: #313244;
+  min-width: 9.272rem;
+  min-height: 9.272rem; }
+
 .session-bg {
   margin-top: -2.727rem;
   background-color: rgba(30, 30, 46, 0.64); }
