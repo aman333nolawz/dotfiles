@@ -1,11 +1,11 @@
 #!/bin/env python3
 # Pomodoro timer using pygame and using catppuccin theme
-import pygame
-import numpy as np
 import time
 from threading import Thread
-from pygame import gfxdraw
 
+import numpy as np
+import pygame
+from pygame import gfxdraw
 
 pygame.init()
 

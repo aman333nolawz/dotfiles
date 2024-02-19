@@ -63,6 +63,12 @@ text/x-csrc=code-oss.desktop
 text/html=firefox.desktop
 text/plain=code-oss.desktop
 text/x-makefile=code-oss.desktop
+image/jpeg=vimiv.desktop
+x-scheme-handler/jetbrains=jetbrains-toolbox.desktop
+x-scheme-handler/fleet=jetbrains-fleet.desktop
+image/png=vimiv.desktop
 
 [Added Associations]
 text/html=firefox.desktop;
+image/jpeg=vimiv.desktop;
+image/png=vimiv.desktop;

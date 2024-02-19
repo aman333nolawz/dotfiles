@@ -42,7 +42,7 @@ $rounding_large: 1.705rem;
 
 @mixin icon-material {
     // Material Design Icons
-    font-family: "Material Symbols Rounded", "Material Symbols Outlined",
+    font-family: "Material Symbols Rounded", "MaterialSymbolsRounded", "Material Symbols Outlined",
         "Material Symbols Sharp";
 }
 
@@ -60,7 +60,7 @@ $rounding_large: 1.705rem;
 
 @mixin readingfont {
     // The most readable fonts, for a comfortable reading experience
-    // in stuff like ChatGPT widget
+    // in stuff like AI chat on sidebar
     font-family: "Lexend", "Noto Sans", sans-serif;
     // font-weight: 500;
 }

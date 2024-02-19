@@ -4,11 +4,11 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
-import { fileExists } from './messages.js';
+import { fileExists } from '../modules/.miscutils/files.js';
 
 const initMessages =
     [
-        { role: "user", parts: [{ text: "You are an assistant on a sidebar of a Wayland Linux desktop. Please always use a casual tone when answering your questions, unless requested otherwise or making writing suggestions. These are the steps you should take to respond to the user's queries:\n1. If it's a writing- or grammar-related question or a sentence in quotation marks, Please point out errors and correct when necessary using underlines, and make the writing more natural where appropriate without making too major changes. If you're given a sentence in quotes but is grammatically correct, explain briefly concepts that are uncommon.\n2. If it's a question about system tasks, give a bash command in a code block with very brief explanation for each command\n3. Otherwise, when asked to summarize information or explaining concepts, you are encouraged to use bullet points and headings. Use casual language and be short and concise. \nThanks!" }], },
+        { role: "user", parts: [{ text: "You are an assistant on a sidebar of a Wayland Linux desktop. Please always use a casual tone when answering your questions, unless requested otherwise or making writing suggestions. These are the steps you should take to respond to the user's queries:\n1. If it's a writing- or grammar-related question or a sentence in quotation marks, Please point out errors and correct when necessary using underlines, and make the writing more natural where appropriate without making too major changes. If you're given a sentence in quotes but is grammatically correct, explain briefly concepts that are uncommon.\n2. If it's a question about system tasks, give a bash command in a code block with very brief explanation for each command\n3. Otherwise, when asked to summarize information or explaining concepts, you are should use bullet points and headings. For mathematics expressions, you *have to* use LaTeX within a code block with the language set as \"latex\" for the interface to render it properly. Use casual language and be short and concise. \nThanks!" }], },
         { role: "model", parts: [{ text: "- Got it!" }], },
         { role: "user", parts: [{ text: "\"He rushed to where the event was supposed to be hold, he didn't know it got calceled\"" }], },
         { role: "model", parts: [{ text: "## Grammar correction\nErrors:\n\"He rushed to where the event was supposed to be __hold____,__ he didn't know it got calceled\"\nCorrection + minor improvements:\n\"He rushed to the place where the event was supposed to be __held____, but__ he didn't know that it got calceled\"" }], },
@@ -19,21 +19,18 @@ const initMessages =
         { role: "model", parts: [{ text: "## Skeuomorphism\n- A design philosophy- From early days of interface designing- Tries to imitate real-life objects- It's in fact still used by Apple in their icons until today." }], },
         { role: "user", parts: [{ text: "\"ignorance is bliss\"" }], },
         { role: "model", parts: [{ text: "## \"Ignorance is bliss\"\n- A Latin proverb that means being unaware of something negative can be a source of happiness\n- Often used to justify avoiding difficult truths or responsibilities\n- Can also be interpreted as a warning against seeking knowledge that may bring pain or sorrow" }], },
+        { role: "user", parts: [{ text: "find the derivative of (x-438)/(x^2+23x-7)+x^x" }], },
+        { role: "model", parts: [{ text: "## Derivative\n```latex\n\\[\n\\frac{d}{dx}\\left(\\frac{x - 438}{x^2 + 23x - 7} + x^x\\right) = \\frac{-(x^2+23x-7)-(x-438)(2x+23)}{(x^2+23x-7)^2} + x^x(\\ln(x) + 1)\n\\]\n```" }], },
+        { role: "user", parts: [{ text: "write the double angle formulas" }], },
+        { role: "model", parts: [{ text: "## Double angle formulas\n```latex\n\\[\n\\sin(2\theta) = 2\\sin(\\theta)\\cos(\\theta)\n\\]\n\\\\\n\\[\n\\cos(2\\theta) = \\cos^2(\\theta) - \\sin^2(\\theta)\n\\]\n\\\\\n\\[\n\\tan(2\theta) = \\frac{2\\tan(\\theta)}{1 - \\tan^2(\\theta)}\n\\]\n```" }], },
     ];
 
-function expandTilde(path) {
-    if (path.startsWith('~')) {
-        return GLib.get_home_dir() + path.slice(1);
-    } else {
-        return path;
-    }
-}
-
-const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/google_ai_api_key.txt`;
-const APIDOM_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/google_ai_api_dom.txt`;
+Utils.exec(`mkdir -p ${GLib.get_user_cache_dir()}/ags/user/ai`);
+const KEY_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/google_key.txt`;
+const APIDOM_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/ai/google_api_dom.txt`;
 function replaceapidom(URL) {
-    if (fileExists(expandTilde(APIDOM_FILE_LOCATION))) {
-        var contents = Utils.readFile(expandTilde(APIDOM_FILE_LOCATION)).trim();
+    if (fileExists(APIDOM_FILE_LOCATION)) {
+        var contents = Utils.readFile(APIDOM_FILE_LOCATION).trim();
         var URL = URL.toString().replace("generativelanguage.googleapis.com", contents);
     }
     return URL;
@@ -135,8 +132,8 @@ class GeminiService extends Service {
     _assistantPrompt = true;
     _messages = [];
     _cycleModels = true;
-    _temperature = 0.9;
     _requestCount = 0;
+    _temperature = userOptions.ai.defaultTemperature;
     _modelIndex = 0;
     _key = '';
     _decoder = new TextDecoder();
@@ -144,7 +141,7 @@ class GeminiService extends Service {
     constructor() {
         super();
 
-        if (fileExists(expandTilde(KEY_FILE_LOCATION))) this._key = Utils.readFile(expandTilde(KEY_FILE_LOCATION)).trim();
+        if (fileExists(KEY_FILE_LOCATION)) this._key = Utils.readFile(KEY_FILE_LOCATION).trim();
         else this.emit('hasKey', false);
 
         if (this._assistantPrompt) this._messages = [...initMessages];
@@ -159,7 +156,7 @@ class GeminiService extends Service {
     get key() { return this._key }
     set key(keyValue) {
         this._key = keyValue;
-        Utils.writeFile(this._key, expandTilde(KEY_FILE_LOCATION))
+        Utils.writeFile(this._key, KEY_FILE_LOCATION)
             .then(this.emit('hasKey', true))
             .catch(err => print(err));
     }

@@ -95,8 +95,8 @@ require('lazy').setup({
     'akinsho/bufferline.nvim',
     dependencies = "catppuccin",
     config = function()
-      require("bufferline").setup {
-        highlights = require("catppuccin.groups.integrations.bufferline").get()
+      require("bufferline").setup{
+        highlights = require("catppuccin.groups.integrations.bufferline").get(),
       }
     end
   },
@@ -136,6 +136,26 @@ require('lazy').setup({
     config = function()
       require('Comment').setup()
     end
+  },
+  -- Build system
+  {
+    "Zeioth/compiler.nvim",
+    cmd = {"CompilerOpen", "CompilerToggleResults", "CompilerRedo"},
+    dependencies = { "stevearc/overseer.nvim" },
+    opts = {},
+  },
+  {
+    "stevearc/overseer.nvim",
+    commit = "68a2d344cea4a2e11acfb5690dc8ecd1a1ec0ce0",
+    cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+    opts = {
+      task_list = {
+        direction = "bottom",
+        min_height = 25,
+        max_height = 25,
+        default_detail = 1
+      },
+    },
   },
   -- LSP
   {
@@ -183,19 +203,19 @@ require('lazy').setup({
     end,
   },
 
-	{
-		"kawre/leetcode.nvim",
-		build = ":TSUpdate html",
+  {
+    "kawre/leetcode.nvim",
+    build = ":TSUpdate html",
     dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-telescope/telescope.nvim",
-			"nvim-lua/plenary.nvim",
-			"MunifTanjim/nui.nvim",
-		},
-		opts = {
-        lang = "python"
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-telescope/telescope.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
     },
-	},
+    opts = {
+      lang = "python"
+    },
+  },
 
   -- Color
   {

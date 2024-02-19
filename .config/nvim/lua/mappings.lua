@@ -50,6 +50,14 @@ keymap('n', '<leader>fr', builtin.reloader, { desc = 'Reload' })
 keymap({'n', 'v'}, '<leader>tt', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open Terminal' })
 keymap({'n', 't'}, '<A-i>', "<Cmd>:ToggleTerm direction=float<CR>", { desc = 'Open Terminal' })
 
+-- Compile
+keymap('n', '<F5>', "<cmd>CompilerOpen<cr>", { noremap = true, silent = true })
+keymap('n', '<S-F5>',
+     "<cmd>CompilerStop<cr>"
+  .. "<cmd>CompilerRedo<cr>",
+ { noremap = true, silent = true })
+keymap('n', '<S-F6>', "<cmd>CompilerToggleResults<cr>", { noremap = true, silent = true })
+
 -- Folding
 keymap('n', 'zR', require('ufo').openAllFolds)
 keymap('n', 'zM', require('ufo').closeAllFolds)

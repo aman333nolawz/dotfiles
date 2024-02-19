@@ -1,0 +1,140 @@
+#!/bin/env python3
+import re
+import subprocess
+from ctypes import CDLL
+from json import loads
+
+from pyperclip import paste
+
+CDLL("libgtk4-layer-shell.so")
+
+word = paste()
+dictionary = "Merrian Webster 10th dictionary"
+css = """
+window {
+    font-family: 'Noto Sans';
+    background-color: #1e1e2e;
+    border: 2px solid #b4befe;
+    padding: 2em;
+}
+
+.word-label {
+    color: #b4befe;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+label {
+    font-size: 16px;
+}
+
+.example {
+    color: red;
+}"""
+
+import gi
+
+gi.require_version("Gtk", "4.0")
+gi.require_version("Gtk4LayerShell", "1.0")
+gi.require_version('Gdk', '4.0')
+
+from gi.repository import Gdk, Gtk
+from gi.repository import Gtk4LayerShell as LayerShell
+
+
+def convert_to_markup(text):
+    def replace_with_grammar_elements(match):
+        if match.group(1) is None:
+            return ""
+        return (
+            '<span foreground="#b4befe" text_transform="capitalize" font-weight="bold" size="larger" underline="single">'
+            + match.group(1)
+            + "</span>\n"
+        )
+
+    def replace_numbers(match):
+        return (
+            '<span>'
+            + match.group(1)
+            +'. </span>'
+        )
+
+    # Function to replace matches with italics markup
+    def replace_with_italics(match):
+        return (
+            '<span font-style="italic" foreground="#a6adc8">"'
+            + match.group(1)
+            + '"</span>'
+        )
+
+    
+    grammar_elements = r"(noun)|(verb)|(intransitive verb)|(transitive verb)|(adjective)|(adverb)|(abbreviation)"
+    result = text.strip()
+    result = re.sub(r"<([^>\d]+)>", replace_with_italics, result)
+    result = re.sub(
+        r"<\d+> (" + grammar_elements + ")", replace_with_grammar_elements, result
+    )
+    result = re.sub(
+        r"^(" + grammar_elements + ")", replace_with_grammar_elements, result
+    )
+    result = re.sub(r"(\d+) : ", replace_numbers, result)
+    
+    return result
+
+
+def on_activate(app):
+    window = Gtk.Window(application=app)
+    window.set_default_size(720, 500)
+    window.add_controller(evk)
+
+    LayerShell.init_for_window(window)
+    LayerShell.set_layer(window, LayerShell.Layer.TOP)
+    LayerShell.set_keyboard_mode(window, LayerShell.KeyboardMode.EXCLUSIVE)
+
+    css_provider = Gtk.CssProvider()
+    css_provider.load_from_data(css)
+    Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
+
+
+    # get definition of the word using sdcv from cli
+    process = subprocess.Popen(
+        ["sdcv", "-nj", "-u", dictionary, word], stdout=subprocess.PIPE
+    )
+    definitions = loads(process.communicate()[0].decode("utf-8"))
+
+
+    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+    for def_ in definitions:
+        definition = convert_to_markup(def_["definition"])
+
+
+        word_label = Gtk.Label(label=def_["word"])
+        word_label.set_css_classes(["word-label"])
+
+        label = Gtk.Label(wrap=True)
+        label.set_markup(definition)
+
+        box.append(word_label)
+        box.append(label)
+
+    # Wrap the box inside a ScrolledWindow
+    scrolled_window = Gtk.ScrolledWindow()
+    scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS)
+    scrolled_window.set_child(box)
+
+    window.set_child(scrolled_window)
+    window.present()
+
+
+def key_press(event, keyval, keycode, state):
+    if keyval == Gdk.KEY_q or keyval == Gdk.KEY_Escape:
+        app.quit()
+
+
+evk = Gtk.EventControllerKey.new()
+evk.connect("key-pressed", key_press)
+
+app = Gtk.Application()
+app.connect("activate", on_activate)
+app.run(None)

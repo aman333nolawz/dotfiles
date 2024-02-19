@@ -76,7 +76,7 @@ case $chosen in
         fi
         ;;
     $lock)
-        sh $HOME/.config/hypr/scripts/lock.sh
+        loginctl lock-session
         ;;
     $suspend)
 		ans=$(rdialog &)
@@ -91,7 +91,7 @@ case $chosen in
     $logout)
 		ans=$(rdialog &)
 		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
-			pkill -u $USER
+			pkill Hyprland
 		elif [[ $ans == "no" ]] || [[ $ans == "NO" ]] || [[ $ans == "n" ]]; then
 			exit
         else
