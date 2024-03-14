@@ -13,7 +13,7 @@ menu() {
   printf "dankmemes\n"
   printf "indiandankmemes\n"
   printf "unixporn\n"
-  printf "wallpaers\n"
+  printf "wallpapers\n"
   printf "wallpaper\n"
 }
 
@@ -30,5 +30,5 @@ curl -H "User-agent: sth" "https://www.reddit.com/r/$subreddit.json?limit=75" | 
     aria2c "$line"
   done
   notify-send "Reddit" "Downloaded all the reddit images!"
-  vimiv . --no-bar
+  vimiv .
 
