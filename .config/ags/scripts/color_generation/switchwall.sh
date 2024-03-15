@@ -27,3 +27,6 @@ fi
 
 # Generate colors for ags n stuff
 "$HOME"/.config/ags/scripts/color_generation/colorgen.sh "${imgpath}" --apply
+
+imgpath=$(printf '%s\n' "$imgpath" | sed -e 's/[]\/$*.^[]/\\&/g')
+sed -i "s/\$bg_img\s*=.*/\$bg_img = ${imgpath}/" ~/.config/hypr/hyprlock.conf
