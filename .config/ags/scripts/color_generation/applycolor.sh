@@ -12,28 +12,11 @@ colorstrings=''
 colorlist=()
 colorvalues=()
 
-# wallpath=$(swww query | awk -F 'image: ' '{print $2}')
+# wallpath=$(swww query | head -1 | awk -F 'image: ' '{print $2}')
 # wallpath_png="$HOME"'/.cache/ags/user/generated/hypr/lockscreen.png'
 # convert "$wallpath" "$wallpath_png"
 # wallpath_png=$(echo "$wallpath_png" | sed 's/\//\\\//g')
 # wallpath_png=$(sed 's/\//\\\\\//g' <<< "$wallpath_png")
-
-if [[ "$1" = "--bad-apple" ]]; then
-    cp scripts/color_generation/specials/_material_badapple.scss scss/_material.scss
-    colornames=$(cat scripts/color_generation/specials/_material_badapple.scss | cut -d: -f1)
-    colorstrings=$(cat scripts/color_generation/specials/_material_badapple.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
-    IFS=$'\n'
-    # filearr=( $filelist ) # Get colors
-    colorlist=( $colornames ) # Array of color names
-    colorvalues=( $colorstrings ) # Array of color values
-else
-    colornames=$(cat scss/_material.scss | cut -d: -f1)
-    colorstrings=$(cat scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
-    IFS=$'\n'
-    # filearr=( $filelist ) # Get colors
-    colorlist=( $colornames ) # Array of color names
-    colorvalues=( $colorstrings ) # Array of color values
-fi
 
 transparentize() {
   local hex="$1"
@@ -52,15 +35,30 @@ get_light_dark() {
     if [ ! -f "$HOME"/.cache/ags/user/colormode.txt ]; then
         echo "" > "$HOME"/.cache/ags/user/colormode.txt
     else
-        lightdark=$(cat "$HOME"/.cache/ags/user/colormode.txt) # either "" or "-l"
+        lightdark=$(sed -n '1p' "$HOME/.cache/ags/user/colormode.txt")
     fi
     echo "$lightdark"
 }
 
 apply_ags() {
     sass "$HOME"/.config/ags/scss/main.scss "$HOME"/.cache/ags/user/generated/style.css
-    # ags run-js 'openColorScheme.value = true; Utils.timeout(2000, () => openColorScheme.value = false);'
     ags run-js "App.resetCss(); App.applyCss('${HOME}/.cache/ags/user/generated/style.css');"
 }
+
+if [[ "$1" = "--bad-apple" ]]; then
+    lightdark=$(get_light_dark)
+    cp scripts/color_generation/specials/_material_badapple"${lightdark}".scss scss/_material.scss
+    colornames=$(cat scripts/color_generation/specials/_material_badapple"${lightdark}".scss | cut -d: -f1)
+    colorstrings=$(cat scripts/color_generation/specials/_material_badapple"${lightdark}".scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
+    IFS=$'\n'
+    colorlist=( $colornames ) # Array of color names
+    colorvalues=( $colorstrings ) # Array of color values
+else
+    colornames=$(cat scss/_material.scss | cut -d: -f1)
+    colorstrings=$(cat scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
+    IFS=$'\n'
+    colorlist=( $colornames ) # Array of color names
+    colorvalues=( $colorstrings ) # Array of color values
+fi
 
 apply_ags &

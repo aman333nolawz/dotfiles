@@ -1,4 +1,4 @@
-const { Gdk, GdkPixbuf, GLib, Gtk } = imports.gi;
+const { GLib } = imports.gi;
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
@@ -9,17 +9,22 @@ const { Box, EventBox, Icon, Scrollable, Label, Button, Revealer } = Widget;
 import { fileExists } from '../.miscutils/files.js';
 import { AnimatedCircProg } from "../.commonwidgets/cairo_circularprogress.js";
 import { showMusicControls } from '../../variables.js';
+import { darkMode, hasPlasmaIntegration } from '../.miscutils/system.js';
 
 const COMPILED_STYLE_DIR = `${GLib.get_user_cache_dir()}/ags/user/generated`
 const LIGHTDARK_FILE_LOCATION = `${GLib.get_user_cache_dir()}/ags/user/colormode.txt`;
-const lightDark = Utils.readFile(LIGHTDARK_FILE_LOCATION).trim();
+const colorMode = Utils.exec('bash -c "sed -n \'1p\' $HOME/.cache/ags/user/colormode.txt"');
+const lightDark = (colorMode == "light") ? '-l' : '';
 const COVER_COLORSCHEME_SUFFIX = '_colorscheme.css';
 var lastCoverPath = '';
 
 function isRealPlayer(player) {
     return (
-        !player.busName.startsWith('org.mpris.MediaPlayer2.firefox') && // Firefox mpris dbus is useless
-        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld') // Doesn't have cover art
+        // Remove unecessary native buses from browsers if there's plasma integration
+        !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.firefox')) &&
+        !(hasPlasmaIntegration && player.busName.startsWith('org.mpris.MediaPlayer2.chromium')) &&
+        // playerctld just copies other buses and we don't need duplicates
+        !player.busName.startsWith('org.mpris.MediaPlayer2.playerctld')
     );
 }
 
@@ -180,7 +185,7 @@ const CoverArt = ({ player, ...rest }) => {
                 }
 
                 const coverPath = player.coverPath;
-                const stylePath = `${player.coverPath}${lightDark}${COVER_COLORSCHEME_SUFFIX}`;
+                const stylePath = `${player.coverPath}${darkMode ? '' : '-l'}${COVER_COLORSCHEME_SUFFIX}`;
                 if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
                     Utils.timeout(200, () => {
                         // self.attribute.showImage(self, coverPath);
@@ -199,9 +204,9 @@ const CoverArt = ({ player, ...rest }) => {
 
                 // Generate colors
                 execAsync(['bash', '-c',
-                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' > ${App.configDir}/scss/_musicmaterial.scss ${lightDark}`])
+                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode ${darkMode ? 'dark' : 'light'} > ${App.configDir}/scss/_musicmaterial.scss`])
                     .then(() => {
-                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${lightDark}`)
+                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${darkMode ? '' : '-l'}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
                         exec(`sass ${App.configDir}/scss/_music.scss ${stylePath}`);
                         Utils.timeout(200, () => {
@@ -378,7 +383,7 @@ const MusicControlsWidget = (player) => Box({
                     setup: (box) => {
                         box.pack_start(TrackControls({ player: player }), false, false, 0);
                         box.pack_end(PlayState({ player: player }), false, false, 0);
-                        box.pack_end(TrackTime({ player: player }), false, false, 0)
+                        if(hasPlasmaIntegration || player.busName.startsWith('org.mpris.MediaPlayer2.chromium')) box.pack_end(TrackTime({ player: player }), false, false, 0)
                         // box.pack_end(TrackSource({ vpack: 'center', player: player }), false, false, 0);
                     }
                 })
@@ -392,57 +397,10 @@ export default () => Revealer({
     transitionDuration: userOptions.animations.durationLarge,
     revealChild: false,
     child: Box({
-        setup: (self) => self.hook(Mpris, box => {
-            box.children.forEach(child => {
-                child.destroy();
-                child = null;
-            });
-            Mpris.players.forEach((player, i) => {
-                if (isRealPlayer(player)) {
-                    const newInstance = MusicControlsWidget(player);
-                    box.add(newInstance);
-                }
-            });
-        }, 'notify::players'),
+        children: Mpris.bind("players")
+            .as(players => players.map((player) => (isRealPlayer(player) ? MusicControlsWidget(player) : null)))
     }),
     setup: (self) => self.hook(showMusicControls, (revealer) => {
         revealer.revealChild = showMusicControls.value;
     }),
 })
-
-// export default () => MarginRevealer({
-//     transition: 'slide_down',
-//     revealChild: false,
-//     showClass: 'osd-show',
-//     hideClass: 'osd-hide',
-//     child: Box({
-//         setup: (self) => self.hook(Mpris, box => {
-//             let foundPlayer = false;
-//             Mpris.players.forEach((player, i) => {
-//                 if (isRealPlayer(player)) {
-//                     foundPlayer = true;
-//                     box.children.forEach(child => {
-//                         child.destroy();
-//                         child = null;
-//                     });
-//                     const newInstance = MusicControlsWidget(player);
-//                     box.children = [newInstance];
-//                 }
-//             });
-
-//             if (!foundPlayer) {
-//                 const children = box.get_children();
-//                 for (let i = 0; i < children.length; i++) {
-//                     const child = children[i];
-//                     child.destroy();
-//                     child = null;
-//                 }
-//                 return;
-//             }
-//         }, 'notify::players'),
-//     }),
-//     setup: (self) => self.hook(showMusicControls, (revealer) => {
-//         if (showMusicControls.value) revealer.attribute.show();
-//         else revealer.attribute.hide();
-//     }),
-// })

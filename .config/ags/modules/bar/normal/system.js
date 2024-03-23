@@ -30,21 +30,21 @@ const BatBatteryProgress = () => {
 
 const BarClock = () => Widget.Box({
     vpack: 'center',
-    className: 'spacing-h-4 txt-onSurfaceVariant bar-clock-box',
+    className: 'spacing-h-4 bar-clock-box',
     children: [
         Widget.Label({
-            className: 'bar-clock',
+            className: 'bar-time',
             label: GLib.DateTime.new_now_local().format(userOptions.time.format),
             setup: (self) => self.poll(userOptions.time.interval, label => {
                 label.label = GLib.DateTime.new_now_local().format(userOptions.time.format);
             }),
         }),
         Widget.Label({
-            className: 'txt-norm',
+            className: 'txt-norm txt-onLayer1',
             label: '•',
         }),
         Widget.Label({
-            className: 'txt-smallie',
+            className: 'txt-smallie bar-date',
             label: GLib.DateTime.new_now_local().format(userOptions.time.dateFormatLong),
             setup: (self) => self.poll(userOptions.time.dateInterval, (label) => {
                 label.label = GLib.DateTime.new_now_local().format(userOptions.time.dateFormatLong);
@@ -63,7 +63,7 @@ const UtilButton = ({ name, icon, onClicked }) => Button({
 
 const Utilities = () => Box({
     hpack: 'center',
-    className: 'spacing-h-4 txt-onSurfaceVariant',
+    className: 'spacing-h-4',
     children: [
         UtilButton({
             name: 'Screen snip', icon: 'screenshot_region', onClicked: () => {
@@ -85,7 +85,7 @@ const Utilities = () => Box({
 })
 
 const BarBattery = () => Box({
-    className: 'spacing-h-4 txt-onSurfaceVariant',
+    className: 'spacing-h-4 bar-batt-txt',
     children: [
         Revealer({
             transitionDuration: userOptions.animations.durationSmall,
@@ -97,7 +97,7 @@ const BarBattery = () => Box({
             }),
         }),
         Label({
-            className: 'txt-smallie txt-onSurfaceVariant',
+            className: 'txt-smallie',
             setup: (self) => self.hook(Battery, label => {
                 label.label = `${Battery.percent}%`;
             }),
@@ -108,7 +108,7 @@ const BarBattery = () => Box({
                 className: 'bar-batt',
                 homogeneous: true,
                 children: [
-                    MaterialIcon('settings_heart', 'small'),
+                    MaterialIcon('battery_full', 'small'),
                 ],
                 setup: (self) => self.hook(Battery, box => {
                     box.toggleClassName('bar-batt-low', Battery.percent <= userOptions.battery.low);

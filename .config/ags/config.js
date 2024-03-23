@@ -7,7 +7,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js'
 // Stuff
 import userOptions from './modules/.configuration/user_options.js';
 // Widgets
-import { Bar } from './modules/bar/main.js';
+import { Bar, BarCornerTopleft, BarCornerTopright } from './modules/bar/main.js';
 import Cheatsheet from './modules/cheatsheet/main.js';
 // import DesktopBackground from './modules/desktopbackground/main.js';
 // import Dock from './modules/dock/main.js';
@@ -47,7 +47,6 @@ const Windows = () => [
     SideRight(),
     Osk(),
     Session(),
-    // forMonitors(Bar),
 ];
 const CLOSE_ANIM_TIME = 210; // Longer than actual anim time to make sure widgets animate fully
 App.config({

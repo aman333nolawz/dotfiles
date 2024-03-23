@@ -73,7 +73,7 @@ class Timer:
                 self.duration = 25*60
             else:
                 self.duration = 5*60
-        else:
+        elif self.mode == "break":
             self.mode = "pomodoro"
             self.duration = 25*60
             self.elapsed_time = 0

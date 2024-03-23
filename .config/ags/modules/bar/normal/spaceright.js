@@ -38,21 +38,33 @@ export default () => {
             }
         }),
     });
+    const SpaceRightDefaultClicks = (child) => Widget.EventBox({
+        onHover: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', true) },
+        onHoverLost: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', false) },
+        onPrimaryClick: () => App.toggleWindow('sideright'),
+        onSecondaryClick: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']).catch(print),
+        onMiddleClick: () => execAsync('playerctl play-pause').catch(print),
+        setup: (self) => self.on('button-press-event', (self, event) => {
+            if (event.get_button()[1] === 8)
+                execAsync('playerctl previous').catch(print)
+        }),
+        child: child,
+    });
+    const emptyArea = SpaceRightDefaultClicks(Widget.Box({ hexpand: true, }));
+    const indicatorArea = SpaceRightDefaultClicks(Widget.Box({
+        children: [
+            separatorDot,
+            barStatusIcons
+        ],
+    }));
     const actualContent = Widget.Box({
         hexpand: true,
-        className: 'spacing-h-5 txt',
+        className: 'spacing-h-5 bar-spaceright',
         children: [
-            Widget.Box({
-                hexpand: true,
-                className: 'spacing-h-5 txt',
-                children: [
-                    Widget.Box({ hexpand: true, }),
-                    barTray,
-                    separatorDot,
-                    barStatusIcons,
-                ],
-            }),
-        ]
+            emptyArea,
+            barTray,
+            indicatorArea
+        ],
     });
 
     return Widget.EventBox({
@@ -68,20 +80,10 @@ export default () => {
             else Audio.speaker.volume -= 0.03;
             Indicator.popup(1);
         },
-        onHover: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', true) },
-        onHoverLost: () => { barStatusIcons.toggleClassName('bar-statusicons-hover', false) },
-        onPrimaryClick: () => App.toggleWindow('sideright'),
-        onSecondaryClick: () => execAsync(['bash', '-c', 'playerctl next || playerctl position `bc <<< "100 * $(playerctl metadata mpris:length) / 1000000 / 100"` &']).catch(print),
-        onMiddleClick: () => execAsync('playerctl play-pause').catch(print),
-        setup: (self) => self.on('button-press-event', (self, event) => {
-            if (event.get_button()[1] === 8)
-                execAsync('playerctl previous').catch(print)
-        }),
         child: Widget.Box({
-            homogeneous: false,
             children: [
                 actualContent,
-                Widget.Box({ className: 'bar-corner-spacing' }),
+                SpaceRightDefaultClicks(Widget.Box({ className: 'bar-corner-spacing' })),
             ]
         })
     });

@@ -10,6 +10,7 @@ import { SystemMessage, ChatMessage } from "./ai_chatmessage.js";
 import { ConfigToggle, ConfigSegmentedSelection, ConfigGap } from '../../.commonwidgets/configwidgets.js';
 import { markdownTest } from '../../.miscutils/md2pango.js';
 import { MarginRevealer } from '../../.widgethacks/advancedrevealers.js';
+import { chatEntry } from '../apiwidgets.js';
 
 const MODEL_NAME = `Gemini`;
 
@@ -151,7 +152,7 @@ const geminiWelcome = Box({
 });
 
 export const chatContent = Box({
-    className: 'spacing-v-15',
+    className: 'spacing-v-5',
     vertical: true,
     setup: (self) => self
         .hook(GeminiService, (box, id) => {
@@ -257,6 +258,7 @@ export const geminiView = Box({
             // Always scroll to bottom with new content
             const adjustment = scrolledWindow.get_vadjustment();
             adjustment.connect("changed", () => {
+                if(!chatEntry.hasFocus) return;
                 adjustment.set_value(adjustment.get_upper() - adjustment.get_page_size());
             })
         }

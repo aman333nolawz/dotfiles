@@ -9,9 +9,8 @@ import {
     ModuleNightLight,
     ModuleWallpaper,
     ModuleIdleInhibitor,
-    ModuleEditIcon,
     ModuleReloadIcon,
-    ModulePowerIcon
+    ModulePowerIcon,
 } from "./quicktoggles.js";
 import ModuleNotificationList from "./notificationlist.js";
 import { ModuleCalendar } from "./calendar.js";
@@ -37,7 +36,6 @@ const timeRow = Box({
             ,
         }),
         Widget.Box({ hexpand: true }),
-        // ModuleEditIcon({ hpack: 'end' }), // TODO: Make this work
         ModuleReloadIcon({ hpack: 'end' }),
         ModulePowerIcon({ hpack: 'end' }),
     ]
