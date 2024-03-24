@@ -11,7 +11,7 @@ do
 done
 
 source $ZSH/aliases.zsh
-source $ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $ZSH/prompt.zsh
 
 complete -F _complete_alias dots
