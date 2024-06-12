@@ -3,7 +3,8 @@
 yt-music() {
   dir=$(pwd)
 	cd ~/Music/
-	ytfzf -tdmfs
+  url=$(ytfzf -L)
+  yt-dlp --embed-metadata --embed-chapters --embed-thumbnail --audio-format mp3 -x "$url"
 	# if [ $? -eq 0 ];
 	# then
 	# 	for opus_file in ~/Music/*.opus;

@@ -178,14 +178,14 @@ const CoverArt = ({ player, ...rest }) => {
                 // const player = Mpris.getPlayer(); // Maybe no need to re-get player.. can't remember why I had this
                 // Player closed
                 // Note that cover path still remains, so we're checking title
-                if (!player || player.trackTitle == "") {
+                if (!player || player.trackTitle == "" || !player.coverPath) {
                     self.css = `background-image: none;`; // CSS image
                     App.applyCss(`${COMPILED_STYLE_DIR}/style.css`);
                     return;
                 }
 
                 const coverPath = player.coverPath;
-                const stylePath = `${player.coverPath}${darkMode ? '' : '-l'}${COVER_COLORSCHEME_SUFFIX}`;
+                const stylePath = `${player.coverPath}${darkMode.value ? '' : '-l'}${COVER_COLORSCHEME_SUFFIX}`;
                 if (player.coverPath == lastCoverPath) { // Since 'notify::cover-path' emits on cover download complete
                     Utils.timeout(200, () => {
                         // self.attribute.showImage(self, coverPath);
@@ -204,9 +204,9 @@ const CoverArt = ({ player, ...rest }) => {
 
                 // Generate colors
                 execAsync(['bash', '-c',
-                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode ${darkMode ? 'dark' : 'light'} > ${App.configDir}/scss/_musicmaterial.scss`])
+                    `${App.configDir}/scripts/color_generation/generate_colors_material.py --path '${coverPath}' --mode ${darkMode.value ? 'dark' : 'light'} > ${App.configDir}/scss/_musicmaterial.scss`])
                     .then(() => {
-                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${darkMode ? '' : '-l'}`)
+                        exec(`wal -i "${player.coverPath}" -n -t -s -e -q ${darkMode.value ? '' : '-l'}`)
                         exec(`cp ${GLib.get_user_cache_dir()}/wal/colors.scss ${App.configDir}/scss/_musicwal.scss`);
                         exec(`sass ${App.configDir}/scss/_music.scss ${stylePath}`);
                         Utils.timeout(200, () => {

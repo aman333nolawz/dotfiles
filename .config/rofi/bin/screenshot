@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-rofi_command="rofi -theme $HOME/.config/rofi/config/screenshot.rasi"
-
 time=`date +%Y-%m-%d-%I-%M-%S`
 dir="$HOME/Pictures/Screenshots"
 file="Screenshot_${time}.png"
@@ -10,20 +8,11 @@ icon1="$HOME/.config/swaync/icons/collections.svg"
 icon2="$HOME/.config/swaync/icons/timer.svg"
 
 # Buttons
-layout=`cat $HOME/.config/rofi/config/screenshot.rasi | grep BUTTON | cut -d'=' -f2 | tr -d '[:blank:],*/'`
-if [[ "$layout" == "TRUE" ]]; then
-	screen=""
-	area=""
-	window="缾"
-	infive="靖"
-	inten="福"
-else
-	screen=" Capture Desktop"
-	area=" Capture Area"
-	window="缾 Capture Window"
-	infive="靖 Take in 3s"
-	inten="福 Take in 10s"
-fi
+screen=""
+area=""
+window=""
+timer=""
+
 
 # countdown
 countdown () {
@@ -63,23 +52,19 @@ fi
 # Variable passed to rofi
 options="$screen\n$area\n$window\n$infive\n$inten"
 
-chosen="$(echo -e "$options" | $rofi_command -p 'Take A Shot' -dmenu -selected-row 0)"
-sleep 0.5;
+chosen="$(printf "%s\n%s\n%s\n%s\n" "$screen" "$area" "$window" "$timer" | rofi -theme "~/.config/rofi/screen.rasi" -p 'Take Screenshot' -dmenu -selected-row 0 -theme-str 'listview {lines: 4;}')"
+sleep 0.5
 case $chosen in
-    $screen)
+	"$screen")
 		shotnow
-        ;;
-    $area)
+		;;
+	"$area")
 		shotarea
-        ;;
-    $window)
+		;;
+	"$window")
 		shotwin
 		;;
-    $infive)
-		shot5
-		;;
-    $inten)
+	"$timer")
 		shot10
-        ;;
-esac
-
+		;;
+	esac

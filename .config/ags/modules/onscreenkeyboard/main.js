@@ -1,10 +1,11 @@
 import PopupWindow from '../.widgethacks/popupwindow.js';
 import OnScreenKeyboard from "./onscreenkeyboard.js";
 
-export default () => PopupWindow({
+export default (id) => PopupWindow({
+    monitor: id,
     anchor: ['bottom'],
-    name: 'osk',
+    name: `osk${id}`,
     showClassName: 'osk-show',
     hideClassName: 'osk-hide',
-    child: OnScreenKeyboard(),
+    child: OnScreenKeyboard({ id: id }),
 });

@@ -40,7 +40,7 @@ const pinButton = Button({
             sideleftContent.toggleClassName('sidebar-pinned', self.attribute.enabled);
 
             if (self.attribute.enabled) {
-                sideleftWindow.exclusivity = 'exclusive';
+                sideleftWindow.exclusivity = 'on-demad';
             }
             else {
                 sideleftWindow.exclusivity = 'normal';
@@ -74,14 +74,8 @@ export const widgetContent = TabContainer({
 export default () => Box({
     // vertical: true,
     vexpand: true,
-    hexpand: true,
     css: 'min-width: 2px;',
     children: [
-        EventBox({
-            onPrimaryClick: () => App.closeWindow('sideleft'),
-            onSecondaryClick: () => App.closeWindow('sideleft'),
-            onMiddleClick: () => App.closeWindow('sideleft'),
-        }),
         widgetContent,
     ],
     setup: (self) => self

@@ -15,7 +15,6 @@ import { chatEntry } from '../apiwidgets.js';
 
 export const chatGPTTabIcon = Icon({
     hpack: 'center',
-    className: 'sidebar-chat-apiswitcher-icon',
     icon: `openai-symbolic`,
 });
 
@@ -182,15 +181,6 @@ const GPTSettings = () => MarginRevealer({
                 hpack: 'fill',
                 className: 'sidebar-chat-settings-toggles',
                 children: [
-                    ConfigToggle({
-                        icon: 'cycle',
-                        name: 'Cycle models',
-                        desc: 'Helps avoid exceeding the API rate of 3 messages per minute.\nTurn this on if you message rapidly.',
-                        initValue: GPTService.cycleModels,
-                        onChange: (self, newValue) => {
-                            GPTService.cycleModels = newValue;
-                        },
-                    }),
                     ConfigToggle({
                         icon: 'model_training',
                         name: 'Enhancements',

@@ -5,18 +5,29 @@
     padding: 0.682rem;
 }
 
+.dock-app-btn-animate {
+    transition-property: background-color;
+    transition-duration: 0.5s;
+}
+
 .dock-app-btn {
     @include normal-rounding;
     padding: 0.273rem;
 }
 
+.pinned-dock-app-btn {
+    @include normal-rounding;
+    padding: 0.273rem;
+    background-color: $layer0Hover;
+}
+
 .dock-app-btn:hover,
 .dock-app-btn:focus {
-    background-color: mix($surface, $onSurface, 90%);
+    background-color: $layer0Hover;
 }
 
 .dock-app-btn:active {
-    background-color: mix($surface, $onSurface, 85%);
+    background-color: $layer0Active;
 }
 
 .dock-app-icon {
@@ -27,5 +38,5 @@
 
 .dock-separator {
     min-width: 0.068rem;
-    background-color: $surfaceVariant;
+    background-color: $outline;
 }

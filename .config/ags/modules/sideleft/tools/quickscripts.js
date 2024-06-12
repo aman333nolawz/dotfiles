@@ -42,6 +42,12 @@ const scripts = [
         enabled: isArchDistro,
     },
     {
+        icon: 'arch-symbolic',
+        name: 'Remove orphan packages',
+        command: `sudo pacman -R $(pacman -Qdtq)`,
+        enabled: isArchDistro,
+    },
+    {
         icon: 'flatpak-symbolic',
         name: 'Uninstall unused flatpak packages',
         command: `flatpak uninstall --unused`,
@@ -76,8 +82,8 @@ export default () => SidebarModule({
                         className: 'sidebar-module-scripts-button',
                         child: scriptStateIcon,
                         onClicked: () => {
-                            App.closeWindow('sideleft');
-                            execAsync([`bash`, `-c`, `${userOptions.apps.terminal} fish -C "${script.command}"`]).catch(print)
+                            closeEverything();
+                            execAsync([`bash`, `-c`, `${userOptions.apps.terminal} sh -c "${script.command}"`]).catch(print)
                                 .then(() => {
                                     scriptStateIcon.label = 'done';
                                 })

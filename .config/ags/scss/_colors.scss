@@ -1,26 +1,9 @@
-$transparency: 0.5;
-$transparentize_amount: 0.3;
-$transparentize_surface_amount: 0.7;
-
-// Extended material
-$success: #4f6354;
-$onSuccess: #ffffff;
-$successContainer: #d1e8d5;
-$onSuccessContainer: #0c1f13;
-
-@if $darkmode == True {
-    // Dark variant
-    $success: #b5ccba;
-    $onSuccess: #213528;
-    $successContainer: #374b3e;
-    $onSuccessContainer: #d1e9d6;
-}
+$rootTransparency: 0.31; // Transparency = 1 - opacity
+$transparency: 0.75;
 
 // Transparent versions
-$t_surface: transparentize($surface, $transparentize_surface_amount);
-
 @if $transparent == True {
-  $background: transparentize($background, $transparency);
+  $background: transparentize($background, $rootTransparency);
   $surface: transparentize($surface, $transparency);
   $surfaceDim: transparentize($surfaceDim, $transparency);
   $surfaceBright: transparentize($surfaceBright, $transparency);
@@ -60,6 +43,8 @@ $layer1Hover: mix($layer1, $onLayer1, 85%);
 $layer1Active: mix($layer1, $onLayer1, 70%);
 $layer2Hover: mix($layer2, $onLayer2, 90%);
 $layer2Active: mix($layer2, $onLayer2, 80%);
+$layer3Hover: mix($layer3, $onLayer3, 90%);
+$layer3Active: mix($layer3, $onLayer3, 80%);
 // Elements
 $windowtitleOnLayer0Inactive: $onLayer0Inactive;
 $windowtitleOnLayer0: $onLayer0;

@@ -45,18 +45,18 @@ require('lazy').setup({
 
   -- Color scheme
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    "folke/tokyonight.nvim",
+    lazy = false,
     priority = 1000,
+    opts = {},
     config = function()
-      require("config.catppuccin")
+      require("config.tokyonight")
     end
   },
 
   -- File explorer
   {
     'nvim-tree/nvim-tree.lua',
-    dependencies="catppuccin",
     config = function ()
       require("config.nvim-tree")
     end
@@ -93,22 +93,23 @@ require('lazy').setup({
   -- Buffer line & Status line
   {
     'akinsho/bufferline.nvim',
-    dependencies = "catppuccin",
-    config = function()
-      require("bufferline").setup{
-        highlights = require("catppuccin.groups.integrations.bufferline").get(),
-      }
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function ()
+      require("bufferline").setup{}
     end
   },
   {
-    'freddiehaddad/feline.nvim',
-    config = function ()
-      require("feline").setup{
-        components = require("catppuccin.groups.integrations.feline").get()
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'tokyonight'
+        }
       }
     end
   },
-
   {
     "stevearc/dressing.nvim",
     config = function()
@@ -203,20 +204,6 @@ require('lazy').setup({
     end,
   },
 
-  {
-    "kawre/leetcode.nvim",
-    build = ":TSUpdate html",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-telescope/telescope.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-    },
-    opts = {
-      lang = "python"
-    },
-  },
-
   -- Color
   {
     "uga-rosa/ccc.nvim",
@@ -231,13 +218,3 @@ require('lazy').setup({
   },
 })
 
-vim.api.nvim_create_autocmd("ColorScheme", {
-  pattern = "*",
-  callback = function()
-    package.loaded["feline"] = nil
-    package.loaded["catppuccin.groups.integrations.feline"] = nil
-    require("feline").setup {
-      components = require("catppuccin.groups.integrations.feline").get(),
-    }
-  end,
-})

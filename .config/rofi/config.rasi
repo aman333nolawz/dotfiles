@@ -1,17 +1,2 @@
-configuration{
-    modi: "run,drun,window";
-    show-icons: true;
-    terminal: "kitty";
-    drun-display-format: "{icon} {name}";
-    disable-history: false;
-    hide-scrollbar: true;
-    display-drun: "   Apps ";
-    display-run: "   Run ";
-    display-window: " 﩯  Window";
-    display-Network: " 󰤨  Network";
-    sidebar-mode: true;
-    icon-theme: "Papirus";
-}
-
-@theme "~/.config/rofi/config/launcher"
+@theme "~/.config/rofi/launcher"
 

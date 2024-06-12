@@ -9,12 +9,52 @@ import {
     ModuleNightLight,
     ModuleWallpaper,
     ModuleIdleInhibitor,
+    ModuleEditIcon,
     ModuleReloadIcon,
+    ModuleSettingsIcon,
     ModulePowerIcon,
+    ModuleRawInput,
+    ModuleCloudflareWarp
 } from "./quicktoggles.js";
-import ModuleNotificationList from "./notificationlist.js";
+import ModuleNotificationList from "./centermodules/notificationlist.js";
+import ModuleAudioControls from "./centermodules/audiocontrols.js";
+import ModuleWifiNetworks from "./centermodules/wifinetworks.js";
+import ModuleBluetooth from "./centermodules/bluetooth.js";
+import ModuleConfigure from "./centermodules/configure.js";
 import { ModuleCalendar } from "./calendar.js";
 import { getDistroIcon } from '../.miscutils/system.js';
+import { MaterialIcon } from '../.commonwidgets/materialicon.js';
+import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
+import { checkKeybind } from '../.widgetutils/keybind.js';
+
+const centerWidgets = [
+    {
+        name: 'Notifications',
+        materialIcon: 'notifications',
+        contentWidget: ModuleNotificationList(),
+    },
+    {
+        name: 'Audio controls',
+        materialIcon: 'volume_up',
+        contentWidget: ModuleAudioControls(),
+    },
+    {
+        name: 'Bluetooth',
+        materialIcon: 'bluetooth',
+        contentWidget: ModuleBluetooth(),
+    },
+    {
+        name: 'Wifi networks',
+        materialIcon: 'wifi',
+        contentWidget: ModuleWifiNetworks(),
+        onFocus: () => execAsync('nmcli dev wifi list').catch(print),
+    },
+    {
+        name: 'Live config',
+        materialIcon: 'tune',
+        contentWidget: ModuleConfigure(),
+    },
+];
 
 const timeRow = Box({
     className: 'spacing-h-10 sidebar-group-invisible-morehorizpad',
@@ -36,6 +76,7 @@ const timeRow = Box({
             ,
         }),
         Widget.Box({ hexpand: true }),
+        // ModuleEditIcon({ hpack: 'end' }), // TODO: Make this work
         ModuleReloadIcon({ hpack: 'end' }),
         ModulePowerIcon({ hpack: 'end' }),
     ]
@@ -43,17 +84,30 @@ const timeRow = Box({
 
 const togglesBox = Widget.Box({
     hpack: 'center',
-    className: 'sidebar-togglesbox spacing-h-10',
+    className: 'sidebar-togglesbox spacing-h-5',
     children: [
         ToggleIconWifi(),
         ToggleIconBluetooth(),
-        await HyprToggleIcon('mouse', 'Raw input', 'input:force_no_accel', {}),
-        await HyprToggleIcon('front_hand', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
-        ModuleNightLight(),
-        ModuleWallpaper(),
+        await ModuleRawInput(),
+        await HyprToggleIcon('touchpad_mouse', 'No touchpad while typing', 'input:touchpad:disable_while_typing', {}),
+        await ModuleNightLight(),
+        await ModuleWallpaper(),
         ModuleIdleInhibitor(),
+        await ModuleCloudflareWarp(),
     ]
 })
+
+export const sidebarOptionsStack = ExpandingIconTabContainer({
+    tabsHpack: 'center',
+    tabSwitcherClassName: 'sidebar-icontabswitcher',
+    icons: centerWidgets.map((api) => api.materialIcon),
+    names: centerWidgets.map((api) => api.name),
+    children: centerWidgets.map((api) => api.contentWidget),
+    onChange: (self, id) => {
+        self.shown = centerWidgets[id].name;
+        if (centerWidgets[id].onFocus) centerWidgets[id].onFocus();
+    }
+});
 
 export default () => Box({
     vexpand: true,
@@ -79,9 +133,24 @@ export default () => Box({
                         togglesBox,
                     ]
                 }),
-                ModuleNotificationList({ vexpand: true, }),
+                Box({
+                    className: 'sidebar-group',
+                    children: [
+                        sidebarOptionsStack,
+                    ],
+                }),
                 ModuleCalendar(),
             ]
         }),
-    ]
+    ],
+    setup: (self) => self
+        .on('key-press-event', (widget, event) => { // Handle keybinds
+            if (checkKeybind(event, userOptions.keybinds.sidebar.options.nextTab)) {
+                sidebarOptionsStack.nextTab();
+            }
+            else if (checkKeybind(event, userOptions.keybinds.sidebar.options.prevTab)) {
+                sidebarOptionsStack.prevTab();
+            }
+        })
+    ,
 });

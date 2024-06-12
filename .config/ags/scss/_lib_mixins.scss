@@ -1,6 +1,7 @@
 // Common colors
 $hovercolor: $surfaceContainerHigh;
 $activecolor: $surfaceContainerHighest;
+$rounding_verysmall: 0.477rem;
 $rounding_small: 0.818rem;
 $rounding_mediumsmall: 0.955rem;
 $rounding_medium: 1.159rem;
@@ -28,9 +29,13 @@ $rounding_large: 1.705rem;
     -gtk-outline-radius: 9999px;
 }
 
+@mixin symbolic-icon {
+    -gtk-icon-theme: 'Adwaita';
+}
+
 @mixin titlefont {
     // Geometric sans-serif
-    font-family: "Gabarito", "Poppins", "Lexend", sans-serif;
+    font-family: "Gabarito", "Poppins", "Readex Pro", "Lexend", sans-serif;
 }
 
 @mixin mainfont {
@@ -61,7 +66,7 @@ $rounding_large: 1.705rem;
 @mixin readingfont {
     // The most readable fonts, for a comfortable reading experience
     // in stuff like AI chat on sidebar
-    font-family: "Lexend", "Noto Sans", sans-serif;
+    font-family: "Readex Pro", "Lexend", "Noto Sans", sans-serif;
     // font-weight: 500;
 }
 
@@ -91,28 +96,6 @@ $elevation_margin: 0.476rem;
 @mixin elevation3 {
     box-shadow: 0px 2px 5px $shadow;
     margin: $elevation_margin;
-}
-
-@keyframes flyin-top {
-    from {
-        margin-top: -2.795rem;
-    }
-
-    to {
-        margin-top: 0rem;
-    }
-}
-
-@keyframes flyin-bottom {
-    from {
-        margin-top: 4.841rem;
-        margin-bottom: -4.841rem;
-    }
-
-    to {
-        margin-bottom: 0rem;
-        margin-top: 0rem;
-    }
 }
 
 @mixin menu_decel {
@@ -158,12 +141,15 @@ $elevation_margin: 0.476rem;
 @mixin element_decel {
     transition: 300ms cubic-bezier(0, 0.55, 0.45, 1);
 }
+
 @mixin element_bounceOut {
     transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 @mixin element_accel {
     transition: 300ms cubic-bezier(0.55, 0, 1, 0.45);
 }
+
 @mixin element_easeInOut {
     transition: 300ms cubic-bezier(0.85, 0, 0.15, 1);
 }

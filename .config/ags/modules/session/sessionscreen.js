@@ -1,10 +1,10 @@
 // This is for the cool memory indicator on the sidebar
 // For the right pill of the bar, see system.js
 const { Gdk, Gtk } = imports.gi;
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../variables.js';
 import App from 'resource:///com/github/Aylur/ags/app.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
+import { monitors } from '../.miscutils/hyprlanddata.js';
 
 const { exec, execAsync } = Utils;
 
@@ -59,16 +59,16 @@ const SessionButton = (name, icon, command, props = {}, colorid = 0) => {
     });
 }
 
-export default () => {
+export default ({ id = 0 }) => {
     // lock, logout, sleep
-    const lockButton = SessionButton('Lock', 'lock', () => { App.closeWindow('session'); execAsync(['loginctl', 'lock-session']).catch(print) }, {}, 1);
-    const logoutButton = SessionButton('Logout', 'logout', () => { App.closeWindow('session'); execAsync(['bash', '-c', 'pkill Hyprland || pkill sway || pkill niri || loginctl terminate-user $USER']).catch(print) }, {}, 2);
-    const sleepButton = SessionButton('Sleep', 'sleep', () => { App.closeWindow('session'); execAsync(['bash', '-c', 'systemctl suspend || loginctl suspend']).catch(print) }, {}, 3);
+    const lockButton = SessionButton('Lock', 'lock', () => { closeWindowOnAllMonitors('session'); execAsync(['loginctl', 'lock-session']).catch(print) }, {}, 1);
+    const logoutButton = SessionButton('Logout', 'logout', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'pkill Hyprland || pkill sway || pkill niri || loginctl terminate-user $USER']).catch(print) }, {}, 2);
+    const sleepButton = SessionButton('Sleep', 'sleep', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl suspend || loginctl suspend']).catch(print) }, {}, 3);
     // hibernate, shutdown, reboot
-    const hibernateButton = SessionButton('Hibernate', 'downloading', () => { App.closeWindow('session'); execAsync(['bash', '-c', 'systemctl hibernate || loginctl hibernate']).catch(print) }, {}, 4);
-    const shutdownButton = SessionButton('Shutdown', 'power_settings_new', () => { App.closeWindow('session'); execAsync(['bash', '-c', 'systemctl poweroff || loginctl poweroff']).catch(print) }, {}, 5);
-    const rebootButton = SessionButton('Reboot', 'restart_alt', () => { App.closeWindow('session'); execAsync(['bash', '-c', 'systemctl reboot || loginctl reboot']).catch(print) }, {}, 6);
-    const cancelButton = SessionButton('Cancel', 'close', () => App.closeWindow('session'), { className: 'session-button-cancel' }, 7);
+    const hibernateButton = SessionButton('Hibernate', 'downloading', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl hibernate || loginctl hibernate']).catch(print) }, {}, 4);
+    const shutdownButton = SessionButton('Shutdown', 'power_settings_new', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl poweroff || loginctl poweroff']).catch(print) }, {}, 5);
+    const rebootButton = SessionButton('Reboot', 'restart_alt', () => { closeWindowOnAllMonitors('session'); execAsync(['bash', '-c', 'systemctl reboot || loginctl reboot']).catch(print) }, {}, 6);
+    const cancelButton = SessionButton('Cancel', 'close', () => closeWindowOnAllMonitors('session'), { className: 'session-button-cancel' }, 7);
 
     const sessionDescription = Widget.Box({
         vertical: true,
@@ -98,15 +98,15 @@ export default () => {
     return Widget.Box({
         className: 'session-bg',
         css: `
-        min-width: ${SCREEN_WIDTH * 1.5}px; 
-        min-height: ${SCREEN_HEIGHT * 1.5}px;
+        min-width: ${monitors[id].width}px;
+        min-height: ${monitors[id].height}px;
         `, // idk why but height = screen height doesn't fill
         vertical: true,
         children: [
             Widget.EventBox({
-                onPrimaryClick: () => App.closeWindow('session'),
-                onSecondaryClick: () => App.closeWindow('session'),
-                onMiddleClick: () => App.closeWindow('session'),
+                onPrimaryClick: () => closeWindowOnAllMonitors('session'),
+                onSecondaryClick: () => closeWindowOnAllMonitors('session'),
+                onMiddleClick: () => closeWindowOnAllMonitors('session'),
             }),
             Widget.Box({
                 hpack: 'center',

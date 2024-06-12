@@ -52,15 +52,17 @@ def set_wallpaper():
 
     selectedWallpapers = []
 
-    for output in monitors:
-        wp = wallpapers.pop(random.randint(0, len(wallpapers)-1))
-        if FANCY:
-            command("swww img --transition-type wipe --transition-angle 30 --transition-step 90 -o " + output + " " + wallpaperDir + "/" + wp)
-        else:
-            command("swww img -t none -o " + output + " " + wallpaperDir + "/" + wp) # --transition-type simple --transition-step 30 
-        selectedWallpapers.append(wp)
-        command("~/.config/ags/scripts/color_generation/switchwall.sh --noswitch")
+    wp = wallpapers.pop(random.randint(0, len(wallpapers)-1))
+    if FANCY:
+        command("swww img --transition-type wipe --transition-angle 30 --transition-step 90 " + wallpaperDir + "/" + wp)
+    else:
+        command("swww img -t none " +  wallpaperDir + "/" + wp) # --transition-type simple --transition-step 30 
+    selectedWallpapers.append(wp)
+    command("~/.config/ags/scripts/color_generation/switchwall.sh --noswitch")
 
+
+    wp = (wallpaperDir + "/" + wp).replace("/", "\\/")
+    command(f'sed "s/\$bg_img = .*/\$bg_img = {wp}/" ~/.config/hypr/hyprlock.conf -i')
     wallpaperMemory = selectedWallpapers
     return
 
@@ -80,6 +82,7 @@ def daemon():
 
     if command("pidof swww-daemon") == "":
         command("swww init")
+        print("fdsfj")
 
 
     set_wallpaper()

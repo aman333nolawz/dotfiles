@@ -1,71 +1,86 @@
+import Variable from 'resource:///com/github/Aylur/ags/variable.js';
 import Widget from 'resource:///com/github/Aylur/ags/widget.js';
 import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 import { MaterialIcon } from './materialicon.js';
 import { setupCursorHover } from '../.widgetutils/cursorhover.js';
-const { Box, Button, Label, Revealer } = Widget;
+const { Box, Button, Label, Revealer, SpinButton } = Widget;
 
-export const ConfigToggle = ({ icon, name, desc = '', initValue, onChange, ...rest }) => {
-    let value = initValue;
+export const ConfigToggle = ({
+    icon, name, desc = '', initValue,
+    expandWidget = true,
+    onChange = () => { }, extraSetup = () => { },
+    ...rest
+}) => {
+    const enabled = Variable(initValue);
     const toggleIcon = Label({
-        className: `icon-material txt-bold ${value ? '' : 'txt-poof'}`,
-        label: `${value ? 'check' : ''}`,
+        className: `icon-material txt-bold ${enabled.value ? '' : 'txt-poof'}`,
+        label: `${enabled.value ? 'check' : ''}`,
+        setup: (self) => self.hook(enabled, (self) => {
+            self.toggleClassName('switch-fg-toggling-false', false);
+            if (!enabled.value) {
+                self.label = '';
+                self.toggleClassName('txt-poof', true);
+            }
+            else Utils.timeout(1, () => {
+                toggleIcon.label = 'check';
+                toggleIcon.toggleClassName('txt-poof', false);
+            })
+        }),
     })
     const toggleButtonIndicator = Box({
-        className: `switch-fg ${value ? 'switch-fg-true' : ''}`,
+        className: `switch-fg ${enabled.value ? 'switch-fg-true' : ''}`,
         vpack: 'center',
         hpack: 'start',
         homogeneous: true,
         children: [toggleIcon,],
+        setup: (self) => self.hook(enabled, (self) => {
+            self.toggleClassName('switch-fg-true', enabled.value);
+        }),
     });
     const toggleButton = Box({
         hpack: 'end',
-        className: `switch-bg ${value ? 'switch-bg-true' : ''}`,
+        className: `switch-bg ${enabled.value ? 'switch-bg-true' : ''}`,
         homogeneous: true,
-        children: [toggleButtonIndicator,],
+        children: [toggleButtonIndicator],
+        setup: (self) => self.hook(enabled, (self) => {
+            self.toggleClassName('switch-bg-true', enabled.value);
+        }),
     });
     const widgetContent = Box({
         tooltipText: desc,
         className: 'txt spacing-h-5 configtoggle-box',
         children: [
-            MaterialIcon(icon, 'norm'),
-            Label({
+            ...(icon !== undefined ? [MaterialIcon(icon, 'norm')] : []),
+            ...(name !== undefined ? [Label({
                 className: 'txt txt-small',
                 label: name,
-            }),
-            Box({ hexpand: true }),
+            })] : []),
+            ...(expandWidget ? [Box({ hexpand: true })] : []),
             toggleButton,
         ]
     });
     const interactionWrapper = Button({
         attribute: {
+            enabled: enabled,
             toggle: (newValue) => {
-                value = !value;
-                toggleIcon.toggleClassName('switch-fg-toggling-false', false);
-                if (!value) {
-                    toggleIcon.label = '';
-                    toggleIcon.toggleClassName('txt-poof', true);
-                }
-                toggleButtonIndicator.toggleClassName('switch-fg-true', value);
-                toggleButton.toggleClassName('switch-bg-true', value);
-                if (value) Utils.timeout(1, () => {
-                    toggleIcon.label = 'check';
-                    toggleIcon.toggleClassName('txt-poof', false);
-                })
-                onChange(interactionWrapper, value);
+                enabled.value = !enabled.value;
+                onChange(interactionWrapper, enabled.value);
             }
         },
         child: widgetContent,
         onClicked: (self) => self.attribute.toggle(self),
-        setup: (button) => {
-            setupCursorHover(button),
-                button.connect('pressed', () => { // mouse down
-                    toggleIcon.toggleClassName('txt-poof', true);
-                    toggleIcon.toggleClassName('switch-fg-true', false);
-                    if (!value) toggleIcon.toggleClassName('switch-fg-toggling-false', true);
-                });
+        setup: (self) => {
+            setupCursorHover(self);
+            self.connect('pressed', () => { // mouse down
+                toggleIcon.toggleClassName('txt-poof', true);
+                toggleIcon.toggleClassName('switch-fg-true', false);
+                if (!enabled.value) toggleIcon.toggleClassName('switch-fg-toggling-false', true);
+            });
+            extraSetup(self)
         },
         ...rest,
     });
+    interactionWrapper.enabled = enabled;
     return interactionWrapper;
 }
 
@@ -123,42 +138,37 @@ export const ConfigSegmentedSelection = ({
 export const ConfigMulipleSelection = ({
     icon, name, desc = '',
     optionsArr = [
-      [ { name: 'Option 1', value: 0 }, { name: 'Option 2', value: 1 } ],
-      [ { name: 'Option 3', value: 0 }, { name: 'Option 4', value: 1 } ],
+        [{ name: 'Option 1', value: 0 }, { name: 'Option 2', value: 1 }],
+        [{ name: 'Option 3', value: 0 }, { name: 'Option 4', value: 1 }],
     ],
     initIndex = [0, 0],
     onChange,
     ...rest
 }) => {
     let lastSelected = initIndex;
-    let value = optionsArr[initIndex[0]][initIndex[1]].value;
     const widget = Box({
         tooltipText: desc,
         className: 'multipleselection-container spacing-v-3',
         vertical: true,
-        children: optionsArr.map((options, grp) => {
-          return Box({
+        children: optionsArr.map((options, grp) => Box({
             className: 'spacing-h-5',
             hpack: 'center',
-            children: options.map((option, id) => {
-                return Button({
-                    setup: setupCursorHover,
-                    className: `multipleselection-btn ${id == initIndex[1] && grp == initIndex[0] ? 'multipleselection-btn-enabled' : ''}`,
-                    label: option.name,
-                    onClicked: (self) => {
-                        const kidsg = widget.get_children();
-                        const kids = kidsg.flatMap(widget => widget.get_children());
-                        kids.forEach(kid => {
-                          kid.toggleClassName('multipleselection-btn-enabled', false);
-                        });
-                        lastSelected = id;
-                        self.toggleClassName('multipleselection-btn-enabled', true);
-                        onChange(option.value, option.name);
-                    }
-                })
-            }),
-          })
-        }),
+            children: options.map((option, id) => Button({
+                setup: setupCursorHover,
+                className: `multipleselection-btn ${id == initIndex[1] && grp == initIndex[0] ? 'multipleselection-btn-enabled' : ''}`,
+                label: option.name,
+                onClicked: (self) => {
+                    const kidsg = widget.get_children();
+                    const kids = kidsg.flatMap(widget => widget.get_children());
+                    kids.forEach(kid => {
+                        kid.toggleClassName('multipleselection-btn-enabled', false);
+                    });
+                    lastSelected = id;
+                    self.toggleClassName('multipleselection-btn-enabled', true);
+                    onChange(option.value, option.name);
+                }
+            })),
+        })),
         ...rest,
     });
     return widget;
@@ -169,3 +179,41 @@ export const ConfigGap = ({ vertical = true, size = 5, ...rest }) => Box({
     className: `gap-${vertical ? 'v' : 'h'}-${size}`,
     ...rest,
 })
+
+export const ConfigSpinButton = ({
+    icon, name, desc = '', initValue,
+    minValue = 0, maxValue = 100, step = 1,
+    expandWidget = true,
+    onChange = () => { }, extraSetup = () => { },
+    ...rest
+}) => {
+    const value = Variable(initValue);
+    const spinButton = SpinButton({
+        className: 'spinbutton',
+        range: [minValue, maxValue],
+        increments: [step, step],
+        onValueChanged: ({ value: newValue }) => {
+            value.value = newValue;
+            onChange(spinButton, newValue);
+        },
+    });
+    spinButton.value = value.value;
+    const widgetContent = Box({
+        tooltipText: desc,
+        className: 'txt spacing-h-5 configtoggle-box',
+        children: [
+            ...(icon !== undefined ? [MaterialIcon(icon, 'norm')] : []),
+            ...(name !== undefined ? [Label({
+                className: 'txt txt-small',
+                label: name,
+            })] : []),
+            ...(expandWidget ? [Box({ hexpand: true })] : []),
+            spinButton,
+        ],
+        setup: (self) => {
+            extraSetup(self);
+        },
+        ...rest,
+    });
+    return widgetContent;
+}
