@@ -49,7 +49,6 @@ autocenter_mode = yes
 centered_cursor = yes
 media_library_sort_by_mtime = yes
 default_find_mode = wrapped
-lyrics_fetchers = musixmatch, sing365, metrolyrics, justsomelyrics, jahlyrics, plyrics, tekstowo, internet
 store_lyrics_in_song_dir = no
 
 [colors]

@@ -54,6 +54,27 @@ require('lazy').setup({
     end
   },
 
+  -- Make editing big files faster
+  {
+    "LunarVim/bigfile.nvim",
+    config = function()
+      require("bigfile").setup {
+        filesize = 2, -- size of the file in MiB, the plugin round file sizes to the closest MiB
+        pattern = { "*" }, -- autocmd pattern or function see <### Overriding the detection of big files>
+        features = { -- features to disable
+          "indent_blankline",
+          "illuminate",
+          "lsp",
+          "treesitter",
+          "syntax",
+          "matchparen",
+          "vimopts",
+          "filetype",
+        },
+      }
+    end
+  },
+
   -- File explorer
   {
     'nvim-tree/nvim-tree.lua',
@@ -170,10 +191,15 @@ require('lazy').setup({
     end
   },
   {
+    'mrcjkb/rustaceanvim',
+    version = '^4', -- Recommended
+    lazy = false, -- This plugin is already lazy
+  },
+  {
     'kevinhwang91/nvim-ufo',
     dependencies = {
       'kevinhwang91/promise-async',
-      'luukvbaal/statuscol.nvim'
+      -- 'luukvbaal/statuscol.nvim'
     }
   },
   -- Completions
@@ -204,7 +230,14 @@ require('lazy').setup({
     end,
   },
 
+  { "nvzone/volt", lazy = true },
+  { "nvzone/typr", cmd = { "Typr", "TyprStats" } },
+
   -- Color
+  {
+    "nvzone/minty",
+    cmd = { "Shades", "Huefy" },
+  },
   {
     "uga-rosa/ccc.nvim",
     config = function()

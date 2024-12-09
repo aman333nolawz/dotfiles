@@ -8,6 +8,7 @@ alias v="nvim"
 alias wget="aria2c"
 
 # Colored output
+export CALCURSE_PAGER="glow --pager"
 export LESS='-R --use-color -Dd+r$Du+b'
 alias ip='ip -color=auto'
 alias grep='grep --color=auto'

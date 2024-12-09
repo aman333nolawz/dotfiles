@@ -1,7 +1,7 @@
 # colors
 local color1="blue"
 local color2="cyan"
-local color3=black
+local color3="#292e42"
 local color4="yellow"
 
 autoload -Uz vcs_info

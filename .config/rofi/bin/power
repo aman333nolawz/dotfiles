@@ -28,6 +28,7 @@ case $chosen in
     $shutdown)
 		ans=$(rdialog &)
 		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+      ffplay -nodisp -autoexit ~/.config/hypr/vistashutdown.wav
 			systemctl poweroff
 		elif [[ $ans == "no" ]] || [[ $ans == "NO" ]] || [[ $ans == "n" ]]; then
 			exit
@@ -38,6 +39,7 @@ case $chosen in
     $reboot)
 		ans=$(rdialog &)
 		if [[ $ans == "yes" ]] || [[ $ans == "YES" ]] || [[ $ans == "y" ]]; then
+      ffplay -nodisp -autoexit ~/.config/hypr/vistashutdown.wav
 			systemctl reboot
 		elif [[ $ans == "no" ]] || [[ $ans == "NO" ]] || [[ $ans == "n" ]]; then
 			exit

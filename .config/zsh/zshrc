@@ -17,6 +17,10 @@ source $ZSH/prompt.zsh
 complete -F _complete_alias dots
 complete -F _complete_alias ls
 
+# todo
+todo=$(calcurse -Q --days 31 | perl -pe 's/^[0-9]*\./-/' | tail -n +2)
+printf "# Todo:\n$todo\n"|glow
+
 vterm_printf() {
     if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ]); then
         # Tell tmux to pass the escape sequences through

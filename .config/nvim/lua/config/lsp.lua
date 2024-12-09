@@ -11,7 +11,7 @@ require('mason-lspconfig').setup{
     "emmet_ls",
     "html",
     "cssls",
-    "lua_ls"
+    "lua_ls",
   }
 }
 
@@ -21,14 +21,7 @@ end
 
 -- Folding
 
-local builtin = require("statuscol.builtin")
-require("statuscol").setup{
-	relculright = true,
-	segments = {
-		{ text = { "%s" }, click = "v:lua.ScSa" },
-		{ text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
-		{ text = { " ", builtin.foldfunc, " " }, click = "v:lua.ScFa" },
-}}
+
 capabilities.textDocument.foldingRange = {
     dynamicRegistration = false,
     lineFoldingOnly = true

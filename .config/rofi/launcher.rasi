@@ -1,5 +1,5 @@
 configuration {
-  modi:                           "drun,filebrowser,window";
+  modi:                           "drun,filebrowser,calc";
   show-icons:                     true;
   display-drun:                   "";
   display-run:                    "";
@@ -43,7 +43,7 @@ inputbar {
   text-color:                     @text;
   orientation:                    horizontal;
   border-radius:                  12px;
-  background-image:               url("~/.config/wallpapers/mpv-shot0002.jpg", width);
+  background-image:               url("~/.config/wallpapers/wallhaven-ym985k.png", width);
   background-color:               transparent;
   children:                       [ "prompt", "entry" ];
 }
