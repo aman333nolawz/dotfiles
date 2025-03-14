@@ -1,13 +1,16 @@
 require("tokyonight").setup({
+  transparent = true,
+  styles = {
+    floats = "transparent",
+    sidebars = "transparent",
+  },
   on_highlights = function(hl, c)
-    local prompt = "#2d3149"
+    local prompt = "#332952"
     hl.TelescopeNormal = {
-      bg = c.bg_dark,
       fg = c.fg_dark,
     }
     hl.TelescopeBorder = {
-      bg = c.bg_dark,
-      fg = c.bg_dark,
+      fg = "#0F0A1F",
     }
     hl.TelescopePromptNormal = {
       bg = prompt,
@@ -21,14 +24,13 @@ require("tokyonight").setup({
       fg = prompt,
     }
     hl.TelescopePreviewTitle = {
-      bg = c.bg_dark,
-      fg = c.bg_dark,
+      fg = "#64578F",
     }
     hl.TelescopeResultsTitle = {
-      bg = c.bg_dark,
-      fg = c.bg_dark,
+      fg = "#64578F",
     }
   end,
 })
 
 vim.cmd.colorscheme "tokyonight-night"
+
