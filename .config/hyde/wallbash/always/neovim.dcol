@@ -1,0 +1,37 @@
+$HOME/.config/nvim/lua/config/tokyonight.lua
+require("tokyonight").setup({
+  transparent = true,
+  styles = {
+    floats = "transparent",
+    sidebars = "transparent",
+  },
+  on_highlights = function(hl, c)
+    local prompt = "#<wallbash_1xa1>"
+    hl.TelescopeNormal = {
+      fg = c.fg_dark,
+    }
+    hl.TelescopeBorder = {
+      fg = "#<wallbash_pry1>",
+    }
+    hl.TelescopePromptNormal = {
+      bg = prompt,
+    }
+    hl.TelescopePromptBorder = {
+      bg = prompt,
+      fg = prompt,
+    }
+    hl.TelescopePromptTitle = {
+      bg = prompt,
+      fg = prompt,
+    }
+    hl.TelescopePreviewTitle = {
+      fg = "#<wallbash_1xa4>",
+    }
+    hl.TelescopeResultsTitle = {
+      fg = "#<wallbash_1xa4>",
+    }
+  end,
+})
+
+vim.cmd.colorscheme "tokyonight-night"
+

@@ -1,17 +1,20 @@
-# The following lines were added by compinstall
+# Add user configurations here
+# For HyDE not to touch your beloved configurations,
+# we added 2 files to the project structure:
+# 1. ~/.hyde.zshrc - for customizing the shell related hyde configurations
+# 2. ~/.zshenv - for updating the zsh environment variables handled by HyDE // this will be modified across updates
 
-zstyle ':completion:*' completer _complete _ignored
-zstyle :compinstall filename '/home/nolawz/.zshrc'
+#  Plugins 
+# oh-my-zsh plugins are loaded  in ~/.hyde.zshrc file, see the file for more information
 
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-setopt autocd extendedglob
-bindkey -e
-# End of lines configured by zsh-newuser-install
+#  Aliases 
+# Add aliases here
+alias man="batman"
+alias cat="bat"
 
-source ~/.config/zsh/zshrc
+alias ls="eza --icons=auto"
+
+alias dots='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
+#  This is your file 
+# Add your configurations here

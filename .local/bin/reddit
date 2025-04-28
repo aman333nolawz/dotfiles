@@ -24,7 +24,7 @@ then
 fi
 mkdir /tmp/reddit
 cd /tmp/reddit
-subreddit=$(menu | rofi -dmenu -p "" -l 20 -i)
+subreddit=$(menu | rofi -dmenu -p "" -i -theme "$HOME/.local/share/hyde/rofi/themes/clipboard.rasi")
 curl -H "User-agent: sth" "https://www.reddit.com/r/$subreddit.json?limit=75" | jq "." | grep url_overridden_by_dest | grep -Eo "https://.*(jpg|png|gif)" |
   while IFS= read -r line
   do

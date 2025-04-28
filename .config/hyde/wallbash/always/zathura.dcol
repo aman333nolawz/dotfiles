@@ -1,0 +1,42 @@
+$HOME/.config/zathura/zathurarc
+set window-title-basename "true"
+set selection-clipboard "clipboard"
+
+set default-fg                <wallbash_4xa8_rgba(1)>
+set default-bg 			          <wallbash_pry1_rgba(1)>
+
+set completion-bg		          <wallbash_1xa1_rgba(1)>
+set completion-fg		          <wallbash_4xa8_rgba(1)>
+set completion-highlight-bg	  <wallbash_1xa4_rgba(1)>
+set completion-highlight-fg	  <wallbash_4xa8_rgba(1)>
+set completion-group-bg		    <wallbash_1xa1_rgba(1)>
+set completion-group-fg		    rgba(137,180,250,1)
+
+set statusbar-fg		          <wallbash_4xa8_rgba(1)>
+set statusbar-bg		          <wallbash_1xa1_rgba(1)>
+
+set notification-bg		        <wallbash_1xa1_rgba(1)>
+set notification-fg		        <wallbash_4xa8_rgba(1)>
+set notification-error-bg	    <wallbash_1xa1_rgba(1)>
+set notification-error-fg	    rgba(243,139,168,1)
+set notification-warning-bg	  <wallbash_1xa1_rgba(1)>
+set notification-warning-fg	  rgba(250,227,176,1)
+
+set inputbar-fg			          <wallbash_4xa8_rgba(1)>
+set inputbar-bg 		          <wallbash_1xa1_rgba(1)>
+
+set recolor                   "true"
+set recolor-lightcolor		    <wallbash_pry1_rgba(1)>
+set recolor-darkcolor		      <wallbash_4xa8_rgba(1)>
+
+set index-fg			            <wallbash_4xa8_rgba(1)>
+set index-bg			            <wallbash_pry1_rgba(1)>
+set index-active-fg		        <wallbash_4xa8_rgba(1)>
+set index-active-bg		        <wallbash_1xa1_rgba(1)>
+
+set render-loading-bg		      <wallbash_pry1_rgba(1)>
+set render-loading-fg		      <wallbash_4xa8_rgba(1)>
+
+set highlight-color		        <wallbash_1xa4_rgba(0.3)>
+set highlight-fg              <wallbash_4xa8_rgba(1)>
+set highlight-active-color	  <wallbash_4xa8_rgba(0.5)>

@@ -27,3 +27,10 @@ opt.foldcolumn = '0'
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldenable = true
+
+-- Diagnostic virtual line
+vim.diagnostic.config({
+  virtual_lines = {
+    current_line = true,
+  },
+})

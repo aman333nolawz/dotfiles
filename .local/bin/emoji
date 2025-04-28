@@ -1,4 +1,0 @@
-#!/bin/bash
-
-cat /home/kite/.my/exes/emoji-list.txt | dmenu -l 25 -i | cut -d" " -f1 | tr -d '\n' | xclip -selection clipboard
-

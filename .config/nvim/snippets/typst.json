@@ -1,0 +1,13 @@
+{
+  "dvd.typ": {
+    "prefix": "dvd.typ",
+    "body": [
+      "#import \"@preview/dvdtyp:1.0.1\": *",
+      "",
+      "#show: dvdtyp.with(",
+        "  title: \"${1:Title}\",",
+        "  author: \"${2:Author}\",",
+        ")"
+    ]
+  }
+}

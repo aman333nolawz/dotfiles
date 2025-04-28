@@ -5,12 +5,12 @@ require("tokyonight").setup({
     sidebars = "transparent",
   },
   on_highlights = function(hl, c)
-    local prompt = "#332952"
+    local prompt = "#292C52"
     hl.TelescopeNormal = {
       fg = c.fg_dark,
     }
     hl.TelescopeBorder = {
-      fg = "#0F0A1F",
+      fg = "#000327",
     }
     hl.TelescopePromptNormal = {
       bg = prompt,
@@ -24,10 +24,10 @@ require("tokyonight").setup({
       fg = prompt,
     }
     hl.TelescopePreviewTitle = {
-      fg = "#64578F",
+      fg = "#575B8F",
     }
     hl.TelescopeResultsTitle = {
-      fg = "#64578F",
+      fg = "#575B8F",
     }
   end,
 })

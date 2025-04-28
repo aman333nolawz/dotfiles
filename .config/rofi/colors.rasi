@@ -1,8 +1,0 @@
-* {
-  base: #1a1b26;
-  mantle: #16161E;
-  text: #a9b1d6;
-  red: #f7768e;
-  green: #9ece6a;
-  accent: #7AA2F7;
-}

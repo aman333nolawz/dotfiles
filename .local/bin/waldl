@@ -17,7 +17,7 @@ version="0.0.1"
 
 [ -z $VIEWER ] && VIEWER=vimiv
 # the dir where wallpapers are stored
-walldir="$HOME/.config/wallpapers"
+walldir="$HOME/Pictures/Wallpapers/"
 # the dir used to cache thumbnails
 cachedir="$HOME/.cache/wallhaven"
 # sxiv options

@@ -24,15 +24,13 @@ require("lazy").setup({
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     config = function()
-      local configs = require("nvim-treesitter.configs")
-
-      configs.setup({
-        ensure_installed = { "c", "lua", "javascript", "html", "python" },
-        highlight = { enable = true },
-        indent = { enable = true },
-        incremental_selection = { enable = true },
-      })
+      require("config.treesitter")
     end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    after = "nvim-treesitter",
+    dependencies = "nvim-treesitter/nvim-treesitter",
   },
 
   -- Color scheme
@@ -70,7 +68,7 @@ require("lazy").setup({
     },
     keys = {
       {
-        "<leader>n",
+        "<leader>h",
         function()
           Snacks.picker.notifications()
         end,
@@ -90,6 +88,7 @@ require("lazy").setup({
         end,
         desc = "Toggle Zen Mode",
       },
+      { "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
     },
 
     init = function()
@@ -108,15 +107,18 @@ require("lazy").setup({
           -- Create some toggle mappings
           Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
           Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-          Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
+          Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map(
+            "<leader>uL")
           Snacks.toggle.diagnostics():map("<leader>ud")
           Snacks.toggle.line_number():map("<leader>ul")
           Snacks.toggle
-              .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+              .option("conceallevel",
+                { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
               :map("<leader>uc")
           Snacks.toggle.treesitter():map("<leader>uT")
           Snacks.toggle
-              .option("background", { off = "light", on = "dark", name = "Dark Background" })
+              .option("background",
+                { off = "light", on = "dark", name = "Dark Background" })
               :map("<leader>ub")
           Snacks.toggle.inlay_hints():map("<leader>uh")
           Snacks.toggle.indent():map("<leader>ug")
@@ -137,7 +139,6 @@ require("lazy").setup({
           override = {
             ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
             ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
           },
         },
         presets = {
@@ -233,6 +234,113 @@ require("lazy").setup({
       },
     },
   },
+
+  -- Navgation
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {},
+    -- stylua: ignore
+    keys = {
+      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+      { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+    },
+  },
+
+  -- Multicursor
+  {
+    "jake-stewart/multicursor.nvim",
+    branch = "1.0",
+    config = function()
+      local mc = require("multicursor-nvim")
+      mc.setup()
+
+      local set = vim.keymap.set
+
+      -- Add or skip cursor above/below the main cursor.
+      set({ "n", "x" }, "<up>", function() mc.lineAddCursor(-1) end, { desc = "Add cursor above" })
+      set({ "n", "x" }, "<down>", function() mc.lineAddCursor(1) end, { desc = "Add cursor below" })
+      set({ "n", "x" }, "<leader><up>", function() mc.lineSkipCursor(-1) end, { desc = "Skip cursor above" })
+      set({ "n", "x" }, "<leader><down>", function() mc.lineSkipCursor(1) end, { desc = "Skip cursor below" })
+
+      -- Add or skip adding a new cursor by matching word/selection
+      set({ "n", "x" }, "<leader>n", function() mc.matchAddCursor(1) end, { desc = "Add cursor to next word/selction" })
+      set({ "n", "x" }, "<leader>s", function() mc.matchSkipCursor(1) end, { desc = "Skip cursor of next word/selction" })
+      set({ "n", "x" }, "<leader>N", function() mc.matchAddCursor(-1) end, { desc = "Add cursor to prev word/selction" })
+      set({ "n", "x" }, "<leader>S", function() mc.matchSkipCursor(-1) end,
+        { desc = "Skip cursor of prev word/selction" })
+
+      -- Add and remove cursors with control + left click.
+      set("n", "<c-leftmouse>", mc.handleMouse)
+      set("n", "<c-leftdrag>", mc.handleMouseDrag)
+      set("n", "<c-leftrelease>", mc.handleMouseRelease)
+
+      -- Disable and enable cursors.
+      set({ "n", "x" }, "<c-q>", mc.toggleCursor)
+
+      -- Pressing `gaip` will add a cursor on each line of a paragraph.
+      set("n", "ga", mc.addCursorOperator)
+
+      set("n", "<leader>a", mc.alignCursors, { desc = "Align cursor columns" })
+      set("x", "<leader>c", mc.splitCursors, { desc = "Split visual selections by regex" })
+      set("x", "M", mc.matchCursors, { desc = "Match new cursors within visual selections by regex" })
+      set({ "n", "x" }, "<leader>A", mc.matchAllAddCursors, { desc = "Add cursor to all matches" })
+      set("x", "<leader>t", function() mc.transposeCursors(1) end, { desc = "Transpose cursors clockwise" })
+      set("x", "<leader>T", function() mc.transposeCursors(-1) end, { desc = "Transpose cursors anti-clockwise" })
+      set("x", "I", mc.insertVisual, { desc = "Insert on each line of visual selections" })
+      set("x", "A", mc.appendVisual, { desc = "Append on each line of visual selections" })
+      set({ "n", "x" }, "g<c-a>", mc.sequenceIncrement, { desc = "Increment sequence" })
+      set({ "n", "x" }, "g<c-x>", mc.sequenceDecrement, { desc = "Decrement sequence" })
+
+      set("n", "<leader>/n", function() mc.searchAddCursor(1) end, { desc = "Add cursor to next search result" })
+      set("n", "<leader>/N", function() mc.searchAddCursor(-1) end, { desc = "Add cursor to prev search result" })
+      set("n", "<leader>/s", function() mc.searchSkipCursor(1) end, { desc = "Skip cursor of next search result" })
+      set("n", "<leader>/S", function() mc.searchSkipCursor(-1) end, { desc = "Skip cursor of prev search result" })
+      set("n", "<leader>/A", mc.searchAllAddCursors, { desc = "Add cursor to all search results" })
+
+      -- Pressing `<leader>miwap` will create a cursor in every match of the
+      -- string captured by `iw` inside range `ap`.
+      -- This action is highly customizable, see `:h multicursor-operator`.
+      set({ "n", "x" }, "<leader>m", mc.operator, { desc = "Multicursor operator" })
+
+      set({ "n", "x" }, "]d", function() mc.diagnosticAddCursor(1) end, { desc = "Add cursor to next diagnostic" })
+      set({ "n", "x" }, "[d", function() mc.diagnosticAddCursor(-1) end, { desc = "Add cursor to prev diagnostic" })
+      set({ "n", "x" }, "]s", function() mc.diagnosticSkipCursor(1) end, { desc = "Skip cursor of next diagnostic" })
+      set({ "n", "x" }, "[S", function() mc.diagnosticSkipCursor(-1) end, { desc = "Skip cursor of prev diagnostic" })
+
+      mc.addKeymapLayer(function(layerSet)
+        -- Select a different cursor as the main one.
+        layerSet({ "n", "x" }, "<left>", mc.prevCursor)
+        layerSet({ "n", "x" }, "<right>", mc.nextCursor)
+
+        layerSet({ "n", "x" }, "<leader>x", mc.deleteCursor, { desc = "Delete main cursor" })
+
+        -- Enable and clear cursors using escape.
+        layerSet("n", "<esc>", function()
+          if not mc.cursorsEnabled() then
+            mc.enableCursors()
+          else
+            mc.clearCursors()
+          end
+        end)
+      end)
+
+      -- Customize how cursors look.
+      local hl = vim.api.nvim_set_hl
+      hl(0, "MultiCursorCursor", { link = "Cursor" })
+      hl(0, "MultiCursorVisual", { link = "Visual" })
+      hl(0, "MultiCursorSign", { link = "SignColumn" })
+      hl(0, "MultiCursorMatchPreview", { link = "Search" })
+      hl(0, "MultiCursorDisabledCursor", { link = "Visual" })
+      hl(0, "MultiCursorDisabledVisual", { link = "Visual" })
+      hl(0, "MultiCursorDisabledSign", { link = "SignColumn" })
+    end
+  },
+
   -- Formatting
   {
     "stevearc/conform.nvim",
@@ -256,6 +364,8 @@ require("lazy").setup({
         lua = { "stylua" },
         python = { "isort", "black" },
         javascript = { "prettierd", "prettier", stop_after_first = true },
+        typst = { "typstyle" },
+        go = { "gofmt" }
       },
       -- Set default options
       default_format_opts = {
@@ -282,6 +392,7 @@ require("lazy").setup({
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      'saghen/blink.cmp'
     },
     config = function()
       require("config.lsp")
@@ -300,17 +411,32 @@ require("lazy").setup({
   },
 
   -- Completions
-  { "L3MON4D3/LuaSnip" },
-  { "hrsh7th/cmp-nvim-lsp",       dependencies = { "onsails/lspkind.nvim" } },
-  { "hrsh7th/cmp-path" },
-  { "hrsh7th/cmp-buffer" },
   {
-    "hrsh7th/nvim-cmp",
-    config = function()
-      require("config.cmp")
-    end,
+    'saghen/blink.cmp',
+    dependencies = {
+      'rafamadriz/friendly-snippets',
+      'Exafunction/windsurf.nvim'
+    },
+    version = '*',
+    opts = {
+      keymap = { preset = 'enter' },
+      appearance = {
+        nerd_font_variant = 'normal'
+      },
+      completion = {
+        documentation = { auto_show = false },
+      },
+      signature = { enabled = true },
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer', 'codeium' },
+        providers = {
+          codeium = { name = 'Codeium', module = 'codeium.blink', async = true },
+        },
+      },
+      fuzzy = { implementation = "prefer_rust_with_warning" }
+    },
+    opts_extend = { "sources.default" }
   },
-  { "saadparwaiz1/cmp_luasnip" },
   -- Auto pairs
   {
     "windwp/nvim-ts-autotag",
@@ -323,18 +449,15 @@ require("lazy").setup({
   -- AI
   -- "github/copilot.vim",
   {
-    "Exafunction/codeium.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
-    },
+    "Exafunction/windsurf.nvim",
     config = function()
       require("codeium").setup({
+        enable_cmp_source = false,
         virtual_text = {
           enabled = true,
-        },
+        }
       })
-    end,
+    end
   },
 
   {
@@ -349,7 +472,19 @@ require("lazy").setup({
     "catgoose/nvim-colorizer.lua",
     event = "BufReadPre",
     config = function()
-      require("colorizer").setup()
+      require('colorizer').setup()
     end,
   },
+
+
+  -- FASM
+  {
+    "fedorenchik/fasm.vim",
+    config = function()
+      vim.api.nvim_create_autocmd({ "BufReadPre", }, {
+        pattern = "*.asm",
+        command = 'let g:asmsyntax = "fasm"',
+      })
+    end
+  }
 })

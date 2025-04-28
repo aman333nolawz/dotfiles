@@ -1,7 +1,0 @@
-[default]
-duration = "30s"
-
-[any]
-path = "/home/nolawz/.config/wallpapers/"
-
-[default.transition.colour-distance]
