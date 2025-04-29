@@ -11,10 +11,11 @@ pygame.init()
 
 win = pygame.display.set_mode((500, 500), pygame.RESIZABLE)
 
+
 def create_bell_sound():
     duration = 500  # Duration of the sound in milliseconds
     sample_rate = 44100  # Number of samples per second
-    frequency = 440  # Frequency of the fundamental tone in Hz
+    frequency = 700  # Frequency of the fundamental tone in Hz
     decay_factor = 0.99  # Decay factor for the sound
 
     num_samples = int(duration * sample_rate / 1000)
@@ -47,17 +48,17 @@ class Timer:
         self.total_pomos = 0
         self.paused = False
         bell_sound.play()
-        Thread(target=self.countdown).start()
+        Thread(target=self.countdown, daemon=True).start()
 
     def get_time(self):
         time_left = self.duration - self.elapsed_time
-        
+
         if time_left <= 0:
             time_left = 0
             self.change_mode()
 
         return time_left
-    
+
     def countdown(self):
         while 1:
             if not self.paused:
@@ -70,12 +71,12 @@ class Timer:
             self.mode = "break"
 
             if self.total_pomos % 3 == 0:
-                self.duration = 25*60
+                self.duration = 25 * 60
             else:
-                self.duration = 5*60
+                self.duration = 5 * 60
         elif self.mode == "break":
             self.mode = "pomodoro"
-            self.duration = 25*60
+            self.duration = 25 * 60
             self.elapsed_time = 0
 
         bell_sound.play()
@@ -101,15 +102,16 @@ class Timer:
 
         # Render completed pomodoros
         pomos_text = pomos_font.render(f"x{self.total_pomos}", True, "#A6E3A1")
-        pomos_text_rect = pomos_text.get_rect(center=(pos[0], pos[1]+70))
+        pomos_text_rect = pomos_text.get_rect(center=(pos[0], pos[1] + 70))
         win.blit(pomos_text, pomos_text_rect)
+
 
 bell_sound = create_bell_sound()
 
-time_font = pygame.font.SysFont('FiraCode Nerd Font', 70)
-pomos_font = pygame.font.SysFont('FiraCode Nerd Font', 40)
+time_font = pygame.font.SysFont("FiraCode Nerd Font", 70)
+pomos_font = pygame.font.SysFont("FiraCode Nerd Font", 40)
 
-pomodoro_duration = 25*60
+pomodoro_duration = 25 * 60
 timer = Timer(pomodoro_duration)
 
 while True:
@@ -125,7 +127,7 @@ while True:
             elif event.key == pygame.K_r:
                 timer.reset()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            circle_rect = pygame.Rect(W//2-150, H//2-150, 300, 300)
+            circle_rect = pygame.Rect(W // 2 - 150, H // 2 - 150, 300, 300)
             if circle_rect.collidepoint(event.pos):
                 timer.toggle_pause()
 
@@ -137,7 +139,7 @@ while True:
     if timer.paused:
         primary_color = (249, 226, 175)
 
-    gfxdraw.aacircle(win, W//2, H//2, 150, primary_color)
-    timer.display(win, (W//2, H//2), primary_color)
+    gfxdraw.aacircle(win, W // 2, H // 2, 150, primary_color)
+    timer.display(win, (W // 2, H // 2), primary_color)
 
     pygame.display.flip()
