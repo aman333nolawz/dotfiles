@@ -27,6 +27,7 @@ local function select_anime(path)
   else
     menu = {
       type = "anime_selector",
+      search_style = "palette",
       title = "Select an anime",
       callback = { mp.get_script_name(), 'menu-event' },
       items = {}
@@ -35,7 +36,10 @@ local function select_anime(path)
       menu.items[i] = {
         title = anime.title.english,
         hint = tostring(anime.episodes),
-        value = tostring(anime.id)
+        value = tostring(anime.id),
+        actions = {
+          { name = 'open_in_browser', icon = 'open_in_new', label = 'Open in browser' },
+        },
       }
     end
 
@@ -46,25 +50,30 @@ end
 local function update_anime(json)
   local event = utils.parse_json(json)
   if event.type == 'activate' then
-    local menu = {
-      type = 'anime_selector',
-      title = "Updating...",
-      search_style = 'disabled',
-      items = { { icon = 'spinner', align = 'center', selectable = false, muted = true } },
-    }
-    mp.commandv('script-message-to', 'uosc', 'update-menu', utils.format_json(menu))
-
-    local path = mp.get_property("path")
-    local command = { args = { "python", mp.command_native({ "expand-path", "~~/script-opts/anitracker.py" }), "--id", event.value, "--title", path } }
-    local result = utils.subprocess(command)
-
-    if result.status == 0 then
-      log("Updated anilist entry :)")
+    if event.action == 'open_in_browser' or event.modifiers == 'shift' then
+      local command = { args = { "xdg-open", "https://anilist.co/anime/" .. event.value } }
+      utils.subprocess(command)
     else
-      log("Failed to update anilist entry :(")
-    end
+      local menu = {
+        type = 'anime_selector',
+        title = "Updating...",
+        search_style = 'disabled',
+        items = { { icon = 'spinner', align = 'center', selectable = false, muted = true } },
+      }
+      mp.commandv('script-message-to', 'uosc', 'update-menu', utils.format_json(menu))
 
-    mp.commandv('script-message-to', 'uosc', 'close-menu', 'anime_selector')
+      local path = mp.get_property("path")
+      local command = { args = { "python", mp.command_native({ "expand-path", "~~/script-opts/anitracker.py" }), "--id", event.value, "--title", path } }
+      local result = utils.subprocess(command)
+
+      if result.status == 0 then
+        log("Updated anilist entry :)")
+      else
+        log("Failed to update anilist entry :(")
+      end
+
+      mp.commandv('script-message-to', 'uosc', 'close-menu', 'anime_selector')
+    end
   end
 end
 
