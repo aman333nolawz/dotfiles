@@ -5,6 +5,8 @@ import requests
 import webbrowser
 import sys
 from guessit import guessit
+from argparse import ArgumentParser
+from json import dumps
 
 
 def authorize() -> str:
@@ -32,11 +34,33 @@ class Anilist:
             json={"query": query, "variables": variables},
         )
 
-    def get_anime(self, title: str) -> Dict | None:
+    def get_anime(self, anime_id: int) -> Dict | None:
+        query = """
+        query ($id: Int!) {
+          Page {
+            media(id: $id, type: ANIME) {
+              id
+              episodes
+            }
+          }
+        }
+        """
+        variables = {"id": anime_id}
+
+        response = self._graphql_request(query, variables)
+        media = response.json()["data"]["Page"]["media"]
+        if len(media) > 0:
+            return {"id": media[0]["id"], "total_episodes": media[0]["episodes"]}
+        return None
+
+    def get_animes(self, title: str) -> Dict | None:
         query = """
         query ($search: String!) {
           Page {
             media(search: $search, type: ANIME) {
+              title {
+                english
+              }
               id
               episodes
             }
@@ -47,9 +71,10 @@ class Anilist:
 
         response = self._graphql_request(query, variables)
         media = response.json()["data"]["Page"]["media"]
-        if len(media) > 0:
-            return {"id": media[0]["id"], "total_episodes": media[0]["episodes"]}
-        return None
+        return media
+        # if len(media) > 0:
+        #     return {"id": media[0]["id"], "total_episodes": media[0]["episodes"]}
+        # return None
 
     def update_anime_entry(self, anime_id, episode_no, total_episodes):
         query = """
@@ -65,13 +90,29 @@ class Anilist:
         self._graphql_request(query, variables)
 
 
-if sys.argv[1].lower() == "authorize":
+parser = ArgumentParser()
+
+parser.add_argument(
+    "-a", "--authorize", help="Save authorization token", action="store_true"
+)
+parser.add_argument("-s", "--search", help="Search for the anime", type=str)
+parser.add_argument(
+    "-t",
+    "--title",
+    help="Title of the anime (should be passed along with --id)",
+    type=str,
+)
+parser.add_argument("--id", help="ID of the anime in anilist", type=int)
+
+args = parser.parse_args()
+
+if args.authorize:
     access_token = authorize()
     output_file = Path(expanduser("~/.local/share/anitracker/access_token"))
     output_file.parent.mkdir(exist_ok=True, parents=True)
     with open(output_file, "w") as f:
         f.write(access_token)
-    exit(1)
+    exit(0)
 
 try:
     with open(expanduser("~/.local/share/anitracker/access_token"), "r") as f:
@@ -85,18 +126,34 @@ except FileNotFoundError:
 
 anilist = Anilist(access_token)
 
-guess = guessit(" ".join(sys.argv[1:]))
-title = guess.get("title")
-season = guess.get("season")
-episode_no = guess.get("episode")
+if args.search is not None:
+    guess = guessit(args.search)
+    title = guess.get("title")
+    season = guess.get("season")
 
-search_query = title
-if season is not None:
-    search_query += " Season " + str(season)
+    search_query = title
+    if season is not None:
+        search_query += " Season " + str(season)
 
-anime = anilist.get_anime(search_query)
-if anime is not None:
-    anime_id, total_episodes = anime["id"], anime["total_episodes"]
-    anilist.update_anime_entry(anime_id, episode_no, total_episodes)
-else:
-    exit(1)
+    animes = anilist.get_animes(search_query)
+    print(dumps(animes))
+
+if args.id:
+    if args.title is None:
+        print("Please provide title", file=sys.stderr)
+        exit(1)
+
+    guess = guessit(args.title)
+    episode_no = guess.get("episode")
+    anime = anilist.get_anime(args.id)
+
+    if episode_no is None:
+        print("Failed to get the episode number", file=sys.stderr)
+        exit(1)
+
+    if anime is not None:
+        anime_id, total_episodes = anime["id"], anime["total_episodes"]
+        anilist.update_anime_entry(anime_id, episode_no, total_episodes)
+    else:
+        print("Anime not found", file=sys.stderr)
+        exit(1)
