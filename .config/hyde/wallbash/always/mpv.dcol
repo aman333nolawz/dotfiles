@@ -108,7 +108,7 @@ menu_type_to_search=yes
 
 # Top bar with window controls and media title
 # Can be: never, no-border, always
-top_bar=no-border
+top_bar=always
 top_bar_size=40
 top_bar_controls=no
 # Can be: `no` (hide), `yes` (inherit title from mpv.conf), or a custom template string

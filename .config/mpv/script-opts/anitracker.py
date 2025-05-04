@@ -85,7 +85,11 @@ class Anilist:
           }
         }
         """
-        status = "COMPLETED" if episode_no >= total_episodes else "CURRENT"
+        status = (
+            "COMPLETED"
+            if (episode_no and total_episodes and episode_no >= total_episodes)
+            else "CURRENT"
+        )
         variables = {"mediaId": anime_id, "status": status, "progress": episode_no}
         self._graphql_request(query, variables)
 
@@ -132,7 +136,7 @@ if args.search is not None:
     season = guess.get("season")
 
     search_query = title
-    if season is not None:
+    if season is not None and season != 1:
         search_query += " Season " + str(season)
 
     animes = anilist.get_animes(search_query)
