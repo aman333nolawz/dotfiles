@@ -1,0 +1,60 @@
+#!/bin/env python3
+import requests
+from threading import Thread
+from os.path import expanduser, exists, join
+from os import mkdir, listdir
+from shutil import rmtree
+from subprocess import call
+from datetime import datetime
+
+epaper_download_dir = expanduser("~/.cache/epaper")
+date = datetime.now().strftime("%Y-%m-%d")
+
+if not exists(epaper_download_dir):
+    mkdir(epaper_download_dir)
+
+for folder in listdir(join(epaper_download_dir)):
+    if folder != date:
+        rmtree(join(epaper_download_dir, folder))
+
+
+def get_epaper_collections(date):
+    url = "https://api2.suprabhaatham.com/api/ePaper"
+    data = {
+        "type": "all",
+        "edition": "Malappuram",
+        "createdAt": date,
+    }
+    r = requests.post(url, json=data)
+    return r.json()[0]["epapercollections"]
+
+
+def download_pages(data):
+    filename = data["name"].replace(".pdf", "").split(" ")[1:3]
+    filename = filename[0][1:] + " - " + filename[1] + ".jpeg"
+    print("Started downloading " + filename)
+    with open(join(epaper_download_dir, date, filename), "wb") as f:
+        f.write(requests.get(data["imageUrl"]).content)
+    print("Finished downloading " + filename)
+
+
+if exists(join(epaper_download_dir, date)):
+    print(
+        "Already downloaded. If there is any mistake, delete the folder of the date in ~/.cache/epaper and run again"
+    )
+    call(["vimiv", join(epaper_download_dir, date)])
+    exit()
+
+mkdir(join(epaper_download_dir, date))
+datas = get_epaper_collections(date)
+
+threads = []
+for data in datas:
+    t = Thread(target=download_pages, args=(data,))
+    t.start()
+    threads.append(t)
+
+for t in threads:
+    t.join()
+
+call(["vimiv", join(epaper_download_dir, date)])
