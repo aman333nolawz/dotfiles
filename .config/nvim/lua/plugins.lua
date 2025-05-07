@@ -361,9 +361,16 @@ require("lazy").setup({
     opts = {
       -- Define your formatters
       formatters_by_ft = {
+        typescript = { "prettierd", "prettier", stop_after_first = true },
+        typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+        json = { "prettierd", "prettier", stop_after_first = true },
+        html = { "prettierd", "prettier", stop_after_first = true },
+        css = { "prettierd", "prettier", stop_after_first = true },
+
         lua = { "stylua" },
         python = { "isort", "black" },
-        javascript = { "prettierd", "prettier", stop_after_first = true },
         typst = { "typstyle" },
         go = { "gofmt" }
       },
@@ -372,7 +379,7 @@ require("lazy").setup({
         lsp_format = "fallback",
       },
       -- Set up format-on-save
-      format_on_save = { timeout_ms = 500 },
+      format_on_save = { lsp_fallback = true, timeout_ms = 500 },
       -- Customize formatters
       formatters = {
         shfmt = {
