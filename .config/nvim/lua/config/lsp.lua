@@ -1,11 +1,9 @@
-local lspconfig = require('lspconfig')
-local capabilities = require('blink.cmp').get_lsp_capabilities()
-
 require('ufo').setup()
 require('mason').setup {
   PATH = "prepend",
 }
 require('mason-lspconfig').setup {
+  automatic_enable = true,
   ensure_installed = {
     "pyright",
     "emmet_ls",
@@ -16,41 +14,6 @@ require('mason-lspconfig').setup {
     "gopls"
   }
 }
-local lsp_attach = function()
-end
-
--- Folding
-capabilities.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true
-}
-
-require('mason-lspconfig').setup_handlers({
-  function(server_name)
-    lspconfig[server_name].setup({
-      native_lsp = {
-        enabled = true,
-        virtual_text = {
-          errors = { "italic" },
-          hints = { "italic" },
-          warnings = { "italic" },
-          information = { "italic" },
-        },
-        underlines = {
-          errors = { "underline" },
-          hints = { "underline" },
-          warnings = { "underline" },
-          information = { "underline" },
-        },
-        inlay_hints = {
-          background = true,
-        },
-      },
-      on_attach = lsp_attach,
-      capabilities = capabilities,
-    })
-  end
-})
 
 -- Loading notification
 ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>

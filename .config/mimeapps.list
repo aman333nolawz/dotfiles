@@ -1,5 +1,7 @@
 [Added Associations]
 application/pdf=org.pwmt.zathura.desktop;sioyek.desktop;org.pwmt.zathura-pdf-poppler.desktop;
+application/zip=org.kde.ark.desktop;
+image/jpeg=vimiv.desktop;
 image/png=vimiv.desktop;
 text/html=zen.desktop;
 video/x-matroska=mpv.desktop;zen.desktop;
@@ -14,6 +16,8 @@ application/x-extension-shtml=zen.desktop
 application/x-extension-xht=zen.desktop
 application/x-extension-xhtml=zen.desktop
 application/xhtml+xml=zen.desktop
+application/zip=org.kde.ark.desktop;
+image/jpeg=vimiv.desktop;
 image/png=vimiv.desktop;
 inode/directory=org.kde.dolphin.desktop
 text/html=zen.desktop
@@ -21,7 +25,8 @@ video/x-matroska=mpv.desktop;
 x-scheme-handler/about=brave-browser.desktop
 x-scheme-handler/app.5ire=5ire.desktop
 x-scheme-handler/chrome=zen.desktop
+x-scheme-handler/discord-733927271726841887=pokeclicker-desktop.desktop
 x-scheme-handler/http=zen.desktop
 x-scheme-handler/https=zen.desktop
 x-scheme-handler/unknown=brave-browser.desktop
-x-scheme-handler/discord-733927271726841887=pokeclicker-desktop.desktop
+x-scheme-handler/discord=vesktop.desktop

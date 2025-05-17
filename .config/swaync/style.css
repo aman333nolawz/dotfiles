@@ -34,7 +34,7 @@
 
 .floating-notifications.background .notification-background .notification .notification-content,
 .control-center .notification-background .notification .notification-content {
-  background: #000327;
+  background: #0C1926;
   padding: 0.818rem;
   padding-right: unset;
   margin-right: unset;
@@ -128,7 +128,7 @@
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
   margin: 7px;
-  background: rgba(0,3,39,0.4);
+  background: rgba(12,25,38,0.4);
   padding: 1.023rem;
 }
 
@@ -153,7 +153,7 @@
 }
 
 .control-center slider:active {
-  background-color: #021C66;
+  background-color: #0C3650;
 }
 
 /* title widget */
@@ -233,7 +233,7 @@
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button:checked {
-  background-color: #AAE7F0;
+  background-color: #AAD8F0;
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button:checked label {
@@ -259,7 +259,7 @@
 
 .widget-volume trough slider {
   color:unset;
-  background-color: #AAE7F0;
+  background-color: #AAD8F0;
   border-radius: 100%;
   min-height: 1.25rem;
 }
