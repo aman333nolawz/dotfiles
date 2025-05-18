@@ -1,0 +1,11 @@
+#!/bin/sh
+streams_file="$HOME/.local/share/streams.txt"
+choice=$(cat "$streams_file" | cut -d"," -f1 | rofi -dmenu -p "")
+
+if [ -z "$choice" ]; then
+  exit
+fi
+
+url=$(cat "$streams_file" | grep "$choice" | cut -d"," -f2)
+echo "$choice" : "$url"
+mpv "$url"
