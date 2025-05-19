@@ -1,6 +1,6 @@
 #!/bin/sh
 streams_file="$HOME/.local/share/streams.txt"
-choice=$(cat "$streams_file" | cut -d"," -f1 | rofi -dmenu -p "")
+choice=$(cat "$streams_file" | cut -d"," -f1 | rofi -dmenu -i -p "")
 
 if [ -z "$choice" ]; then
   exit
