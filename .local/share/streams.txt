@@ -1,2 +1,6 @@
 sky sports cricket,acestream://6d95e4b0893e155cc674b84e0763150c445d3ddd
 f1 formula,acestream://b8f513efc32e596d4c3d237b3ecc0fd7a4b9ec9f
+Sky Sports 1 HD,acestream://7c12288663069a12aff58f3f62e8ea47ab78c65d
+Sky Sports 2 HD,acestream://fc9f1f580da8f641a5991d44b399982a3a069f69
+Sky Sports EPL,acestream://ec5eabe0144ccfffc337e1d6708e2afb81d0638e
+Sky Sports Football,acestream://8dbe2d515e9131fa311353537736f8c94be9b26d
