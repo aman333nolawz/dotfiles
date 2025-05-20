@@ -370,7 +370,7 @@ require("lazy").setup({
         css = { "prettierd", "prettier", stop_after_first = true },
 
         lua = { "stylua" },
-        python = { "isort", "black" },
+        python = { "ruff_fix", "ruff_format" },
         typst = { "typstyle" },
         go = { "gofmt" }
       },

@@ -6,6 +6,7 @@ require('mason-lspconfig').setup {
   automatic_enable = true,
   ensure_installed = {
     "pyright",
+    "ruff",
     "emmet_ls",
     "html",
     "cssls",
