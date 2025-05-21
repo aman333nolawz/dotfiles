@@ -1,0 +1,151 @@
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+(
+    default_album_art_path: None,
+    show_song_table_header: false,
+    draw_borders: true,
+    browser_column_widths: [20, 38, 42],
+    text_color: "#FFFFFF",
+    tab_bar: (
+        enabled: true,
+        active_style: (fg: "#141312", modifiers: "Bold"),
+        inactive_style: (fg: "#658AA3", modifiers: ""),
+    ),
+    highlighted_item_style: (fg: "#658EA3", modifiers: "Bold"),
+    current_item_style: (fg: "#499AC3", bg: "#0C3650", modifiers: "Bold"),
+    borders_style: (fg: "#658AA3", modifiers: "Bold"),
+    highlight_border_style: (fg: "#658AA3"),
+    symbols: (song: "󰝚 ", dir: " ", marker: "* ", ellipsis: "..."),
+    progress_bar: (
+        symbols: ["█", "█", "█"],
+        track_style: (fg: "#0C1926"),
+        elapsed_style: (fg: "#AAD8F0"),
+        thumb_style: (fg: "#AAD8F0"),
+    ),
+    scrollbar: (
+        symbols: ["", "", "", ""],
+        track_style: (fg: "#658AA3"),
+        ends_style: (fg: "#658AA3"),
+        thumb_style: (fg: "#658AA3"),
+    ),
+    song_table_format: [
+        (
+            prop: (kind: Property(Title), style: (fg: "#AAD8F0"),
+                highlighted_item_style: (fg: "#0C1926", modifiers: "Bold"),
+                default: (kind: Property(Filename), style: (fg: "gray"),)
+            ),
+            width: "70%",
+        ),
+        (
+            prop: (kind: Property(Album), style: (fg: "#658AA3"),
+                default: (kind: Text("Unknown Album"), style: (fg: "#4B697D"))
+            ),
+            width: "30%",
+        ),
+    ],
+    layout: Split(
+        direction: Vertical,
+        panes: [
+            (
+                size: "3",
+                pane: Pane(Tabs),
+            ),
+            (
+                size: "4",
+                pane: Split(
+                    direction: Horizontal,
+                    panes: [
+                        (
+                            size: "100%",
+                            pane: Split(
+                                direction: Vertical,
+                                panes: [
+                                    (
+                                        size: "4",
+                                        borders: "ALL",
+                                        pane: Pane(Header),
+                                    ),
+                                ]
+                            )
+                        ),
+                    ]
+                ),
+            ),
+            (
+                size: "100%",
+                pane: Split(
+                    direction: Horizontal,
+                    panes: [
+                        (
+                            size: "100%",
+                            borders: "NONE",
+                            pane: Pane(TabContent),
+                        ),
+                    ]
+                ),
+            ),
+            (
+                size: "3",
+                borders: "TOP | BOTTOM",
+                pane: Pane(ProgressBar),
+            ),
+        ],
+    ),
+    header: (
+        rows: [
+            (
+                left: [
+                    (kind: Property(Status(StateV2(playing_label: " Playing", paused_label: " Paused", stopped_label: "󰓛 Stopped"))), style: (fg: "#499AC3", modifiers: "Bold")),
+                ],
+                center: [
+                    (kind: Property(Song(Title)), style: (fg: "#FFFFFF",modifiers: "Bold"),
+                        default: (kind: Property(Song(Filename)), style: (fg: "#FFFFFF",modifiers: "Bold"))
+                    )
+                ],
+                right: [
+                    (kind: Text("Vol: "), style: (fg: "#499AC3", modifiers: "Bold")),
+                    (kind: Property(Status(Volume)), style: (fg: "#499AC3", modifiers: "Bold")),
+                    (kind: Text("% "), style: (fg: "#499AC3", modifiers: "Bold"))
+                ]
+            ),
+            (
+                left: [
+                    (kind: Property(Status(Elapsed)),style: (fg: "#FFFFFF")),
+                    (kind: Text("/"),style: (fg: "#658AA3")),
+                    (kind: Property(Status(Duration)),style: (fg: "#FFFFFF")),
+                ],
+                center: [
+                    (kind: Property(Song(Artist)), style: (fg: "#499AC3", modifiers: "Bold"),
+                        default: (kind: Text("Unknown Artist"), style: (fg: "#e0af68", modifiers: "Bold"))
+                    ),
+                ],
+                right: [
+                    (kind: Property(Status(RepeatV2(on_label: "󰑖", off_label: "󰑖", on_style: (fg: "#FFFFFF"), off_style: (fg: "#658AA3"))))),
+                    (kind: Text("/"),style: (fg: "#658AA3")),
+                    (kind: Property(Status(RandomV2(on_label: "", off_label: "", on_style: (fg: "#FFFFFF"), off_style: (fg: "#658AA3"))))),
+                    (kind: Text("/"),style: (fg: "#658AA3")),
+                    (kind: Property(Status(ConsumeV2(on_label: "󰮯", off_label: "󰮯", oneshot_label: "O", on_style: (fg: "#FFFFFF"), off_style: (fg: "#658AA3"))))),
+                    (kind: Text("/"),style: (fg: "#658AA3")),
+                    (kind: Property(Status(SingleV2(on_label: "S ", off_label: "S ", oneshot_label: "O ", on_style: (fg: "#FFFFFF"), off_style: (fg: "#658AA3"))))),
+                ]
+            ),
+        ],
+    ),
+    browser_song_format: [
+        (
+            kind: Group([
+                (kind: Property(Track)),
+                (kind: Text(" ")),
+            ])
+        ),
+        (
+            kind: Group([
+                (kind: Property(Artist)),
+                (kind: Text(" - ")),
+                (kind: Property(Title)),
+            ]),
+            default: (kind: Property(Filename))
+        ),
+    ],
+)
