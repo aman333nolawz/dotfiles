@@ -8,4 +8,4 @@ fi
 
 url=$(cat "$streams_file" | grep "$choice" | cut -d"," -f2)
 echo "$choice" : "$url"
-mpv "$url"
+mpv "$url" --title="$choice"

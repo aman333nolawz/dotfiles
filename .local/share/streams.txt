@@ -1,6 +1,13 @@
 sky sports cricket,acestream://6d95e4b0893e155cc674b84e0763150c445d3ddd
-f1 formula,acestream://b8f513efc32e596d4c3d237b3ecc0fd7a4b9ec9f
+f1 formula,acestream://8271af37ec42ed9b66c2af472e782998d197dc86
+Sky Sports Arena,acestream://d317a003e8047da2c36a2a2bb2289578c9a3b79c
+Sky Sports Main,acestream://eab7aeef0218ce8b0752e596e4792b69eda4df5e
 Sky Sports 1 HD,acestream://7c12288663069a12aff58f3f62e8ea47ab78c65d
 Sky Sports 2 HD,acestream://fc9f1f580da8f641a5991d44b399982a3a069f69
 Sky Sports EPL,acestream://ec5eabe0144ccfffc337e1d6708e2afb81d0638e
 Sky Sports Football,acestream://8dbe2d515e9131fa311353537736f8c94be9b26d
+Premier Sports 1,acestream://75a56863b6fe0407ad4305b4d7ee5643c3923565
+TNT Sports 1,acestream://efc60cfe5e3a349baa02bcc49f6647c21a9c3c5b
+Sky Cinema Action,acestream://8f3b3a4b42b8ad785eab4c426d0ce7bb891f4398
+Sky Cinema Special,acestream://dd70fe2057d698d528f627c578733814b74557c5
+DAZN Bar 1,acestream://897e73c9d578848f596585314ecb9ae067c0e229

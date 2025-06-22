@@ -54,7 +54,7 @@ require("lazy").setup({
       dashboard = { enabled = true },
       explorer = { enabled = true },
       bigfile = { enabled = true },
-      image = { enabled = true },
+      image = { enabled = true, doc = { inline = false } },
       indent = { enabled = true },
       input = { enabled = true },
       notifier = { enabled = true },
@@ -163,7 +163,7 @@ require("lazy").setup({
     "tamton-aquib/staline.nvim",
     event = { "BufReadPre", "BufNew" },
     config = function()
-      require("staline").setup()
+      require("config.staline")
     end,
   },
   {
