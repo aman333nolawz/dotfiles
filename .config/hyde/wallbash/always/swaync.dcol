@@ -4,6 +4,7 @@ $HOME/.config/swaync/style.css
   font-family: "Noto Sans";
   transition: 100ms;
   box-shadow: unset;
+  background-color: transparent;
 }
 
 .control-center .notification-row {
@@ -93,6 +94,14 @@ $HOME/.config/swaync/style.css
   font-weight: 500;
   margin-right: 1rem;
   padding-right: unset;
+}
+
+.notification {
+  background-color: #<wallbash_pry1>;
+}
+
+.notification.critical {
+  background-color: #ffb4a9;
 }
 
 .control-center .notification-row .notification-background .notification .notification-content .body,

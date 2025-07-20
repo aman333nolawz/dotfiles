@@ -439,6 +439,9 @@ require("lazy").setup({
         providers = {
           codeium = { name = 'Codeium', module = 'codeium.blink', async = true },
         },
+        per_filetype = {
+          codecompanion = { "codecompanion" },
+        }
       },
       fuzzy = { implementation = "prefer_rust_with_warning" }
     },
@@ -465,6 +468,14 @@ require("lazy").setup({
         }
       })
     end
+  },
+  {
+    "olimorris/codecompanion.nvim",
+    opts = {},
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
   },
 
   {
@@ -493,5 +504,32 @@ require("lazy").setup({
         command = 'let g:asmsyntax = "fasm"',
       })
     end
-  }
+  },
+
+  -- Misc
+  {
+    "kawre/leetcode.nvim",
+    build = ":TSUpdate html",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+    },
+    opts = {
+      image_support = true
+    },
+  },
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    priority = 49,
+    dependencies = {
+      "saghen/blink.cmp"
+    },
+    opts = {
+      preview = {
+        filetypes = { "markdown", "codecompanion" },
+        ignore_buftypes = {},
+      },
+    },
+  },
 })

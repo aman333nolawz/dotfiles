@@ -3,6 +3,7 @@
   font-family: "Noto Sans";
   transition: 100ms;
   box-shadow: unset;
+  background-color: transparent;
 }
 
 .control-center .notification-row {
@@ -34,7 +35,7 @@
 
 .floating-notifications.background .notification-background .notification .notification-content,
 .control-center .notification-background .notification .notification-content {
-  background: #0C1926;
+  background: #09100F;
   padding: 0.818rem;
   padding-right: unset;
   margin-right: unset;
@@ -94,6 +95,14 @@
   padding-right: unset;
 }
 
+.notification {
+  background-color: #09100F;
+}
+
+.notification.critical {
+  background-color: #ffb4a9;
+}
+
 .control-center .notification-row .notification-background .notification .notification-content .body,
 .floating-notifications.background .notification-background .notification .notification-content .body {
   font-family: 'Noto Sans', sans-serif;
@@ -128,7 +137,7 @@
   border-radius: 1.705rem;
   -gtk-outline-radius: 1.705rem;
   margin: 7px;
-  background: rgba(12,25,38,0.4);
+  background: rgba(9,16,15,0.4);
   padding: 1.023rem;
 }
 
@@ -153,7 +162,7 @@
 }
 
 .control-center slider:active {
-  background-color: #0C3650;
+  background-color: #2A4641;
 }
 
 /* title widget */
@@ -233,7 +242,7 @@
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button:checked {
-  background-color: #AAD8F0;
+  background-color: #DFF0AA;
 }
 
 .widget-buttons-grid>flowbox>flowboxchild>button:checked label {
@@ -259,7 +268,7 @@
 
 .widget-volume trough slider {
   color:unset;
-  background-color: #AAD8F0;
+  background-color: #DFF0AA;
   border-radius: 100%;
   min-height: 1.25rem;
 }

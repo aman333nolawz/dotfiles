@@ -7,9 +7,9 @@
   "control-center-margin-right": 10,
   "control-center-margin-top": 20,
   "control-center-width": 500,
-  "cssPriority": "application",
-  "control-center-positionX":"right",
-  "control-center-positionY":"center",
+  "cssPriority": "user",
+  "control-center-positionX": "right",
+  "control-center-positionY": "center",
   "fit-to-screen": true,
   "hide-on-action": false,
   "hide-on-clear": true,
@@ -51,9 +51,9 @@
           "type": "button"
         },
         {
-          "active":false,
-          "command":"sh -c 'swaync-client -t && sleep 1 && screenshot.sh sf'",
-          "label":"󰄀",
+          "active": false,
+          "command": "sh -c 'swaync-client -t && sleep 1 && screenshot.sh sf'",
+          "label": "󰄀",
           "type": "button"
         },
         {
@@ -71,21 +71,15 @@
     "title": {
       "text": "Notifications",
       "button-text": "󰎟 Clear",
-      "clear-all-button": true      
+      "clear-all-button": true
     },
     "volume": {
       "label": "",
       "show-per-app": true,
       "show-per-app-icon": true,
-      "show-per-app-label":true
+      "show-per-app-label": true
     }
   },
 
-  "widgets": [
-    "title",
-    "notifications",
-    "buttons-grid",
-    "mpris",
-    "volume"
-  ]
+  "widgets": ["title", "notifications", "buttons-grid", "mpris", "volume"]
 }
