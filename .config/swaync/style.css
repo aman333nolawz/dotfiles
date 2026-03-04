@@ -1,8 +1,8 @@
 @define-color center-bg       rgba(25,21,48,0.9);
-@define-color background      #191530;
+@define-color background      #2F2952;
 @define-color text            #acb0d0;
 @define-color text-alt        #787c99;
-@define-color background-alt  #2F2952;
+@define-color background-alt  #191530;
 @define-color selected        alpha(@text-alt, .4);
 @define-color hover           alpha(@selected, .4);
 @define-color urgent          @text-alt;
@@ -19,7 +19,7 @@
 .notification {
   padding: 0 5px;
   border-radius: 15px;
-  border: 2px solid @background;
+  border: 1px solid @background;
   color: @text;
 }
 

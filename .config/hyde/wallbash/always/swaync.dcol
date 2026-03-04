@@ -1,9 +1,9 @@
 $HOME/.config/swaync/style.css
 @define-color center-bg       <wallbash_pry1_rgba(0.9)>;
-@define-color background      #191530;
+@define-color background      #<wallbash_1xa1>;
 @define-color text            #acb0d0;
 @define-color text-alt        #787c99;
-@define-color background-alt  #<wallbash_1xa1>;
+@define-color background-alt  #<wallbash_pry1>;
 @define-color selected        alpha(@text-alt, .4);
 @define-color hover           alpha(@selected, .4);
 @define-color urgent          @text-alt;
@@ -20,7 +20,7 @@ $HOME/.config/swaync/style.css
 .notification {
   padding: 0 5px;
   border-radius: 15px;
-  border: 2px solid @background;
+  border: 1px solid @background;
   color: @text;
 }
 
