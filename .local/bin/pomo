@@ -111,7 +111,7 @@ bell_sound = create_bell_sound()
 time_font = pygame.font.SysFont("FiraCode Nerd Font", 70)
 pomos_font = pygame.font.SysFont("FiraCode Nerd Font", 40)
 
-pomodoro_duration = 25 * 60
+pomodoro_duration = 5 * 60
 timer = Timer(pomodoro_duration)
 
 while True:

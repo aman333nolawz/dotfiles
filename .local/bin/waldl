@@ -15,7 +15,7 @@ version="0.0.1"
 ## User variables ##
 ####################
 
-[ -z $VIEWER ] && VIEWER=vimiv
+[ -z $VIEWER ] && VIEWER=swayimg
 # the dir where wallpapers are stored
 walldir="$HOME/Pictures/Wallpapers/"
 # the dir used to cache thumbnails
@@ -26,7 +26,7 @@ sxiv_otps=" -f" # o is needed for selection
 # each page contains 24 results
 max_pages=4
 # sorting : date_added, relevance, random, views, favorites, toplist
-sorting=relevance
+sorting=toplist
 # quality : large original small
 quality=large
 # atleast : least res
@@ -47,7 +47,7 @@ sh_menu () {
 ##########################
 
 [ -n "$*" ] && query="$*" || query=$( sh_menu )
-[ -z "$query" ] && exit 1
+# [ -z "$query" ] && exit 1
 query=$(printf '%s' "$query" | tr ' ' '+' )
 
 ######################

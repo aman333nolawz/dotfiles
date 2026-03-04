@@ -42,10 +42,11 @@ if exists(join(epaper_download_dir, date)):
     print(
         "Already downloaded. If there is any mistake, delete the folder of the date in ~/.cache/epaper and run again"
     )
-    call(["vimiv", join(epaper_download_dir, date)])
+    call(["swayimg", join(epaper_download_dir, date)])
     exit()
 
 mkdir(join(epaper_download_dir, date))
+call(["notify-send", "Started downloading epaper", "Date: " + date])
 datas = get_epaper_collections(date)
 
 threads = []
@@ -57,4 +58,4 @@ for data in datas:
 for t in threads:
     t.join()
 
-call(["vimiv", join(epaper_download_dir, date)])
+call(["swayimg", join(epaper_download_dir, date)])
