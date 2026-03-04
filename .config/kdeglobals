@@ -1,8 +1,8 @@
 [Colors:View]
-BackgroundNormal=#1F2130FF
+BackgroundNormal=#191530FF
 
 [General]
-TerminalApplication=/usr/bin/kitty
+TerminalApplication=kitty
 
 [Icons]
 Theme=Tela-circle-dracula

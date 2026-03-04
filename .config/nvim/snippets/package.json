@@ -2,7 +2,14 @@
   "name": "personal-snippets",
   "contributes": {
     "snippets": [
-      { "language": "typst", "path": "./typst.json" }
+      {
+        "language": "typst",
+        "path": "./typst.json"
+      },
+      {
+        "language": "cpp",
+        "path": "./cpp.json"
+      }
     ]
   }
 }

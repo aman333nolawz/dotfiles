@@ -59,12 +59,19 @@ require("lazy").setup({
       input = { enabled = true },
       notifier = { enabled = true },
       quickfile = { enabled = true },
+      scope = { enabled = true },
       statuscolumn = {
         folds = {
           open = true,
         },
       },
       scroll = { enabled = true },
+      words = { enabled = true },
+      styles = {
+        notification = {
+          wo = { wrap = true }
+        }
+      }
     },
     keys = {
       {
@@ -142,9 +149,10 @@ require("lazy").setup({
           },
         },
         presets = {
-          command_palette = true,
-          inc_rename = false,
-          lsp_doc_border = false,
+          command_palette = true,       -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false,       -- add a border to hover docs and signature help
         },
       })
     end,
@@ -161,7 +169,7 @@ require("lazy").setup({
   -- Buffer line & Status line
   {
     "tamton-aquib/staline.nvim",
-    event = { "BufReadPre", "BufNew" },
+    event = { "BufReadPre", "BufNew", "ColorScheme" },
     config = function()
       require("config.staline")
     end,
@@ -264,13 +272,18 @@ require("lazy").setup({
       -- Add or skip cursor above/below the main cursor.
       set({ "n", "x" }, "<up>", function() mc.lineAddCursor(-1) end, { desc = "Add cursor above" })
       set({ "n", "x" }, "<down>", function() mc.lineAddCursor(1) end, { desc = "Add cursor below" })
-      set({ "n", "x" }, "<leader><up>", function() mc.lineSkipCursor(-1) end, { desc = "Skip cursor above" })
-      set({ "n", "x" }, "<leader><down>", function() mc.lineSkipCursor(1) end, { desc = "Skip cursor below" })
+      set({ "n", "x" }, "<leader><up>", function() mc.lineSkipCursor(-1) end,
+        { desc = "Skip cursor above" })
+      set({ "n", "x" }, "<leader><down>", function() mc.lineSkipCursor(1) end,
+        { desc = "Skip cursor below" })
 
       -- Add or skip adding a new cursor by matching word/selection
-      set({ "n", "x" }, "<leader>n", function() mc.matchAddCursor(1) end, { desc = "Add cursor to next word/selction" })
-      set({ "n", "x" }, "<leader>s", function() mc.matchSkipCursor(1) end, { desc = "Skip cursor of next word/selction" })
-      set({ "n", "x" }, "<leader>N", function() mc.matchAddCursor(-1) end, { desc = "Add cursor to prev word/selction" })
+      set({ "n", "x" }, "<leader>n", function() mc.matchAddCursor(1) end,
+        { desc = "Add cursor to next word/selction" })
+      set({ "n", "x" }, "<leader>s", function() mc.matchSkipCursor(1) end,
+        { desc = "Skip cursor of next word/selction" })
+      set({ "n", "x" }, "<leader>N", function() mc.matchAddCursor(-1) end,
+        { desc = "Add cursor to prev word/selction" })
       set({ "n", "x" }, "<leader>S", function() mc.matchSkipCursor(-1) end,
         { desc = "Skip cursor of prev word/selction" })
 
@@ -289,17 +302,23 @@ require("lazy").setup({
       set("x", "<leader>c", mc.splitCursors, { desc = "Split visual selections by regex" })
       set("x", "M", mc.matchCursors, { desc = "Match new cursors within visual selections by regex" })
       set({ "n", "x" }, "<leader>A", mc.matchAllAddCursors, { desc = "Add cursor to all matches" })
-      set("x", "<leader>t", function() mc.transposeCursors(1) end, { desc = "Transpose cursors clockwise" })
-      set("x", "<leader>T", function() mc.transposeCursors(-1) end, { desc = "Transpose cursors anti-clockwise" })
+      set("x", "<leader>t", function() mc.transposeCursors(1) end,
+        { desc = "Transpose cursors clockwise" })
+      set("x", "<leader>T", function() mc.transposeCursors(-1) end,
+        { desc = "Transpose cursors anti-clockwise" })
       set("x", "I", mc.insertVisual, { desc = "Insert on each line of visual selections" })
       set("x", "A", mc.appendVisual, { desc = "Append on each line of visual selections" })
       set({ "n", "x" }, "g<c-a>", mc.sequenceIncrement, { desc = "Increment sequence" })
       set({ "n", "x" }, "g<c-x>", mc.sequenceDecrement, { desc = "Decrement sequence" })
 
-      set("n", "<leader>/n", function() mc.searchAddCursor(1) end, { desc = "Add cursor to next search result" })
-      set("n", "<leader>/N", function() mc.searchAddCursor(-1) end, { desc = "Add cursor to prev search result" })
-      set("n", "<leader>/s", function() mc.searchSkipCursor(1) end, { desc = "Skip cursor of next search result" })
-      set("n", "<leader>/S", function() mc.searchSkipCursor(-1) end, { desc = "Skip cursor of prev search result" })
+      set("n", "<leader>/n", function() mc.searchAddCursor(1) end,
+        { desc = "Add cursor to next search result" })
+      set("n", "<leader>/N", function() mc.searchAddCursor(-1) end,
+        { desc = "Add cursor to prev search result" })
+      set("n", "<leader>/s", function() mc.searchSkipCursor(1) end,
+        { desc = "Skip cursor of next search result" })
+      set("n", "<leader>/S", function() mc.searchSkipCursor(-1) end,
+        { desc = "Skip cursor of prev search result" })
       set("n", "<leader>/A", mc.searchAllAddCursors, { desc = "Add cursor to all search results" })
 
       -- Pressing `<leader>miwap` will create a cursor in every match of the
@@ -307,10 +326,14 @@ require("lazy").setup({
       -- This action is highly customizable, see `:h multicursor-operator`.
       set({ "n", "x" }, "<leader>m", mc.operator, { desc = "Multicursor operator" })
 
-      set({ "n", "x" }, "]d", function() mc.diagnosticAddCursor(1) end, { desc = "Add cursor to next diagnostic" })
-      set({ "n", "x" }, "[d", function() mc.diagnosticAddCursor(-1) end, { desc = "Add cursor to prev diagnostic" })
-      set({ "n", "x" }, "]s", function() mc.diagnosticSkipCursor(1) end, { desc = "Skip cursor of next diagnostic" })
-      set({ "n", "x" }, "[S", function() mc.diagnosticSkipCursor(-1) end, { desc = "Skip cursor of prev diagnostic" })
+      set({ "n", "x" }, "]d", function() mc.diagnosticAddCursor(1) end,
+        { desc = "Add cursor to next diagnostic" })
+      set({ "n", "x" }, "[d", function() mc.diagnosticAddCursor(-1) end,
+        { desc = "Add cursor to prev diagnostic" })
+      set({ "n", "x" }, "]s", function() mc.diagnosticSkipCursor(1) end,
+        { desc = "Skip cursor of next diagnostic" })
+      set({ "n", "x" }, "[S", function() mc.diagnosticSkipCursor(-1) end,
+        { desc = "Skip cursor of prev diagnostic" })
 
       mc.addKeymapLayer(function(layerSet)
         -- Select a different cursor as the main one.
@@ -350,7 +373,7 @@ require("lazy").setup({
       {
         "<leader>b",
         function()
-          require("conform").format({ async = true })
+          require("conform").format({ async = true, lsp_fallback = true })
         end,
         mode = "",
         desc = "Format buffer",
@@ -366,7 +389,7 @@ require("lazy").setup({
         javascript = { "prettierd", "prettier", stop_after_first = true },
         javascriptreact = { "prettierd", "prettier", stop_after_first = true },
         json = { "prettierd", "prettier", stop_after_first = true },
-        html = { "prettierd", "prettier", stop_after_first = true },
+        -- html = { "prettierd", "prettier", stop_after_first = true },
         css = { "prettierd", "prettier", stop_after_first = true },
 
         lua = { "stylua" },
@@ -417,12 +440,64 @@ require("lazy").setup({
     },
   },
 
+  {
+    'anurag3301/nvim-platformio.lua',
+
+    cond = function()
+      local platformioRootDir = (vim.fn.filereadable('platformio.ini') == 1) and vim.fn.getcwd() or nil
+      if platformioRootDir then
+        vim.g.platformioRootDir = platformioRootDir
+      elseif (vim.uv or vim.loop).fs_stat(vim.fn.stdpath('data') .. '/lazy/nvim-platformio.lua') == nil then
+        vim.g.platformioRootDir = vim.fn.getcwd()
+      else           -- if nvim-platformio.lua installed but disabled, create Pioinit command
+        vim.api.nvim_create_user_command('Pioinit',
+          function() --available only if no platformio.ini and .pio in cwd
+            vim.api.nvim_create_autocmd('User', {
+              pattern = { 'LazyRestore', 'LazyLoad' },
+              once = true,
+              callback = function(args)
+                if args.match == 'LazyRestore' then
+                  require('lazy').load({ plugins = { 'nvim-platformio.lua' } })
+                elseif args.match == 'LazyLoad' then
+                  local pio_install_status = require(
+                    'platformio.utils').pio_install_check()
+                  if not pio_install_status then return end
+                  vim.notify('PlatformIO loaded',
+                    vim.log.levels.INFO,
+                    { title = 'PlatformIO' })
+                  require("platformio").setup(vim.g.pioConfig)
+                  vim.cmd('Pioinit')
+                end
+              end,
+            })
+            vim.g.platformioRootDir = vim.fn.getcwd()
+            require('lazy').restore({ plguins = { 'nvim-platformio.lua' }, show = false })
+          end, {})
+      end
+      return vim.g.platformioRootDir ~= nil
+    end,
+    config = function()
+      require("config.platformio")
+    end,
+
+    dependencies = {
+      { 'akinsho/toggleterm.nvim' },
+      { 'nvim-telescope/telescope.nvim' },
+      { 'nvim-telescope/telescope-ui-select.nvim' },
+      { 'nvim-lua/plenary.nvim' },
+      { 'folke/which-key.nvim' },
+      { 'nvim-treesitter/nvim-treesitter' }
+    },
+  },
+
   -- Completions
   {
     'saghen/blink.cmp',
     dependencies = {
       'rafamadriz/friendly-snippets',
-      'Exafunction/windsurf.nvim'
+      'Kaiser-Yang/blink-cmp-avante',
+      "fang2hou/blink-copilot",
+      -- 'Exafunction/windsurf.nvim',
     },
     version = '*',
     opts = {
@@ -433,14 +508,23 @@ require("lazy").setup({
       completion = {
         documentation = { auto_show = false },
       },
+      friendly_snippets = true,
       signature = { enabled = true },
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer', 'codeium' },
+        default = { 'avante', 'copilot', 'lsp', 'path', 'snippets', 'buffer' },
         providers = {
-          codeium = { name = 'Codeium', module = 'codeium.blink', async = true },
-        },
-        per_filetype = {
-          codecompanion = { "codecompanion" },
+          avante = {
+            module = 'blink-cmp-avante',
+            name = 'Avante',
+          },
+          copilot = {
+            name = "copilot",
+            module = "blink-copilot",
+            score_offset = 100,
+            async = true,
+          },
+          --   codeium = { name = 'Codeium', module = 'codeium.blink', async = true },
+          -- },
         }
       },
       fuzzy = { implementation = "prefer_rust_with_warning" }
@@ -450,31 +534,93 @@ require("lazy").setup({
   -- Auto pairs
   {
     "windwp/nvim-ts-autotag",
-    event = "InsertEnter",
     config = function()
-      require("nvim-ts-autotag").setup({ enable = true })
-    end,
-  },
-
-  -- AI
-  -- "github/copilot.vim",
-  {
-    "Exafunction/windsurf.nvim",
-    config = function()
-      require("codeium").setup({
-        enable_cmp_source = false,
-        virtual_text = {
-          enabled = true,
-        }
+      require('nvim-ts-autotag').setup({
+        opts = {
+          enable_close = true,
+          enable_rename = true,
+          enable_close_on_slash = true
+        },
       })
     end
   },
+
+  -- AI
   {
-    "olimorris/codecompanion.nvim",
-    opts = {},
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    opts = {
+      suggestion = { enabled = false },
+      filetypes = {
+        markdown = true,
+        help = true,
+      },
+    },
+  },
+  -- "github/copilot.vim",
+  -- {
+  --   "Exafunction/windsurf.nvim",
+  --   config = function()
+  --     require("codeium").setup({
+  --       enable_cmp_source = false,
+  --       virtual_text = {
+  --         enabled = true,
+  --       }
+  --     })
+  --   end
+  -- },
+  -- {
+  {
+    "yetone/avante.nvim",
+    build = vim.fn.has("win32") ~= 0
+        and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+        or "make",
+    event = "VeryLazy",
+    version = false,
+    ---@module 'avante'
+    ---@type avante.Config
+    opts = {
+      instructions_file = "avante.md",
+      provider = "copilot",
+      windows = {
+        input = {
+          provider = "snacks",
+        }
+      }
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
+      "MunifTanjim/nui.nvim",
+      "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+      "folke/snacks.nvim",             -- for input provider snacks
+      "nvim-tree/nvim-web-devicons",   -- or echasnovski/mini.icons
+      "zbirenbaum/copilot.lua",        -- for providers='copilot'
+      {
+        -- support for image pasting
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+          -- recommended settings
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+            -- required for Windows users
+            use_absolute_path = true,
+          },
+        },
+      },
+      {
+        -- Make sure to set this up properly if you have lazy=true
+        'MeanderingProgrammer/render-markdown.nvim',
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
     },
   },
 
@@ -492,6 +638,31 @@ require("lazy").setup({
     config = function()
       require('colorizer').setup()
     end,
+  },
+  {
+    "nvzone/volt",
+    lazy = true
+  },
+
+  {
+    "nvzone/minty",
+    cmd = { "Shades", "Huefy" },
+    keys = {
+      {
+        "<leader>Cs",
+        function()
+          require("minty.shades").open()
+        end,
+        desc = "Open shades of color",
+      },
+      {
+        "<leader>Ch",
+        function()
+          require("minty.huefy").open()
+        end,
+        desc = "Open hues of color",
+      },
+    }
   },
 
 
@@ -519,17 +690,32 @@ require("lazy").setup({
     },
   },
   {
-    "OXY2DEV/markview.nvim",
-    lazy = false,
-    priority = 49,
-    dependencies = {
-      "saghen/blink.cmp"
-    },
-    opts = {
-      preview = {
-        filetypes = { "markdown", "codecompanion" },
-        ignore_buftypes = {},
-      },
-    },
+    "yunusey/codeforces-nvim",
+    config = function()
+      require('codeforces-nvim').setup {
+        use_term_toggle = true,
+        cf_path = "/home/nolawz/Coding/codeforces/",
+        compiler = {
+          cpp = { "g++", "@.cpp", "-o", "@" },
+          py = {}
+        },
+        run = {
+          cpp = { "@" },
+          py = { "python3", "@.py" }
+        },
+        -- notify = function(title, message, type)
+        --   local notify = require('notify')
+        --   if message == nil then
+        --     notify(title, type, {
+        --       render = "minimal",
+        --     })
+        --   else
+        --     notify(message, type, {
+        --       title = title,
+        --     })
+        --   end
+        -- end
+      }
+    end
   },
 })

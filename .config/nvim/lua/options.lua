@@ -1,6 +1,8 @@
 local opt = vim.opt
 local g = vim.g
 
+
+opt.laststatus = 3
 -- Line numbers
 opt.nu = true
 opt.relativenumber = true
@@ -27,6 +29,9 @@ opt.foldcolumn = '0'
 opt.foldlevel = 99
 opt.foldlevelstart = 99
 opt.foldenable = true
+
+opt.signcolumn = 'yes:2'
+opt.pumblend = 30
 
 -- Diagnostic virtual line
 vim.diagnostic.config({

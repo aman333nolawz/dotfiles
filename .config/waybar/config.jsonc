@@ -13,7 +13,6 @@
         "$XDG_CONFIG_HOME/waybar/modules/*json*", 
         "$XDG_CONFIG_HOME/waybar/includes/includes.json" 
     ],
-    // positions generated based on config.ctl //
     "modules-left": [
         "group/pill#left1",
         "group/pill#left2"
@@ -21,8 +20,8 @@
     "group/pill#left1": {
         "orientation": "inherit",
         "modules": [
-            "hyprland/workspaces",
-            "hyprland/window"
+            "cpu",
+            "memory"
         ]
     },
     "group/pill#left2": {
@@ -38,10 +37,8 @@
     "group/pill#center": {
         "orientation": "inherit",
         "modules": [
-            "cpu",
-            "memory",
-            "custom/cpuinfo",
-            "custom/gpuinfo"
+            "hyprland/workspaces",
+            "hyprland/window"
         ]
     },
     "modules-right": [
