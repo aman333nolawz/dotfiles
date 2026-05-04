@@ -1,0 +1,28 @@
+/* calendar.rasi */
+* {
+  background: #1e222a;
+  foreground: #d0d6e0;
+  border-radius: 8px;
+  padding: 12px;
+  font: "Monospace 11";
+}
+window {
+  anchor: north;
+  width: 40%;
+}
+listview {
+  fixed-height: 0;
+  spacing: 6px;
+}
+element {
+  padding: 6px 10px;
+}
+element selected {
+  background: #2b8dbb;
+  foreground: #ffffff;
+}
+message {
+  font: "Monospace 10";
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}

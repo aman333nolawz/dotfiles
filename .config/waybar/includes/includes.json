@@ -45,6 +45,7 @@
         "/home/nolawz/.local/share/waybar/modules/cpu.jsonc",
         "/home/nolawz/.local/share/waybar/modules/custom-cpuinfo.jsonc",
         "/home/nolawz/.local/share/waybar/modules/tray.jsonc",
+        "/home/nolawz/.local/share/waybar/modules/custom-app-launcher.jsonc",
         "/home/nolawz/.local/share/waybar/modules/clock.jsonc",
         "/home/nolawz/.local/share/waybar/modules/cava.jsonc",
         "/home/nolawz/.local/share/waybar/modules/custom-updates.jsonc",

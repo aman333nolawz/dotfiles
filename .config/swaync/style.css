@@ -1,8 +1,8 @@
-@define-color center-bg       rgba(25,21,48,0.9);
-@define-color background      #2F2952;
+@define-color center-bg       rgba(18,8,9,0.9);
+@define-color background      #52292D;
 @define-color text            #acb0d0;
 @define-color text-alt        #787c99;
-@define-color background-alt  #191530;
+@define-color background-alt  #120809;
 @define-color selected        alpha(@text-alt, .4);
 @define-color hover           alpha(@selected, .4);
 @define-color urgent          @text-alt;

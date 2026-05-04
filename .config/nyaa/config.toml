@@ -15,7 +15,7 @@ shell_cmd = "sh -c"
 use_magnet = true
 
 [source.nyaa]
-base_url = "https://nyaa.land/"
+base_url = "https://nyaa.mom/"
 default_sort = "Date"
 default_sort_dir = "Desc"
 default_filter = "NoFilter"
