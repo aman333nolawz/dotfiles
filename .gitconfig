@@ -14,3 +14,9 @@
 [user]
 	email = amananudhiu@gmail.com
 	name = aman333nolawz
+[interactive]
+	diffFilter = delta --color-only
+[core]
+	pager = delta
+[delta]
+	side-by-side = true
