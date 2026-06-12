@@ -1,5 +1,6 @@
 local keymap = vim.keymap.set
 local Snacks = require("snacks")
+local dap = require("dap")
 
 -- Save file
 keymap({ "n", "i", "v" }, "<C-S>", "<Cmd>:w!<CR>")
@@ -39,17 +40,17 @@ keymap("n", "<C-u>", "<C-u>zz")
 -- Refactoring
 keymap("n", "<leader>lrr", vim.lsp.buf.rename, { desc = "Rename variable" })
 keymap("n", "<leader>lc", vim.lsp.buf.code_action, { desc = "Code actions" })
-keymap('n', 'gD', vim.lsp.buf.declaration, { desc = "Go to declaration" })
-keymap('n', 'gd', vim.lsp.buf.definition, { desc = "Go to definition" })
-keymap('n', 'gr', vim.lsp.buf.references, { desc = "References" })
-keymap('n', 'gs', vim.lsp.buf.signature_help, { desc = "Signature help" })
-keymap('n', 'gi', vim.lsp.buf.implementation, { desc = "Implementation" })
-keymap('n', 'gt', vim.lsp.buf.type_definition, { desc = "Type definition" })
-keymap('n', '<leader>ls', vim.lsp.buf.document_symbol, { desc = "Document symbols" })
-keymap('n', '<leader>lS', vim.lsp.buf.workspace_symbol, { desc = "Workspace symbols" })
-keymap('n', '<leader>lh', vim.lsp.buf.hover, { desc = "Hover" })
-keymap('n', '<leader>li', vim.lsp.buf.incoming_calls, { desc = "Incoming calls" })
-keymap('n', '<leader>lo', vim.lsp.buf.outgoing_calls, { desc = "Outgoing calls" })
+keymap("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+keymap("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+keymap("n", "gr", vim.lsp.buf.references, { desc = "References" })
+keymap("n", "gs", vim.lsp.buf.signature_help, { desc = "Signature help" })
+keymap("n", "gi", vim.lsp.buf.implementation, { desc = "Implementation" })
+keymap("n", "gt", vim.lsp.buf.type_definition, { desc = "Type definition" })
+keymap("n", "<leader>ls", vim.lsp.buf.document_symbol, { desc = "Document symbols" })
+keymap("n", "<leader>lS", vim.lsp.buf.workspace_symbol, { desc = "Workspace symbols" })
+keymap("n", "<leader>lh", vim.lsp.buf.hover, { desc = "Hover" })
+keymap("n", "<leader>li", vim.lsp.buf.incoming_calls, { desc = "Incoming calls" })
+keymap("n", "<leader>lo", vim.lsp.buf.outgoing_calls, { desc = "Outgoing calls" })
 
 -- Diagnostics
 keymap("n", "<leader>do", vim.diagnostic.open_float, { desc = "Open diagnostics" })
@@ -70,6 +71,20 @@ keymap("n", "<leader>fls", builtin.lsp_document_symbols, { desc = "List Document
 keymap("n", "<leader>flS", builtin.lsp_workspace_symbols, { desc = "List Document Symbols" })
 keymap("n", "<leader>flo", builtin.lsp_outgoing_calls, { desc = "List Outgoing Calls" })
 keymap("n", "<leader>fli", builtin.lsp_incoming_calls, { desc = "List Incoming Calls" })
+
+-- DAP
+keymap("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
+keymap("n", "<F2>", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
+keymap("n", "<leader>dc", dap.continue, { desc = "New/Continue" })
+keymap("n", "<F9>", dap.continue, { desc = "New/Continue" })
+keymap("n", "<leader>di", dap.step_into, { desc = "Step into" })
+keymap("n", "<F7>", dap.step_into, { desc = "Step into" })
+keymap("n", "<leader>ds", dap.step_over, { desc = "Step over" })
+keymap("n", "<F8>", dap.step_over, { desc = "Step over" })
+keymap("n", "<leader>du", dap.step_out, { desc = "Step out" })
+keymap("n", "<leader>dr", dap.repl.toggle, { desc = "Toggle REPL" })
+keymap("n", "<leader>dl", dap.run_last, { desc = "Run last" })
+keymap("n", "<leader>dt", dap.terminate, { desc = "Terminate" })
 
 -- Terminal
 -- keymap({ "n", "v" }, "<leader>tt", Snacks.terminal.toggle, { desc = "Open Terminal" })

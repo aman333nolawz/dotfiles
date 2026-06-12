@@ -1,0 +1,27 @@
+{
+  "cp": {
+    "prefix": "cp",
+    "body": [
+      "#include <bits/stdc++.h>",
+      "",
+      "using namespace std;",
+      "",
+      "typedef long long ll;",
+      "typedef vector<int> vi;",
+      "typedef pair<int, int> pi;",
+      "",
+      "int main() {",
+      " ios::sync_with_stdio(0);",
+      " cin.tie(0);",
+      " ${1}",
+      "}"
+    ]
+  },
+  "cpf": {
+    "prefix": "cpf",
+    "body": [
+      "freopen(\"${1:input.txt}\", \"r\", stdin);",
+      "freopen(\"${2:output.txt}\", \"w\", stdout);"
+    ]
+  }
+}

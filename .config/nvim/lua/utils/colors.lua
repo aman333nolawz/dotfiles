@@ -1,7 +1,7 @@
 local colors = {
-  bg = "#1F1A23",
-  secondary = "#3F2952",
-  tertiary = "#76578F"
+  bg = "#070707",
+  secondary = "#522929",
+  tertiary = "#8F5757"
 }
 
 return colors

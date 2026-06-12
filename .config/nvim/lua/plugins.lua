@@ -537,6 +537,22 @@ require("lazy").setup({
 		},
 	},
 
+	-- DAP
+	{ "mfussenegger/nvim-dap" },
+	{
+		"mfussenegger/nvim-dap-python",
+		config = function()
+			require("dap-python").setup("python3")
+		end,
+	},
+	{
+		"rcarriga/nvim-dap-ui",
+		dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+		config = function()
+			require("config.dap")
+		end,
+	},
+
 	-- Completions
 	{
 		"saghen/blink.cmp",
