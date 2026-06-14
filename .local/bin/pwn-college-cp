@@ -1,0 +1,33 @@
+#!/bin/sh
+LOCAL_FILE="$1"
+
+if [[ ! -f "$LOCAL_FILE" ]]; then
+    echo "[!] File not found: $LOCAL_FILE"
+    exit 1
+fi
+
+# ---- prep working copy -------------------------------------------------
+BASENAME="$(basename "$LOCAL_FILE")"
+TMPFILE="$(mktemp /tmp/"${BASENAME%.py}"_patched.XXXXXX.py)"
+
+cp "$LOCAL_FILE" "$TMPFILE"
+
+# ---- patch 1: replace kitty terminal with tmux --------------------------
+# Matches: context.terminal = ["kitty", "@", "launch"]
+sed -i 's/context\.terminal[[:space:]]*=[[:space:]]*\[.*\]/context.terminal = ["tmux", "splitw", "-h"]/' "$TMPFILE"
+
+# ---- patch 2: insert pwndbg source line as first line of gdbscript ------
+# Inserts directly after: gdbscript = """
+if grep -q '^gdbscript = """' "$TMPFILE"; then
+    sed -i '/^gdbscript = """$/a source \/opt\/pwndbg\/gdbinit.py' "$TMPFILE"
+else
+    echo "[!] Warning: could not find 'gdbscript = \"\"\"' line; gdbscript not patched."
+fi
+
+grep -n 'context.terminal' "$TMPFILE" || true
+echo
+awk '/^gdbscript = """/{found=1} found{print; if(++c==4) exit}' "$TMPFILE"
+echo
+
+scp "$TMPFILE" hacker@dojo.pwn.college:/tmp/
+rm -f "$TMPFILE"
